@@ -1,0 +1,252 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Aktualne promocje</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      background: transparent;
+      font-family: SF Pro Display, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif !important;
+      color: #111827;
+    }
+
+    .cobbo-hot-offers {
+      width: 100%;
+      padding: 4px;
+    }
+
+    .cobbo-hot-offers__box {
+      width: 100%;
+      border: 1px solid #d8dce3;
+      border-radius: 4px;
+      background: #fff;
+      padding: 22px 18px 24px;
+      overflow: hidden;
+    }
+
+    .cobbo-hot-offers__header {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      margin-bottom: 18px;
+    }
+
+    .cobbo-hot-offers__title {
+      margin: 0;
+      font-size: 22px;
+      line-height: 1.2;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: #111827;
+    }
+
+    .cobbo-hot-offers__viewport {
+      position: relative;
+      width: 100%;
+    }
+
+    .cobbo-hot-offers__track {
+      display: grid;
+      grid-template-columns: repeat(7, minmax(120px, 1fr));
+      gap: 26px;
+      align-items: start;
+    }
+
+    .cobbo-hot-offers__item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-decoration: none;
+      color: #30343b;
+      min-width: 0;
+    }
+
+    .cobbo-hot-offers__circle {
+      width: 128px;
+      height: 128px;
+      border-radius: 50%;
+      overflow: hidden;
+      background: #f5f5f5;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.22s ease, filter 0.22s ease;
+      box-shadow: 0 3px 10px rgba(15, 23, 42, 0.08);
+    }
+
+    .cobbo-hot-offers__circle img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .cobbo-hot-offers__label {
+      margin-top: 12px;
+      min-height: 42px;
+      text-align: center;
+      font-size: 15px;
+      line-height: 1.35;
+      font-weight: 400;
+      color: #333842;
+      max-width: 150px;
+    }
+
+    .cobbo-hot-offers__item:hover .cobbo-hot-offers__circle {
+      transform: translateY(-3px) scale(1.035);
+      filter: brightness(1.03);
+    }
+
+    .cobbo-hot-offers__item:hover .cobbo-hot-offers__label {
+      color: #0057ff;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+
+    @media (max-width: 1100px) {
+      .cobbo-hot-offers__box {
+        padding: 20px 14px 22px;
+      }
+
+      .cobbo-hot-offers__track {
+        display: flex;
+        gap: 22px;
+        overflow-x: auto;
+        overflow-y: hidden;
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
+        padding: 2px 4px 10px;
+      }
+
+      .cobbo-hot-offers__track::-webkit-scrollbar {
+        height: 6px;
+      }
+
+      .cobbo-hot-offers__track::-webkit-scrollbar-track {
+        background: #f1f3f5;
+        border-radius: 999px;
+      }
+
+      .cobbo-hot-offers__track::-webkit-scrollbar-thumb {
+        background: #c8ced8;
+        border-radius: 999px;
+      }
+
+      .cobbo-hot-offers__item {
+        flex: 0 0 132px;
+        scroll-snap-align: start;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .cobbo-hot-offers {
+        padding: 0;
+      }
+
+      .cobbo-hot-offers__box {
+        border-left: 0;
+        border-right: 0;
+        border-radius: 0;
+        padding: 18px 12px 18px;
+      }
+
+      .cobbo-hot-offers__title {
+        font-size: 19px;
+      }
+
+      .cobbo-hot-offers__track {
+        gap: 18px;
+      }
+
+      .cobbo-hot-offers__item {
+        flex-basis: 118px;
+      }
+
+      .cobbo-hot-offers__circle {
+        width: 108px;
+        height: 108px;
+      }
+
+      .cobbo-hot-offers__label {
+        font-size: 14px;
+        max-width: 120px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <section class="cobbo-hot-offers" aria-label="Aktualne promocje">
+    <div class="cobbo-hot-offers__box">
+      <div class="cobbo-hot-offers__header">
+        <h2 class="cobbo-hot-offers__title">Aktualne promocje</h2>
+      </div>
+
+      <div class="cobbo-hot-offers__viewport">
+        <div class="cobbo-hot-offers__track">
+
+          <a class="cobbo-hot-offers__item" href="#" target="_top">
+            <span class="cobbo-hot-offers__circle">
+              <img src="https://cobbo.pl/upload/cobbo/images/strona/kolka/PROMOCJA1.webp" alt="Promocja COBBO">
+            </span>
+            <span class="cobbo-hot-offers__label">Promocja</span>
+          </a>
+
+          <a class="cobbo-hot-offers__item" href="#" target="_top">
+            <span class="cobbo-hot-offers__circle">
+              <img src="https://cobbo.pl/upload/cobbo/images/strona/kolka/PROMOCJA2.webp" alt="Promocja COBBO">
+            </span>
+            <span class="cobbo-hot-offers__label">Specjalna oferta</span>
+          </a>
+
+          <a class="cobbo-hot-offers__item" href="#" target="_top">
+            <span class="cobbo-hot-offers__circle">
+              <img src="https://cobbo.pl/upload/cobbo/images/strona/kolka/11.webp" alt="Okazja COBBO">
+            </span>
+            <span class="cobbo-hot-offers__label">Okazje COBBO</span>
+          </a>
+
+          <a class="cobbo-hot-offers__item" href="#" target="_top">
+            <span class="cobbo-hot-offers__circle">
+              <img src="https://cobbo.pl/upload/cobbo/images/strona/kolka/PREMIERY.webp" alt="Premiery COBBO">
+            </span>
+            <span class="cobbo-hot-offers__label">Premiery</span>
+          </a>
+
+          <a class="cobbo-hot-offers__item" href="#" target="_top">
+            <span class="cobbo-hot-offers__circle">
+              <img src="https://cobbo.pl/upload/cobbo/images/strona/kolka/PREMIERY-1.webp" alt="Nowe premiery COBBO">
+            </span>
+            <span class="cobbo-hot-offers__label">Najnowsze premiery</span>
+          </a>
+
+          <a class="cobbo-hot-offers__item" href="#" target="_top">
+            <span class="cobbo-hot-offers__circle">
+              <img src="https://cobbo.pl/upload/cobbo/images/strona/kolka/NOWOSCI.webp" alt="Nowości COBBO">
+            </span>
+            <span class="cobbo-hot-offers__label">Nowości</span>
+          </a>
+
+          <a class="cobbo-hot-offers__item" href="#" target="_top">
+            <span class="cobbo-hot-offers__circle">
+              <img src="https://cobbo.pl/upload/cobbo/images/strona/kolka/OUTLET.webp" alt="Outlet COBBO">
+            </span>
+            <span class="cobbo-hot-offers__label">Outlet</span>
+          </a>
+
+        </div>
+      </div>
+    </div>
+  </section>
+</body>
+</html>
