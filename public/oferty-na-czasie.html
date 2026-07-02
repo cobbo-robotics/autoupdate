@@ -7,224 +7,275 @@
 
   <style>
     * {
-      box-sizing: border-box;
-    }
+  box-sizing: border-box;
+}
 
-    html,
-    body {
-      margin: 0;
-      padding: 0;
-      width: 100%;
-      background: transparent;
-      font-family: SF Pro Display, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif !important;
-      color: #111827;
-    }
+html,
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  background: transparent;
+  font-family: SF Pro Display, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif !important;
+  color: #111827;
+}
 
-    .cobbo-hot-offers {
-      width: 100%;
-      padding: 0;
-      background: transparent;
-    }
+.cobbo-hot-offers {
+  width: 100%;
+  padding: 0;
+  background: transparent;
+}
 
-    .cobbo-hot-offers__box {
-      width: 100%;
-      border: 0;
-      border-radius: 0;
-      background: transparent;
-      padding: 22px 18px 24px;
-      overflow: hidden;
-      position: relative;
-    }
+.cobbo-hot-offers__box {
+  width: 100%;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  padding: 22px 0 24px;
+  overflow: hidden;
+  position: relative;
+}
 
-    .cobbo-hot-offers__header {
-      display: flex;
-      align-items: center;
-      justify-content: flex-start;
-      margin-bottom: 18px;
-    }
+.cobbo-hot-offers__header {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  margin-bottom: 18px;
+  padding: 0 18px;
+}
 
-    .cobbo-hot-offers__title {
-      margin: 0;
-      font-size: 22px;
-      line-height: 1.2;
-      font-weight: 700;
-      letter-spacing: -0.02em;
-      color: #111827;
-    }
+.cobbo-hot-offers__title {
+  margin: 0;
+  font-size: 22px;
+  line-height: 1.2;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: #111827;
+}
 
-    .cobbo-hot-offers__viewport {
-      position: relative;
-      width: 100%;
-    }
+.cobbo-hot-offers__viewport {
+  position: relative;
+  width: 100%;
+  overflow: visible;
+}
 
-    .cobbo-hot-offers__track {
-      display: grid;
-      grid-template-columns: repeat(7, minmax(120px, 1fr));
-      gap: 26px;
-      align-items: start;
-    }
+.cobbo-hot-offers__track {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(120px, 1fr));
+  gap: 26px;
+  align-items: start;
+  padding: 2px 18px 12px;
+}
 
-    .cobbo-hot-offers__item {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      text-decoration: none;
-      color: #30343b;
-      min-width: 0;
-    }
+.cobbo-hot-offers__item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-decoration: none;
+  color: #30343b;
+  min-width: 0;
+}
 
-    .cobbo-hot-offers__circle {
-      width: 128px;
-      height: 128px;
-      border-radius: 50%;
-      overflow: hidden;
-      background: #f5f5f5;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: transform 0.22s ease, filter 0.22s ease;
-      box-shadow: 0 4px 14px rgba(15, 23, 42, 0.12);
-    }
+.cobbo-hot-offers__circle {
+  width: 128px;
+  height: 128px;
+  border-radius: 50%;
+  overflow: hidden;
+  background: #f5f5f5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.22s ease, filter 0.22s ease;
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.12);
+}
 
-    .cobbo-hot-offers__circle img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-      image-rendering: auto;
-    }
+.cobbo-hot-offers__circle img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  image-rendering: auto;
+}
 
-    .cobbo-hot-offers__label {
-      margin-top: 12px;
-      min-height: 42px;
-      text-align: center;
-      font-size: 15px;
-      line-height: 1.35;
-      font-weight: 400;
-      color: #111827;
-      max-width: 150px;
-    }
+.cobbo-hot-offers__label {
+  margin-top: 12px;
+  min-height: 42px;
+  text-align: center;
+  font-size: 15px;
+  line-height: 1.35;
+  font-weight: 400;
+  color: #111827;
+  max-width: 150px;
+}
 
-    .cobbo-hot-offers__item:hover .cobbo-hot-offers__circle {
-      transform: translateY(-3px) scale(1.035);
-      filter: brightness(1.03);
-    }
+.cobbo-hot-offers__item:hover .cobbo-hot-offers__circle {
+  transform: translateY(-3px) scale(1.035);
+  filter: brightness(1.03);
+}
 
-    .cobbo-hot-offers__item:hover .cobbo-hot-offers__label {
-      color: #0057ff;
-      text-decoration: underline;
-      text-underline-offset: 3px;
-    }
+.cobbo-hot-offers__item:hover .cobbo-hot-offers__label {
+  color: #0057ff;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
 
-    .cobbo-hot-offers__arrow {
-      display: none;
-    }
+.cobbo-hot-offers__arrow {
+  display: none;
+}
 
-    @media (max-width: 1100px) {
-      .cobbo-hot-offers__box {
-        padding: 20px 46px 22px;
-      }
+/* TABLET + MOBILE */
+@media (max-width: 1100px) {
+  .cobbo-hot-offers__box {
+    padding: 20px 0 22px;
+  }
 
-      .cobbo-hot-offers__viewport {
-        overflow: hidden;
-      }
+  .cobbo-hot-offers__header {
+    padding: 0 18px;
+  }
 
-      .cobbo-hot-offers__track {
-        display: flex;
-        gap: 22px;
-        overflow-x: auto;
-        overflow-y: hidden;
-        scroll-snap-type: x mandatory;
-        scroll-behavior: smooth;
-        -webkit-overflow-scrolling: touch;
-        padding: 2px 4px 12px;
-        scrollbar-width: none;
-      }
+  .cobbo-hot-offers__viewport {
+    overflow: visible;
+  }
 
-      .cobbo-hot-offers__track::-webkit-scrollbar {
-        display: none;
-      }
+  .cobbo-hot-offers__track {
+    display: flex;
+    gap: 18px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    padding: 2px 18px 12px;
+    scrollbar-width: none;
+  }
 
-      .cobbo-hot-offers__item {
-        flex: 0 0 132px;
-        scroll-snap-align: start;
-      }
+  .cobbo-hot-offers__track::-webkit-scrollbar {
+    display: none;
+  }
 
-      .cobbo-hot-offers__arrow {
-        display: flex;
-        position: absolute;
-        top: 50%;
-        transform: translateY(-25%);
-        z-index: 5;
-        width: 34px;
-        height: 54px;
-        border: 1px solid #d1d5db;
-        border-radius: 999px;
-        background: rgba(255, 255, 255, 0.96);
-        color: #111827;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-        font-size: 28px;
-        line-height: 1;
-        font-weight: 500;
-        box-shadow: 0 4px 16px rgba(15, 23, 42, 0.14);
-      }
+  .cobbo-hot-offers__item {
+    flex: 0 0 122px;
+    scroll-snap-align: start;
+  }
 
-      .cobbo-hot-offers__arrow--left {
-        left: 6px;
-      }
+  .cobbo-hot-offers__circle {
+    width: 116px;
+    height: 116px;
+  }
 
-      .cobbo-hot-offers__arrow--right {
-        right: 6px;
-      }
+  .cobbo-hot-offers__label {
+    font-size: 14px;
+    max-width: 122px;
+  }
 
-      .cobbo-hot-offers__arrow:hover {
-        background: #f8fafc;
-      }
-    }
+  .cobbo-hot-offers__arrow {
+    display: flex;
+    position: absolute;
+    top: 48%;
+    transform: translateY(-50%);
+    z-index: 20;
+    width: 34px;
+    height: 54px;
+    border: 1px solid #d1d5db;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.94);
+    color: #111827;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 28px;
+    line-height: 1;
+    font-weight: 500;
+    box-shadow: 0 4px 16px rgba(15, 23, 42, 0.14);
+  }
 
-    @media (max-width: 640px) {
-      .cobbo-hot-offers__box {
-        padding: 18px 42px 18px;
-      }
+  .cobbo-hot-offers__arrow--left {
+    left: 4px;
+  }
 
-      .cobbo-hot-offers__title {
-        font-size: 19px;
-      }
+  .cobbo-hot-offers__arrow--right {
+    right: 4px;
+  }
 
-      .cobbo-hot-offers__track {
-        gap: 18px;
-      }
+  .cobbo-hot-offers__arrow:hover {
+    background: #f8fafc;
+  }
+}
 
-      .cobbo-hot-offers__item {
-        flex-basis: 118px;
-      }
+/* MOBILE */
+@media (max-width: 640px) {
+  .cobbo-hot-offers__box {
+    padding: 18px 0 18px;
+  }
 
-      .cobbo-hot-offers__circle {
-        width: 108px;
-        height: 108px;
-      }
+  .cobbo-hot-offers__header {
+    padding: 0 16px;
+    margin-bottom: 16px;
+  }
 
-      .cobbo-hot-offers__label {
-        font-size: 14px;
-        max-width: 120px;
-      }
+  .cobbo-hot-offers__title {
+    font-size: 19px;
+  }
 
-      .cobbo-hot-offers__arrow {
-        width: 32px;
-        height: 50px;
-        font-size: 26px;
-      }
+  .cobbo-hot-offers__track {
+    gap: 14px;
+    padding: 2px 16px 12px;
+  }
 
-      .cobbo-hot-offers__arrow--left {
-        left: 4px;
-      }
+  .cobbo-hot-offers__item {
+    flex: 0 0 104px;
+  }
 
-      .cobbo-hot-offers__arrow--right {
-        right: 4px;
-      }
-    }
+  .cobbo-hot-offers__circle {
+    width: 96px;
+    height: 96px;
+  }
+
+  .cobbo-hot-offers__label {
+    margin-top: 9px;
+    font-size: 13px;
+    line-height: 1.25;
+    max-width: 104px;
+    min-height: 34px;
+  }
+
+  .cobbo-hot-offers__arrow {
+    width: 30px;
+    height: 46px;
+    font-size: 25px;
+    background: rgba(255, 255, 255, 0.94);
+  }
+
+  .cobbo-hot-offers__arrow--left {
+    left: 4px;
+  }
+
+  .cobbo-hot-offers__arrow--right {
+    right: 4px;
+  }
+}
+
+/* SMALL MOBILE */
+@media (max-width: 380px) {
+  .cobbo-hot-offers__track {
+    gap: 12px;
+    padding: 2px 14px 12px;
+  }
+
+  .cobbo-hot-offers__item {
+    flex: 0 0 100px;
+  }
+
+  .cobbo-hot-offers__circle {
+    width: 92px;
+    height: 92px;
+  }
+
+  .cobbo-hot-offers__label {
+    font-size: 12.5px;
+    max-width: 100px;
+  }
+}
   </style>
 </head>
 
