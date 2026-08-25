@@ -4,243 +4,44 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>COBBO Q6 PRO Technology Showcase</title>
-
 <style>
 
 *{
 box-sizing:border-box;
 }
 
-html,body{
-margin:0;
-padding:0;
-}
-
 body{
+margin:0;
 font-family:
 "SF Pro Display",
 -apple-system,
 BlinkMacSystemFont,
 "Segoe UI",
 sans-serif;
-
 background:transparent;
 }
 
 
-/* =========================================================
-ROOT
-========================================================= */
-
-#q6pro-tech-showcase{
+#q6pro-feature-showcase{
 
 width:100%;
-overflow:hidden;
+min-height:780px;
 
-padding:
-70px 0;
-
-background:
-linear-gradient(
-160deg,
-#f8f5f1 0%,
-#ffffff 45%,
-#ebe3da 100%
-);
-
-border-radius:32px;
-
-transition:
-background .8s ease;
-
-}
-
-
-/* =========================================================
-HEADER
-========================================================= */
-
-
-#q6pro-tech-header{
-
-text-align:center;
-
-padding:
-0 24px;
-
-}
-
-
-#q6pro-tech-eyebrow{
-
-font-size:11px;
-
-letter-spacing:.18em;
-
-font-weight:650;
-
-color:#a1968a;
-
-text-transform:uppercase;
-
-}
-
-
-#q6pro-tech-title{
-
-margin-top:18px;
-
-font-size:
-clamp(34px,5vw,60px);
-
-line-height:1.05;
-
-font-weight:700;
-
-letter-spacing:-.05em;
-
-color:#111;
-
-}
-
-
-#q6pro-tech-title span{
-
-color:#9d8e7e;
-
-}
-
-
-#q6pro-tech-description{
-
-max-width:650px;
-
-margin:
-22px auto 0;
-
-font-size:17px;
-
-line-height:1.6;
-
-color:#6b645c;
-
-}
-
-
-/* =========================================================
-CAROUSEL
-========================================================= */
-
-
-#q6pro-tech-wrapper{
-
-position:relative;
-
-margin-top:55px;
-
-}
-
-
-
-#q6pro-tech-window{
-
-overflow:visible;
-
-cursor:grab;
-
-touch-action:none;
-
-}
-
-
-#q6pro-tech-window.dragging{
-
-cursor:grabbing;
-
-}
-
-
-
-#q6pro-tech-track{
-
-display:flex;
-
-align-items:center;
-
-gap:26px;
-
-padding:
-
-20px calc((100vw - min(1180px,100vw))/2 + 24px);
-
-transition:
-transform .7s cubic-bezier(.22,.61,.36,1);
-
-}
-
-
-
-.q6pro-tech-card{
-
-position:relative;
-
-flex:
-
-0 0 min(760px,75vw);
-
-height:720px;
+padding:60px 30px;
 
 border-radius:34px;
 
+background:
+linear-gradient(
+140deg,
+#081c2e 0%,
+#102f4b 45%,
+#050f18 100%
+);
+
+color:white;
+
 overflow:hidden;
-
-background:#fff;
-
-box-shadow:
-
-0 30px 100px rgba(0,0,0,.12);
-
-opacity:.45;
-
-transform:
-
-scale(.82);
-
-filter:blur(2px);
-
-transition:
-
-transform .7s cubic-bezier(.22,.61,.36,1),
-opacity .7s ease,
-filter .7s ease;
-
-}
-
-
-
-.q6pro-tech-card.active{
-
-opacity:1;
-
-transform:
-
-scale(1);
-
-filter:none;
-
-}
-
-
-
-/* =========================================================
-CARD VISUAL
-========================================================= */
-
-
-.q6pro-card-image{
-
-height:52%;
 
 position:relative;
 
@@ -248,448 +49,378 @@ display:flex;
 
 align-items:center;
 
-justify-content:center;
+gap:50px;
 
-background:
+}
 
-radial-gradient(
-circle at center,
-#ffffff,
-#e9e1d8
-);
+
+/* LEFT */
+
+#q6pro-feature-list{
+
+width:38%;
+
+max-width:420px;
+
+z-index:10;
 
 }
 
 
 
-.q6pro-card-image.dark{
-
-background:
-
-radial-gradient(
-circle at center,
-rgba(255,255,255,.18),
-transparent 60%
-),
-
-linear-gradient(
-150deg,
-#071927,
-#173a58
-);
-
-}
-
-
-
-.q6pro-placeholder{
-
-text-align:center;
-
-font-size:12px;
-
-font-weight:650;
-
-letter-spacing:.14em;
-
-color:#a1968a;
-
-}
-
-
-
-.dark .q6pro-placeholder{
-
-color:
-rgba(255,255,255,.45);
-
-}
-
-
-.q6pro-card-number{
-
-position:absolute;
-
-top:24px;
-
-right:30px;
+#q6pro-feature-title{
 
 font-size:
-
-150px;
-
-font-weight:750;
-
-letter-spacing:-.08em;
-
-line-height:.8;
-
-color:
-
-rgba(0,0,0,.05);
-
-}
-
-
-.dark .q6pro-card-number{
-
-color:
-
-rgba(255,255,255,.08);
-
-}
-
-
-
-/* =========================================================
-CONTENT
-========================================================= */
-
-
-.q6pro-card-content{
-
-height:48%;
-
-padding:
-
-35px 42px;
-
-}
-
-
-.dark .q6pro-card-content{
-
-background:#071927;
-
-color:#fff;
-
-}
-
-
-
-.q6pro-card-label{
-
-font-size:11px;
-
-font-weight:650;
-
-letter-spacing:.16em;
-
-text-transform:uppercase;
-
-color:#a1968a;
-
-}
-
-
-.dark .q6pro-card-label{
-
-color:#d5bca5;
-
-}
-
-
-
-.q6pro-card-title{
-
-margin-top:15px;
-
-font-size:
-
-clamp(28px,4vw,44px);
+clamp(34px,4vw,54px);
 
 font-weight:700;
 
 line-height:1.05;
 
-letter-spacing:-.045em;
+letter-spacing:-.05em;
+
+margin-bottom:35px;
+
+}
+
+
+#q6pro-feature-title span{
+
+color:#cbbca9;
 
 }
 
 
 
-.q6pro-card-text{
+.q6pro-feature-item{
 
-margin-top:18px;
+margin-bottom:12px;
 
-max-width:620px;
-
-font-size:16px;
-
-line-height:1.6;
-
-color:#6b645c;
-
-}
-
-
-
-.dark .q6pro-card-text{
-
-color:
-rgba(255,255,255,.65);
-
-}
-
-
-
-/* =========================================================
-BENEFITS
-========================================================= */
-
-
-.q6pro-benefits{
-
-display:grid;
-
-grid-template-columns:
-repeat(3,1fr);
-
-gap:12px;
-
-margin-top:28px;
-
-}
-
-
-
-.q6pro-benefit{
-
-padding:16px;
-
-border-radius:18px;
-
-background:#f5f1ec;
-
-}
-
-
-.dark .q6pro-benefit{
+border-radius:22px;
 
 background:
 rgba(255,255,255,.08);
 
-}
+backdrop-filter:blur(20px);
 
+overflow:hidden;
 
-
-.q6pro-benefit strong{
-
-display:block;
-
-font-size:23px;
-
-font-weight:700;
+transition:.5s ease;
 
 }
 
 
-.q6pro-benefit span{
+.q6pro-feature-item summary{
 
-display:block;
-
-margin-top:5px;
-
-font-size:12px;
-
-line-height:1.4;
-
-color:#81786f;
-
-}
-
-
-
-.dark .q6pro-benefit span{
-
-color:
-rgba(255,255,255,.55);
-
-}
-
-
-
-/* =========================================================
-SIDE ARROWS
-========================================================= */
-
-
-.q6pro-arrow{
-
-position:absolute;
-
-top:50%;
-
-transform:
-translateY(-50%);
-
-width:58px;
-
-height:58px;
-
-border-radius:50%;
-
-border:none;
-
-background:#10263f;
-
-color:#fff;
-
-font-size:26px;
+list-style:none;
 
 cursor:pointer;
 
-z-index:20;
-
-}
-
-
-
-#q6pro-prev{
-
-left:30px;
-
-}
-
-
-#q6pro-next{
-
-right:30px;
-
-}
-
-
-
-/* =========================================================
-BOTTOM
-========================================================= */
-
-
-#q6pro-progress{
+padding:20px 24px;
 
 display:flex;
 
-justify-content:center;
-
 align-items:center;
 
-gap:12px;
+gap:15px;
 
-margin-top:35px;
+font-size:18px;
 
-}
-
-
-
-.q6pro-dot{
-
-width:8px;
-
-height:8px;
-
-border-radius:50%;
-
-background:#c8beb3;
-
-cursor:pointer;
-
-transition:.3s;
+font-weight:600;
 
 }
 
 
-
-.q6pro-dot.active{
-
-width:35px;
-
-border-radius:20px;
-
-background:#10263f;
-
-}
-
-
-
-
-/* =========================================================
-MOBILE
-========================================================= */
-
-
-@media(max-width:700px){
-
-
-#q6pro-tech-showcase{
-
-padding:45px 0;
-
-}
-
-
-
-#q6pro-tech-track{
-
-gap:14px;
-
-padding:
-
-20px 18px;
-
-}
-
-
-
-.q6pro-tech-card{
-
-flex-basis:88vw;
-
-height:680px;
-
-}
-
-
-
-.q6pro-card-image{
-
-height:42%;
-
-}
-
-
-.q6pro-card-content{
-
-height:58%;
-
-padding:
-
-26px 22px;
-
-}
-
-
-.q6pro-benefits{
-
-grid-template-columns:1fr;
-
-gap:8px;
-
-}
-
-
-
-.q6pro-arrow{
+.q6pro-feature-item summary::-webkit-details-marker{
 
 display:none;
 
 }
 
 
-.q6pro-card-number{
+.q6pro-feature-icon{
 
-font-size:110px;
+width:38px;
+
+height:38px;
+
+border-radius:50%;
+
+display:flex;
+
+align-items:center;
+
+justify-content:center;
+
+background:#cbbca9;
+
+color:#081c2e;
+
+font-weight:700;
 
 }
+
+
+
+.q6pro-feature-content{
+
+padding:
+0 24px 25px 77px;
+
+font-size:15px;
+
+line-height:1.6;
+
+color:
+rgba(255,255,255,.7);
+
+}
+
+
+
+.q6pro-feature-item[open]{
+
+background:
+rgba(255,255,255,.16);
+
+}
+
+
+
+
+
+/* RIGHT VISUAL */
+
+
+#q6pro-feature-visual{
+
+flex:1;
+
+height:650px;
+
+position:relative;
+
+}
+
+
+
+.q6pro-feature-image{
+
+position:absolute;
+
+inset:0;
+
+display:flex;
+
+align-items:center;
+
+justify-content:center;
+
+opacity:0;
+
+scale:.92;
+
+transition:
+opacity .6s ease,
+scale .8s cubic-bezier(.2,.8,.2,1);
+
+}
+
+
+.q6pro-feature-image.active{
+
+opacity:1;
+
+scale:1;
+
+}
+
+
+
+.q6pro-feature-placeholder{
+
+width:90%;
+
+height:90%;
+
+border-radius:40px;
+
+display:flex;
+
+align-items:center;
+
+justify-content:center;
+
+text-align:center;
+
+font-size:13px;
+
+letter-spacing:.15em;
+
+font-weight:600;
+
+color:
+rgba(255,255,255,.35);
+
+
+background:
+
+radial-gradient(
+circle,
+rgba(255,255,255,.16),
+rgba(255,255,255,.02)
+);
+
+border:
+1px solid rgba(255,255,255,.12);
+
+}
+
+
+
+.q6pro-feature-number{
+
+position:absolute;
+
+right:30px;
+
+top:0;
+
+font-size:180px;
+
+line-height:1;
+
+font-weight:800;
+
+color:
+rgba(255,255,255,.06);
+
+letter-spacing:-.08em;
+
+}
+
+
+
+/* CONTROLS */
+
+
+#q6pro-feature-controls{
+
+position:absolute;
+
+right:35px;
+
+bottom:35px;
+
+display:flex;
+
+gap:12px;
+
+}
+
+
+.q6pro-feature-button{
+
+width:52px;
+
+height:52px;
+
+border-radius:50%;
+
+border:0;
+
+background:white;
+
+color:#081c2e;
+
+font-size:22px;
+
+cursor:pointer;
+
+}
+
+
+
+
+
+/* MOBILE */
+
+
+@media(max-width:850px){
+
+
+#q6pro-feature-showcase{
+
+display:flex;
+
+flex-direction:column-reverse;
+
+padding:35px 18px;
+
+gap:25px;
+
+min-height:auto;
+
+}
+
+
+
+#q6pro-feature-list{
+
+width:100%;
+
+max-width:none;
+
+}
+
+
+
+#q6pro-feature-visual{
+
+width:100%;
+
+height:330px;
+
+}
+
+
+
+.q6pro-feature-placeholder{
+
+width:100%;
+
+height:100%;
+
+border-radius:28px;
+
+}
+
+
+
+.q6pro-feature-number{
+
+font-size:100px;
+
+right:10px;
+
+}
+
+
+
+#q6pro-feature-controls{
+
+position:relative;
+
+right:auto;
+
+bottom:auto;
+
+justify-content:center;
+
+margin-top:20px;
+
+}
+
 
 
 }
@@ -704,619 +435,249 @@ font-size:110px;
 <body>
 
 
-<div id="q6pro-tech-showcase">
+<div id="q6pro-feature-showcase">
 
 
-
-<div id="q6pro-tech-header">
-
-<div id="q6pro-tech-eyebrow">
-Q6 PRO Technology Showcase
-</div>
+<div id="q6pro-feature-list">
 
 
-<div id="q6pro-tech-title">
+<div id="q6pro-feature-title">
 
-Technologie,
-które tworzą
+Technologie Q6 PRO
 <br>
 
 <span>
-nową generację mycia.
-
+które robią różnicę.
 </span>
 
 </div>
 
 
-<div id="q6pro-tech-description">
 
-Przesuń i odkryj rozwiązania,
-które odpowiadają za dokładniejsze,
-stabilniejsze i bardziej równomierne mycie szyb.
+<details class="q6pro-feature-item" open data-image="1">
+
+<summary>
+
+<div class="q6pro-feature-icon">
+01
+</div>
+
+Active Dynamic Glide™
+
+</summary>
+
+
+<div class="q6pro-feature-content">
+
+Kierunkowy system drgań działa po stronie prowadzącej robota.
+Podczas jazdy w lewo pracuje lewa strona.
+Podczas jazdy w prawo — prawa.
+
+Pomaga ograniczyć smugi i efekt „skóry węża”.
+
+</div>
+
+</details>
+
+
+
+<details class="q6pro-feature-item" data-image="2">
+
+<summary>
+
+<div class="q6pro-feature-icon">
+02
+</div>
+
+3-strefowa ściereczka
+
+</summary>
+
+
+<div class="q6pro-feature-content">
+
+Jedna powierzchnia robocza została podzielona na trzy etapy:
+
+zbieranie zabrudzeń,
+mycie,
+polerowanie.
+
+</div>
+
+</details>
+
+
+
+<details class="q6pro-feature-item" data-image="3">
+
+<summary>
+
+<div class="q6pro-feature-icon">
+03
+</div>
+
+Spray Pulse 8™
+
+</summary>
+
+
+<div class="q6pro-feature-content">
+
+Osiem kierunków natrysku przygotowuje szybę przed przejazdem robota.
+
+4 kierunki po lewej stronie i 4 po prawej.
+
+</div>
+
+</details>
+
+
+
+<details class="q6pro-feature-item" data-image="4">
+
+<summary>
+
+<div class="q6pro-feature-icon">
+04
+</div>
+
+FullEdge Clean™
+
+</summary>
+
+
+<div class="q6pro-feature-content">
+
+System zaprojektowany do dokładniejszej pracy przy krawędziach,
+rogach i uszczelkach.
+
+</div>
+
+</details>
+
+
+
+<details class="q6pro-feature-item" data-image="5">
+
+<summary>
+
+<div class="q6pro-feature-icon">
+05
+</div>
+
+Smart Control
+
+</summary>
+
+
+<div class="q6pro-feature-content">
+
+AI Cleaning Path 4.0,
+Anti-Wind 3.0 oraz kontrola docisku pomagają utrzymać stabilną pracę robota.
+
+</div>
+
+</details>
+
+
 
 </div>
 
 
-</div>
 
 
+<div id="q6pro-feature-visual">
 
 
-<div id="q6pro-tech-wrapper">
+<div class="q6pro-feature-image active" data-image="1">
 
-
-<button
-class="q6pro-arrow"
-id="q6pro-prev">
-
-←
-
-</button>
-
-
-<div id="q6pro-tech-window">
-
-
-<div id="q6pro-tech-track">
-
-
-
-<!-- CARD 1 -->
-
-<div class="q6pro-tech-card active dark">
-
-
-<div class="q6pro-card-image dark">
-
-<div class="q6pro-placeholder">
+<div class="q6pro-feature-placeholder">
 
 RENDER ACTIVE DYNAMIC GLIDE™
 
 </div>
 
-
-<div class="q6pro-card-number">
+<div class="q6pro-feature-number">
 01
 </div>
 
-
-</div>
-
-
-<div class="q6pro-card-content">
-
-
-<div class="q6pro-card-label">
-
-Active Dynamic Glide™
-
-</div>
-
-
-<div class="q6pro-card-title">
-
-Nie tylko jedzie.
-<br>
-Aktywnie pracuje.
-
-</div>
-
-
-<div class="q6pro-card-text">
-
-Kierunkowy system drgań działa po stronie,
-która prowadzi robota podczas jazdy.
-Lewo oznacza pracę lewej strony.
-Prawo oznacza pracę prawej strony.
-
-</div>
-
-
-<div class="q6pro-benefits">
-
-
-<div class="q6pro-benefit">
-
-<strong>
-↔
-</strong>
-
-<span>
-Drgania zgodne z kierunkiem ruchu
-</span>
-
-</div>
-
-
-<div class="q6pro-benefit">
-
-<strong>
-↓
-</strong>
-
-<span>
-Mniej smug i efektu skóry węża
-</span>
-
-</div>
-
-
-<div class="q6pro-benefit">
-
-<strong>
-360°
-</strong>
-
-<span>
-Równomierna praca
-</span>
-
-</div>
-
-
-</div>
-
-
-</div>
-
-
 </div>
 
 
 
+<div class="q6pro-feature-image" data-image="2">
 
-<!-- CARD 2 -->
+<div class="q6pro-feature-placeholder">
 
-
-<div class="q6pro-tech-card">
-
-
-<div class="q6pro-card-image">
-
-
-<div class="q6pro-placeholder">
-
-RENDER 3-ZONE CLOTH
+RENDER 3-STREFOWA ŚCIERECZKA
 
 </div>
 
-
-<div class="q6pro-card-number">
+<div class="q6pro-feature-number">
 02
 </div>
 
-
 </div>
 
 
 
-<div class="q6pro-card-content">
+<div class="q6pro-feature-image" data-image="3">
 
-
-<div class="q6pro-card-label">
-
-3-strefowa ściereczka
-
-</div>
-
-
-<div class="q6pro-card-title">
-
-Jedna ściereczka.
-<br>
-Trzy etapy pracy.
-
-</div>
-
-
-<div class="q6pro-card-text">
-
-Specjalna struktura materiału łączy
-zbieranie zabrudzeń, mycie oraz
-końcowe polerowanie powierzchni.
-
-</div>
-
-
-<div class="q6pro-benefits">
-
-<div class="q6pro-benefit">
-
-<strong>
-01
-</strong>
-
-<span>
-Zbieranie brudu
-</span>
-
-</div>
-
-
-<div class="q6pro-benefit">
-
-<strong>
-02
-</strong>
-
-<span>
-Mycie
-</span>
-
-</div>
-
-
-<div class="q6pro-benefit">
-
-<strong>
-03
-</strong>
-
-<span>
-Polerowanie
-</span>
-
-</div>
-
-
-</div>
-
-
-</div>
-
-
-</div>
-
-
-
-
-<!-- CARD 3 -->
-
-
-<div class="q6pro-tech-card">
-
-
-<div class="q6pro-card-image">
-
-
-<div class="q6pro-placeholder">
+<div class="q6pro-feature-placeholder">
 
 RENDER SPRAY PULSE 8
 
 </div>
 
-
-<div class="q6pro-card-number">
+<div class="q6pro-feature-number">
 03
 </div>
 
-
-</div>
-
-
-<div class="q6pro-card-content">
-
-
-<div class="q6pro-card-label">
-
-Spray Pulse 8 Technology
-
-</div>
-
-
-<div class="q6pro-card-title">
-
-Płyn dokładnie tam,
-<br>
-gdzie zaczyna się mycie.
-
-</div>
-
-
-<div class="q6pro-card-text">
-
-Osiem kierunków natrysku
-przygotowuje szybę przed przejazdem
-ściereczki.
-
-</div>
-
-
-<div class="q6pro-benefits">
-
-
-<div class="q6pro-benefit">
-
-<strong>
-4+4
-</strong>
-
-<span>
-Natrysk po obu stronach
-</span>
-
-</div>
-
-
-<div class="q6pro-benefit">
-
-<strong>
-8
-</strong>
-
-<span>
-Kierunków pracy
-</span>
-
-</div>
-
-
-<div class="q6pro-benefit">
-
-<strong>
-✓
-</strong>
-
-<span>
-Równomierne przygotowanie
-</span>
-
-</div>
-
-
-</div>
-
-
-</div>
-
-
 </div>
 
 
 
+<div class="q6pro-feature-image" data-image="4">
 
-
-<!-- CARD 4 -->
-
-
-<div class="q6pro-tech-card dark">
-
-
-<div class="q6pro-card-image dark">
-
-
-<div class="q6pro-placeholder">
+<div class="q6pro-feature-placeholder">
 
 RENDER FULL EDGE CLEAN™
 
 </div>
 
-
-<div class="q6pro-card-number">
+<div class="q6pro-feature-number">
 04
 </div>
 
-
-</div>
-
-
-<div class="q6pro-card-content">
-
-
-<div class="q6pro-card-label">
-
-FullEdge Clean™
-
-</div>
-
-
-<div class="q6pro-card-title">
-
-Cała szyba.
-<br>
-Bez kompromisów.
-
-</div>
-
-
-<div class="q6pro-card-text">
-
-Konstrukcja Q6 PRO została zaprojektowana
-do dokładniejszej pracy przy krawędziach,
-rogach i uszczelkach.
-
-</div>
-
-
-<div class="q6pro-benefits">
-
-
-<div class="q6pro-benefit">
-
-<strong>
-EDGE
-</strong>
-
-<span>
-Praca bliżej ram
-</span>
-
-</div>
-
-
-<div class="q6pro-benefit">
-
-<strong>
-360
-</strong>
-
-<span>
-Pełne wykorzystanie powierzchni
-</span>
-
-</div>
-
-
-<div class="q6pro-benefit">
-
-<strong>
-+
-</strong>
-
-<span>
-Mniej poprawek ręcznych
-</span>
-
-</div>
-
-
-</div>
-
-
-</div>
-
-
 </div>
 
 
 
+<div class="q6pro-feature-image" data-image="5">
 
-<!-- CARD 5 -->
+<div class="q6pro-feature-placeholder">
 
-
-<div class="q6pro-tech-card">
-
-
-<div class="q6pro-card-image">
-
-
-<div class="q6pro-placeholder">
-
-SMART CONTROL
+RENDER SMART CONTROL
 
 </div>
 
-
-<div class="q6pro-card-number">
+<div class="q6pro-feature-number">
 05
 </div>
 
-
-</div>
-
-
-<div class="q6pro-card-content">
-
-
-<div class="q6pro-card-label">
-
-Smart Control
-
-</div>
-
-
-<div class="q6pro-card-title">
-
-Stabilność.
-<br>
-Kontrola.
-<br>
-Precyzja.
-
-</div>
-
-
-<div class="q6pro-card-text">
-
-AI Cleaning Path 4.0,
-Anti-Wind 3.0 oraz kontrola docisku
-pomagają utrzymać stabilną pracę robota.
-
-</div>
-
-
-<div class="q6pro-benefits">
-
-
-<div class="q6pro-benefit">
-
-<strong>
-4.0
-</strong>
-
-<span>
-AI Cleaning Path
-</span>
-
-</div>
-
-
-<div class="q6pro-benefit">
-
-<strong>
-3.0
-</strong>
-
-<span>
-Anti-Wind
-</span>
-
-</div>
-
-
-<div class="q6pro-benefit">
-
-<strong>
-AI
-</strong>
-
-<span>
-Automatyczna kontrola pracy
-</span>
-
-</div>
-
-
-</div>
-
-
-</div>
-
-
 </div>
 
 
 
-</div>
+<div id="q6pro-feature-controls">
 
-</div>
-
-
-
-<button
-class="q6pro-arrow"
-id="q6pro-next">
-
-→
-
+<button class="q6pro-feature-button" id="q6pro-prev">
+←
 </button>
 
-
-</div>
-
-
-
-
-<div id="q6pro-progress">
-
-
-<div class="q6pro-dot active"></div>
-<div class="q6pro-dot"></div>
-<div class="q6pro-dot"></div>
-<div class="q6pro-dot"></div>
-<div class="q6pro-dot"></div>
-
+<button class="q6pro-feature-button" id="q6pro-next">
+→
+</button>
 
 </div>
 
@@ -1324,6 +685,8 @@ id="q6pro-next">
 
 </div>
 
+
+</div>
 
 
 
@@ -1331,241 +694,102 @@ id="q6pro-next">
 <script>
 
 
-(function(){
-
-
-const root =
-document.getElementById(
-"q6pro-tech-showcase"
-);
-
-
-const track =
-document.getElementById(
-"q6pro-tech-track"
-);
-
-
-const cards =
-Array.from(
+const q6Items =
 document.querySelectorAll(
-".q6pro-tech-card"
-)
+".q6pro-feature-item"
 );
 
 
-const dots =
-Array.from(
+const q6Images =
 document.querySelectorAll(
-".q6pro-dot"
-)
+".q6pro-feature-image"
 );
 
 
-let current=0;
+
+function q6Activate(index){
+
+q6Items.forEach(
+(item,i)=>{
+
+item.open =
+i===index;
+
+}
+);
 
 
-let startX=0;
 
-let currentTranslate=0;
+q6Images.forEach(
+(img)=>{
 
-let isDragging=false;
-
-
-
-function update(){
-
-
-cards.forEach(
-(card,index)=>{
-
-card.classList.toggle(
+img.classList.toggle(
 "active",
-index===current
+img.dataset.image ==
+index+1
 );
 
 }
 );
 
 
-
-dots.forEach(
-(dot,index)=>{
-
-dot.classList.toggle(
-"active",
-index===current
-);
-
-}
-);
-
-
-
-const cardWidth =
-cards[0].offsetWidth + 26;
-
-
-
-currentTranslate =
--(current * cardWidth);
-
-
-
-track.style.transform =
-`translateX(${currentTranslate}px)`;
-
-
 }
 
 
 
-
-function next(){
-
-
-current++;
-
-if(current>=cards.length)
-current=0;
+q6Items.forEach(
+(item,index)=>{
 
 
-update();
+item.addEventListener(
+"toggle",
+()=>{
 
-}
+if(item.open){
 
-
-
-function prev(){
-
-
-current--;
-
-if(current<0)
-current=cards.length-1;
-
-
-update();
+q6Activate(index);
 
 }
+
+});
+
+
+});
+
+
+
+let q6Current=0;
 
 
 
 document
 .getElementById("q6pro-next")
-.onclick=next;
+.onclick=()=>{
+
+q6Current++;
+
+if(q6Current>=q6Items.length)
+q6Current=0;
+
+q6Activate(q6Current);
+
+};
+
 
 
 document
 .getElementById("q6pro-prev")
-.onclick=prev;
+.onclick=()=>{
 
+q6Current--;
 
+if(q6Current<0)
+q6Current=q6Items.length-1;
 
-dots.forEach(
-(dot,index)=>{
-
-dot.onclick=()=>{
-
-current=index;
-
-update();
+q6Activate(q6Current);
 
 };
 
-}
-);
-
-
-
-track.addEventListener(
-"pointerdown",
-e=>{
-
-isDragging=true;
-
-startX=e.clientX;
-
-track.style.transition="none";
-
-track.setPointerCapture(
-e.pointerId
-);
-
-}
-);
-
-
-
-track.addEventListener(
-"pointermove",
-e=>{
-
-if(!isDragging)
-return;
-
-
-let diff =
-e.clientX-startX;
-
-
-track.style.transform =
-`translateX(${currentTranslate+diff}px)`;
-
-}
-);
-
-
-
-track.addEventListener(
-"pointerup",
-e=>{
-
-
-if(!isDragging)
-return;
-
-
-isDragging=false;
-
-
-track.style.transition=
-"transform .7s cubic-bezier(.22,.61,.36,1)";
-
-
-let diff =
-e.clientX-startX;
-
-
-
-if(diff < -80)
-next();
-
-
-else if(diff > 80)
-prev();
-
-
-else
-update();
-
-
-}
-);
-
-
-
-window.addEventListener(
-"resize",
-update
-);
-
-
-
-update();
-
-
-})();
 
 
 </script>
