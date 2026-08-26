@@ -1,827 +1,301 @@
-<!DOCTYPE html>
-<html lang="pl">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<section id="q6pro-feature-viewer">
 
 <style>
-
-*{
-box-sizing:border-box;
+#q6pro-feature-viewer{
+    width:100%;
+    overflow:hidden;
+    background:#fff;
+    font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",Arial,sans-serif;
+    color:#1d1d1f;
 }
 
-body{
-margin:0;
-padding:0;
-font-family:
-"SF Pro Display",
--apple-system,
-BlinkMacSystemFont,
-"Segoe UI",
-sans-serif;
-background:transparent;
+#q6pro-feature-viewer .q6-header{
+    max-width:1200px;
+    margin:0 auto;
+    padding:70px 24px 30px;
 }
 
-
-/* =========================================================
-   ROOT
-========================================================= */
-
-#q6pro-apple-feature-gallery{
-
-width:100%;
-
-padding:
-55px 0 50px;
-
-background:
-linear-gradient(
-180deg,
-#ffffff 0%,
-#f5f2ed 100%
-);
-
-overflow:hidden;
-
+#q6pro-feature-viewer .q6-header h2{
+    font-size:48px;
+    line-height:1.05;
+    letter-spacing:-2px;
+    font-weight:700;
+    margin:0;
 }
 
-
-
-/* =========================================================
-   HEADER
-========================================================= */
-
-#q6pro-gallery-header{
-
-text-align:center;
-
-padding:
-0 20px;
-
+#q6pro-feature-viewer .q6-viewer{
+    position:relative;
+    width:100%;
+    height:620px;
+    overflow:hidden;
 }
 
-
-#q6pro-gallery-eyebrow{
-
-font-size:11px;
-
-font-weight:650;
-
-letter-spacing:.18em;
-
-color:#a1968a;
-
-text-transform:uppercase;
-
+#q6pro-feature-viewer .q6-image{
+    position:absolute;
+    inset:0;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    transition:.45s ease;
 }
 
-
-#q6pro-gallery-title{
-
-margin-top:16px;
-
-font-size:
-clamp(32px,5vw,56px);
-
-font-weight:700;
-
-letter-spacing:-.05em;
-
-line-height:1.05;
-
-color:#111;
-
+#q6pro-feature-viewer .q6-image img{
+    width:min(75%,900px);
+    max-height:520px;
+    object-fit:contain;
 }
 
-
-#q6pro-gallery-title span{
-
-color:#9d8e7e;
-
+#q6pro-feature-viewer .q6-controls-wrapper{
+    position:relative;
+    width:100%;
+    overflow:hidden;
 }
 
-
-#q6pro-gallery-description{
-
-max-width:650px;
-
-margin:
-18px auto 0;
-
-font-size:17px;
-
-line-height:1.6;
-
-color:#6b645c;
-
+#q6pro-feature-viewer .q6-controls{
+    display:flex;
+    gap:12px;
+    padding:20px 40px 50px;
+    overflow-x:auto;
+    scroll-behavior:smooth;
+    scrollbar-width:none;
 }
 
-
-
-/* =========================================================
-   MAIN VISUAL
-========================================================= */
-
-
-#q6pro-gallery-visual{
-
-position:relative;
-
-width:100%;
-
-max-width:1000px;
-
-height:
-
-clamp(300px,50vw,560px);
-
-margin:
-45px auto 0;
-
-display:flex;
-
-align-items:center;
-
-justify-content:center;
-
+#q6pro-feature-viewer .q6-controls::-webkit-scrollbar{
+    display:none;
 }
 
+#q6pro-feature-viewer .q6-card{
+    flex:0 0 auto;
+    background:#f5f5f7;
+    border-radius:28px;
+    height:56px;
+    transition:.4s ease;
+    overflow:hidden;
+}
 
-.q6pro-gallery-image{
+#q6pro-feature-viewer .q6-card button{
+    height:56px;
+    border:0;
+    background:none;
+    padding:0 22px;
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-size:16px;
+    color:#1d1d1f;
+    cursor:pointer;
+    white-space:nowrap;
+}
 
-position:absolute;
+#q6pro-feature-viewer .q6-plus{
+    width:24px;
+    height:24px;
+    border:1px solid #777;
+    border-radius:50%;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-size:18px;
+}
 
-inset:0;
+#q6pro-feature-viewer .q6-content{
+    max-width:430px;
+    max-height:0;
+    opacity:0;
+    padding:0 24px;
+    transition:.45s ease;
+}
 
-display:flex;
+#q6pro-feature-viewer .q6-card.active{
+    height:180px;
+}
 
-align-items:center;
+#q6pro-feature-viewer .q6-card.active .q6-content{
+    max-height:120px;
+    opacity:1;
+    padding-bottom:24px;
+}
 
-justify-content:center;
+#q6pro-feature-viewer .q6-content strong{
+    display:block;
+    font-size:21px;
+    line-height:1.2;
+    margin-bottom:8px;
+}
 
-opacity:0;
+#q6pro-feature-viewer .q6-content p{
+    font-size:15px;
+    line-height:1.45;
+    color:#555;
+    margin:0;
+}
 
-transform:
-scale(.96);
+#q6pro-feature-viewer .q6-nav{
+    position:absolute;
+    top:50%;
+    transform:translateY(-50%);
+    width:44px;
+    height:44px;
+    border-radius:50%;
+    background:#e8e8ed;
+    border:0;
+    font-size:28px;
+    cursor:pointer;
+    z-index:3;
+}
 
-transition:
+#q6pro-feature-viewer .q6-prev{
+    left:18px;
+}
 
-opacity .5s ease,
-transform .6s cubic-bezier(.2,.8,.2,1);
-
-pointer-events:none;
-
+#q6pro-feature-viewer .q6-next{
+    right:18px;
 }
 
 
+@media(max-width:734px){
 
-.q6pro-gallery-image.active{
-
-opacity:1;
-
-transform:
-scale(1);
-
+#q6pro-feature-viewer .q6-header{
+    padding:40px 20px 20px;
 }
 
-
-
-.q6pro-gallery-placeholder{
-
-width:90%;
-
-height:90%;
-
-border-radius:34px;
-
-display:flex;
-
-align-items:center;
-
-justify-content:center;
-
-text-align:center;
-
-font-size:12px;
-
-letter-spacing:.16em;
-
-font-weight:650;
-
-color:#a1968a;
-
-background:
-
-radial-gradient(
-circle,
-#ffffff 0%,
-#e9e2d9 100%
-);
-
-border:
-
-1px solid rgba(0,0,0,.05);
-
+#q6pro-feature-viewer .q6-header h2{
+    font-size:34px;
 }
 
-
-
-/* =========================================================
-   ARROWS
-========================================================= */
-
-
-.q6pro-gallery-arrow{
-
-position:absolute;
-
-top:50%;
-
-transform:
-translateY(-50%);
-
-width:52px;
-
-height:52px;
-
-border-radius:50%;
-
-border:0;
-
-background:white;
-
-box-shadow:
-
-0 10px 30px rgba(0,0,0,.12);
-
-font-size:22px;
-
-cursor:pointer;
-
-z-index:10;
-
+#q6pro-feature-viewer .q6-viewer{
+    height:360px;
 }
 
-
-#q6pro-gallery-prev{
-
-left:20px;
-
+#q6pro-feature-viewer .q6-image img{
+    width:95%;
 }
 
-
-#q6pro-gallery-next{
-
-right:20px;
-
+#q6pro-feature-viewer .q6-controls{
+    padding:10px 20px 40px;
 }
 
-
-
-/* =========================================================
-   FEATURE NAV
-========================================================= */
-
-
-#q6pro-gallery-navigation{
-
-display:flex;
-
-gap:12px;
-
-overflow-x:auto;
-
-scroll-snap-type:x mandatory;
-
-padding:
-
-10px 22px;
-
-margin-top:20px;
-
-scrollbar-width:none;
-
+#q6pro-feature-viewer .q6-card{
+    border-radius:24px;
 }
 
-
-#q6pro-gallery-navigation::-webkit-scrollbar{
-
-display:none;
-
 }
-
-
-
-.q6pro-gallery-tab{
-
-flex:
-
-0 0 auto;
-
-scroll-snap-align:center;
-
-padding:
-
-14px 20px;
-
-border-radius:18px;
-
-border:0;
-
-background:#ebe7e1;
-
-color:#6b645c;
-
-font-size:15px;
-
-font-weight:600;
-
-cursor:pointer;
-
-transition:.35s ease;
-
-white-space:nowrap;
-
-}
-
-
-
-.q6pro-gallery-tab.active{
-
-background:#10263f;
-
-color:white;
-
-}
-
-
-
-/* =========================================================
-   DESCRIPTION CARD
-========================================================= */
-
-
-#q6pro-gallery-content{
-
-max-width:700px;
-
-margin:
-
-24px auto 0;
-
-padding:
-
-0 22px;
-
-text-align:center;
-
-}
-
-
-#q6pro-gallery-number{
-
-font-size:11px;
-
-letter-spacing:.15em;
-
-font-weight:650;
-
-color:#b7262d;
-
-text-transform:uppercase;
-
-}
-
-
-#q6pro-gallery-content-title{
-
-margin-top:12px;
-
-font-size:
-
-clamp(25px,4vw,40px);
-
-font-weight:700;
-
-line-height:1.1;
-
-letter-spacing:-.04em;
-
-color:#111;
-
-}
-
-
-#q6pro-gallery-content-text{
-
-margin-top:16px;
-
-font-size:16px;
-
-line-height:1.65;
-
-color:#6b645c;
-
-}
-
-
-
-/* =========================================================
-   ICONS
-========================================================= */
-
-
-#q6pro-gallery-points{
-
-display:grid;
-
-grid-template-columns:
-repeat(3,1fr);
-
-gap:12px;
-
-max-width:700px;
-
-margin:
-
-30px auto 0;
-
-padding:
-
-0 22px;
-
-}
-
-
-
-.q6pro-gallery-point{
-
-padding:
-
-18px;
-
-border-radius:20px;
-
-background:#fff;
-
-text-align:center;
-
-box-shadow:
-
-0 10px 30px rgba(0,0,0,.05);
-
-}
-
-
-.q6pro-gallery-point strong{
-
-display:block;
-
-font-size:22px;
-
-color:#111;
-
-}
-
-
-.q6pro-gallery-point span{
-
-display:block;
-
-margin-top:6px;
-
-font-size:12px;
-
-line-height:1.4;
-
-color:#7b7269;
-
-}
-
-
-
-/* =========================================================
-MOBILE
-========================================================= */
-
-
-@media(max-width:700px){
-
-
-#q6pro-gallery-visual{
-
-height:300px;
-
-margin-top:30px;
-
-}
-
-
-.q6pro-gallery-placeholder{
-
-width:100%;
-
-height:100%;
-
-border-radius:24px;
-
-}
-
-
-
-.q6pro-gallery-arrow{
-
-width:42px;
-
-height:42px;
-
-font-size:18px;
-
-}
-
-
-
-#q6pro-gallery-prev{
-
-left:10px;
-
-}
-
-
-#q6pro-gallery-next{
-
-right:10px;
-
-}
-
-
-
-#q6pro-gallery-navigation{
-
-margin-top:5px;
-
-}
-
-
-
-.q6pro-gallery-tab{
-
-font-size:14px;
-
-padding:
-
-13px 18px;
-
-}
-
-
-
-#q6pro-gallery-points{
-
-grid-template-columns:1fr;
-
-}
-
-
-
-}
-
-
 </style>
 
-</head>
 
-
-<body>
-
-
-<div id="q6pro-apple-feature-gallery">
-
-
-
-<div id="q6pro-gallery-header">
-
-<div id="q6pro-gallery-eyebrow">
-Q6 PRO TECHNOLOGY
+<div class="q6-header">
+<h2>Poznaj COBBO Q6 PRO z każdej strony.</h2>
 </div>
 
 
-<div id="q6pro-gallery-title">
+<div class="q6-viewer">
 
-Technologie,
-które robią
-<span>
-różnicę.
-</span>
-
-</div>
-
-
-<div id="q6pro-gallery-description">
-
-Kliknij funkcję i zobacz,
-jak Q6 PRO został zaprojektowany
-dla dokładniejszego mycia szyb.
-
-</div>
-
-
-</div>
-
-
-
-
-
-<div id="q6pro-gallery-visual">
-
-
-<button
-class="q6pro-gallery-arrow"
-id="q6pro-gallery-prev">
-‹
-</button>
-
-
-
-<div class="q6pro-gallery-image active" data-index="0">
-
-<div class="q6pro-gallery-placeholder">
-
-RENDER ACTIVE DYNAMIC GLIDE™
-
+<div class="q6-image">
+<img id="q6pro-main-image"
+src="https://cobbo.pl/upload/cobbo/q6pro/q6pro-main.png"
+alt="COBBO Q6 PRO">
 </div>
 
 </div>
 
 
+<div class="q6-controls-wrapper">
 
-<div class="q6pro-gallery-image" data-index="1">
+<button class="q6-nav q6-prev">‹</button>
 
-<div class="q6pro-gallery-placeholder">
-
-RENDER 3-STREFOWA ŚCIERECZKA
-
-</div>
-
-</div>
+<div class="q6-controls" id="q6-slider">
 
 
+<div class="q6-card active"
+data-image="https://cobbo.pl/upload/cobbo/q6pro/full-edge.png">
 
-<div class="q6pro-gallery-image" data-index="2">
-
-<div class="q6pro-gallery-placeholder">
-
-RENDER SPRAY PULSE 8™
-
-</div>
-
-</div>
-
-
-
-<div class="q6pro-gallery-image" data-index="3">
-
-<div class="q6pro-gallery-placeholder">
-
-RENDER FULL EDGE CLEAN™
-
-</div>
-
-</div>
-
-
-
-<div class="q6pro-gallery-image" data-index="4">
-
-<div class="q6pro-gallery-placeholder">
-
-RENDER SMART CONTROL
-
-</div>
-
-</div>
-
-
-
-
-<button
-class="q6pro-gallery-arrow"
-id="q6pro-gallery-next">
-›
-</button>
-
-
-</div>
-
-
-
-
-
-<div id="q6pro-gallery-navigation">
-
-
-<button class="q6pro-gallery-tab active">
-Active Dynamic Glide™
-</button>
-
-
-<button class="q6pro-gallery-tab">
-3-strefowa ściereczka
-</button>
-
-
-<button class="q6pro-gallery-tab">
-Spray Pulse 8™
-</button>
-
-
-<button class="q6pro-gallery-tab">
+<button>
+<span class="q6-plus">+</span>
 FullEdge Clean™
 </button>
 
+<div class="q6-content">
+<strong>FullEdge Clean™.</strong>
+<p>
+System dokładnego czyszczenia krawędzi pozwala docierać bliżej narożników i ram okiennych.
+</p>
+</div>
 
-<button class="q6pro-gallery-tab">
-Smart Control
+</div>
+
+
+
+<div class="q6-card"
+data-image="https://cobbo.pl/upload/cobbo/q6pro/oscillation.png">
+
+<button>
+<span class="q6-plus">+</span>
+System drgający
 </button>
 
+<div class="q6-content">
+<strong>Drgający system pracy.</strong>
+<p>
+Kierunkowe ruchy pomagają ograniczyć smugi i poprawiają efekt końcowy mycia.
+</p>
+</div>
 
 </div>
 
 
 
+<div class="q6-card"
+data-image="https://cobbo.pl/upload/cobbo/q6pro/cloth.png">
 
+<button>
+<span class="q6-plus">+</span>
+3-strefowa ściereczka
+</button>
 
-<div id="q6pro-gallery-content">
-
-
-<div id="q6pro-gallery-number">
-01 / 05
+<div class="q6-content">
+<strong>Trzy strefy czyszczenia.</strong>
+<p>
+Zbieranie zabrudzeń, mycie oraz końcowe polerowanie powierzchni.
+</p>
 </div>
-
-
-<div id="q6pro-gallery-content-title">
-
-Nie tylko jedzie.
-<br>
-Aktywnie pracuje.
-
-</div>
-
-
-<div id="q6pro-gallery-content-text">
-
-Kierunkowy system drgań działa po stronie,
-która prowadzi robota podczas jazdy.
-Pomaga ograniczać smugi i efekt
-„skóry węża”.
 
 </div>
 
 
-<div id="q6pro-gallery-points">
 
+<div class="q6-card"
+data-image="https://cobbo.pl/upload/cobbo/q6pro/barometer.png">
 
-<div class="q6pro-gallery-point">
+<button>
+<span class="q6-plus">+</span>
+Barometr
+</button>
 
-<strong>
-↔
-</strong>
-
-<span>
-Drgania zgodne z ruchem
-</span>
+<div class="q6-content">
+<strong>Inteligentna regulacja nacisku.</strong>
+<p>
+Automatyczne dopasowanie siły docisku dla stabilnej pracy na różnych powierzchniach.
+</p>
+</div>
 
 </div>
 
 
-<div class="q6pro-gallery-point">
 
-<strong>
-✓
-</strong>
+<div class="q6-card"
+data-image="https://cobbo.pl/upload/cobbo/q6pro/anti-wind.png">
 
-<span>
-Mniej smug
-</span>
+<button>
+<span class="q6-plus">+</span>
+Anti-Wind
+</button>
 
+<div class="q6-content">
+<strong>Anti-Wind.</strong>
+<p>
+System zwiększający bezpieczeństwo pracy podczas działania przy krawędziach szyb.
+</p>
 </div>
-
-
-<div class="q6pro-gallery-point">
-
-<strong>
-360°
-</strong>
-
-<span>
-Równomierna praca
-</span>
-
-</div>
-
-
-</div>
-
 
 </div>
 
@@ -830,6 +304,9 @@ Równomierna praca
 </div>
 
 
+<button class="q6-nav q6-next">›</button>
+
+</div>
 
 
 
@@ -837,244 +314,65 @@ Równomierna praca
 
 (function(){
 
+const cards=document.querySelectorAll("#q6pro-feature-viewer .q6-card");
+const image=document.querySelector("#q6pro-feature-viewer #q6pro-main-image");
 
-const tabs =
-document.querySelectorAll(
-".q6pro-gallery-tab"
-);
+cards.forEach(card=>{
 
+card.querySelector("button").addEventListener("click",()=>{
 
-const images =
-document.querySelectorAll(
-".q6pro-gallery-image"
-);
+cards.forEach(c=>{
+if(c!==card)c.classList.remove("active");
+});
 
+card.classList.toggle("active");
 
-const number =
-document.getElementById(
-"q6pro-gallery-number"
-);
+if(card.dataset.image){
+image.style.opacity="0";
 
-
-const title =
-document.getElementById(
-"q6pro-gallery-content-title"
-);
-
-
-const text =
-document.getElementById(
-"q6pro-gallery-content-text"
-);
-
-
-const data=[
-
-
-{
-
-title:
-"Nie tylko jedzie.<br>Aktywnie pracuje.",
-
-text:
-"Kierunkowy system drgań działa po stronie, która prowadzi robota podczas jazdy. Pomaga ograniczać smugi i efekt „skóry węża”."
-
-},
-
-
-{
-
-title:
-"Jedna ściereczka.<br>Trzy etapy.",
-
-text:
-"Specjalna struktura materiału łączy zbieranie zabrudzeń, mycie oraz końcowe polerowanie powierzchni."
-
-},
-
-
-{
-
-title:
-"8 kierunków natrysku.<br>Pełna kontrola płynu.",
-
-text:
-"Spray Pulse 8™ przygotowuje szybę przed każdym przejazdem dzięki równomiernemu natryskowi."
-
-},
-
-
-{
-
-title:
-"Cała szyba.<br>Bez kompromisów.",
-
-text:
-"FullEdge Clean™ pomaga dokładniej pracować przy krawędziach, rogach i uszczelkach."
-
-},
-
-
-{
-
-title:
-"Stabilność.<br>Kontrola.<br>Precyzja.",
-
-text:
-"AI Cleaning Path 4.0, Anti-Wind 3.0 oraz kontrola docisku wspierają stabilną pracę robota."
+setTimeout(()=>{
+image.src=card.dataset.image;
+image.style.opacity="1";
+},250);
 
 }
 
-];
-
-
-let current=0;
-
-
-function activate(index){
-
-
-current=index;
-
-
-tabs.forEach(
-(t,i)=>
-t.classList.toggle(
-"active",
-i===index
-)
-);
-
-
-images.forEach(
-(img,i)=>
-img.classList.toggle(
-"active",
-i===index
-)
-);
-
-
-number.innerHTML=
-String(index+1).padStart(2,"0")
-+
-" / 05";
-
-
-title.innerHTML=
-data[index].title;
-
-
-text.innerHTML=
-data[index].text;
-
-
-
-tabs[index].scrollIntoView({
-
-behavior:"smooth",
-
-block:"nearest",
-
-inline:"center"
+});
 
 });
 
 
-}
+const slider=document.querySelector("#q6pro-feature-viewer #q6-slider");
+
+document.querySelector("#q6pro-feature-viewer .q6-next")
+.onclick=()=>slider.scrollBy({
+left:250,
+behavior:"smooth"
+});
 
 
-
-
-tabs.forEach(
-(tab,index)=>{
-
-tab.onclick=()=>activate(index);
-
-}
-
-);
-
-
-
-document
-.getElementById(
-"q6pro-gallery-next"
-)
-.onclick=()=>{
-
-activate(
-(current+1)%data.length
-);
-
-};
-
-
-
-document
-.getElementById(
-"q6pro-gallery-prev"
-)
-.onclick=()=>{
-
-activate(
-(current-1+data.length)%data.length
-);
-
-};
-
+document.querySelector("#q6pro-feature-viewer .q6-prev")
+.onclick=()=>slider.scrollBy({
+left:-250,
+behavior:"smooth"
+});
 
 
 let startX=0;
 
-
-document
-.getElementById(
-"q6pro-gallery-visual"
-)
-.addEventListener(
-"touchstart",
-e=>{
-
+slider.addEventListener("touchstart",e=>{
 startX=e.touches[0].clientX;
+});
 
-}
-);
-
-
-document
-.getElementById(
-"q6pro-gallery-visual"
-)
-.addEventListener(
-"touchend",
-e=>{
-
-let diff=
-e.changedTouches[0].clientX-startX;
-
-
-if(diff < -50)
-activate(
-(current+1)%data.length
-);
-
-
-if(diff > 50)
-activate(
-(current-1+data.length)%data.length
-);
-
-
-}
-);
-
+slider.addEventListener("touchmove",e=>{
+let move=e.touches[0].clientX-startX;
+slider.scrollLeft-=move;
+startX=e.touches[0].clientX;
+});
 
 
 })();
 
 </script>
 
-
-</body>
-</html>
+</section>
