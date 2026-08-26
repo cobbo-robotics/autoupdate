@@ -7,19 +7,19 @@
 <style>
 
 *{
-    box-sizing:border-box;
+box-sizing:border-box;
 }
 
 body{
-    margin:0;
-    padding:0;
-    font-family:
-    "SF Pro Display",
-    -apple-system,
-    BlinkMacSystemFont,
-    "Segoe UI",
-    sans-serif;
-    background:transparent;
+margin:0;
+padding:0;
+font-family:
+"SF Pro Display",
+-apple-system,
+BlinkMacSystemFont,
+"Segoe UI",
+sans-serif;
+background:transparent;
 }
 
 
@@ -27,436 +27,474 @@ body{
    ROOT
 ========================================================= */
 
-#q6pro-apple-carousel{
+#q6pro-apple-feature-gallery{
 
-    width:100%;
-    overflow:hidden;
+width:100%;
 
-    padding:
-    70px 0 60px;
+padding:
+55px 0 50px;
 
-    background:
-    linear-gradient(
-        180deg,
-        #ffffff 0%,
-        #f7f4ef 100%
-    );
+background:
+linear-gradient(
+180deg,
+#ffffff 0%,
+#f5f2ed 100%
+);
 
-}
-
-
-/* =========================================================
-HEADER
-========================================================= */
-
-#q6pro-apple-header{
-
-    max-width:900px;
-
-    margin:
-    0 auto 45px;
-
-    padding:
-    0 24px;
-
-    text-align:center;
-
-}
-
-
-#q6pro-apple-eyebrow{
-
-    font-size:12px;
-
-    letter-spacing:.18em;
-
-    text-transform:uppercase;
-
-    font-weight:650;
-
-    color:#9d8e7e;
-
-}
-
-
-#q6pro-apple-title{
-
-    margin-top:18px;
-
-    font-size:
-    clamp(34px,5vw,58px);
-
-    line-height:1.05;
-
-    letter-spacing:-.05em;
-
-    font-weight:700;
-
-    color:#111;
-
-}
-
-
-#q6pro-apple-title span{
-
-    color:#9d8e7e;
-
-}
-
-
-#q6pro-apple-description{
-
-    margin:
-    20px auto 0;
-
-    max-width:650px;
-
-    font-size:18px;
-
-    line-height:1.55;
-
-    color:#6b645c;
+overflow:hidden;
 
 }
 
 
 
 /* =========================================================
-   SLIDER
+   HEADER
 ========================================================= */
 
-#q6pro-slider-wrapper{
+#q6pro-gallery-header{
 
-    position:relative;
+text-align:center;
 
-}
-
-
-#q6pro-slider{
-
-    display:flex;
-
-    gap:24px;
-
-    overflow-x:auto;
-
-    scroll-snap-type:x mandatory;
-
-    scroll-behavior:smooth;
-
-    padding:
-
-    10px 0 35px;
-
-    padding-left:
-
-    max(
-        20px,
-        calc((100vw - 1180px)/2)
-    );
-
-    scrollbar-width:none;
+padding:
+0 20px;
 
 }
 
 
-#q6pro-slider::-webkit-scrollbar{
+#q6pro-gallery-eyebrow{
 
-    display:none;
+font-size:11px;
+
+font-weight:650;
+
+letter-spacing:.18em;
+
+color:#a1968a;
+
+text-transform:uppercase;
+
+}
+
+
+#q6pro-gallery-title{
+
+margin-top:16px;
+
+font-size:
+clamp(32px,5vw,56px);
+
+font-weight:700;
+
+letter-spacing:-.05em;
+
+line-height:1.05;
+
+color:#111;
+
+}
+
+
+#q6pro-gallery-title span{
+
+color:#9d8e7e;
+
+}
+
+
+#q6pro-gallery-description{
+
+max-width:650px;
+
+margin:
+18px auto 0;
+
+font-size:17px;
+
+line-height:1.6;
+
+color:#6b645c;
 
 }
 
 
 
 /* =========================================================
-CARDS
+   MAIN VISUAL
 ========================================================= */
 
 
-.q6pro-apple-card{
+#q6pro-gallery-visual{
 
-    flex:
+position:relative;
 
-    0 0 min(
-        760px,
-        82vw
-    );
+width:100%;
 
-    scroll-snap-align:start;
+max-width:1000px;
 
-    border-radius:32px;
+height:
 
-    overflow:hidden;
+clamp(300px,50vw,560px);
 
-    background:#fff;
+margin:
+45px auto 0;
 
-    box-shadow:
+display:flex;
 
-    0 25px 80px rgba(0,0,0,.10);
+align-items:center;
 
-    transition:
-
-    transform .5s ease;
+justify-content:center;
 
 }
 
 
-.q6pro-apple-card:hover{
+.q6pro-gallery-image{
 
-    transform:
-    translateY(-8px);
+position:absolute;
 
-}
+inset:0;
 
+display:flex;
 
+align-items:center;
 
-/* IMAGE */
+justify-content:center;
 
+opacity:0;
 
-.q6pro-card-image{
+transform:
+scale(.96);
 
-    height:430px;
+transition:
 
-    display:flex;
+opacity .5s ease,
+transform .6s cubic-bezier(.2,.8,.2,1);
 
-    align-items:center;
-
-    justify-content:center;
-
-    position:relative;
-
-    background:
-
-    radial-gradient(
-        circle at center,
-        #ffffff 0%,
-        #eee8df 100%
-    );
-
-}
-
-
-.q6pro-card-image.dark{
-
-    background:
-
-    radial-gradient(
-        circle at center,
-        #244663 0%,
-        #071927 75%
-    );
+pointer-events:none;
 
 }
 
 
 
-.q6pro-card-placeholder{
+.q6pro-gallery-image.active{
 
-    text-align:center;
+opacity:1;
 
-    color:#a1968a;
-
-    font-size:12px;
-
-    font-weight:650;
-
-    letter-spacing:.16em;
-
-}
-
-
-.dark .q6pro-card-placeholder{
-
-    color:
-    rgba(255,255,255,.45);
-
-}
-
-
-.q6pro-card-number{
-
-    position:absolute;
-
-    right:30px;
-
-    top:20px;
-
-    font-size:160px;
-
-    line-height:1;
-
-    font-weight:800;
-
-    letter-spacing:-.08em;
-
-    color:
-    rgba(0,0,0,.05);
-
-}
-
-
-.dark .q6pro-card-number{
-
-    color:
-    rgba(255,255,255,.08);
+transform:
+scale(1);
 
 }
 
 
 
-/* CONTENT */
+.q6pro-gallery-placeholder{
 
+width:90%;
 
-.q6pro-card-content{
+height:90%;
 
-    padding:
-    38px 42px 42px;
+border-radius:34px;
 
-}
+display:flex;
 
+align-items:center;
 
+justify-content:center;
 
-.q6pro-card-label{
+text-align:center;
 
-    color:#9d8e7e;
+font-size:12px;
 
-    font-size:12px;
+letter-spacing:.16em;
 
-    letter-spacing:.16em;
+font-weight:650;
 
-    font-weight:650;
+color:#a1968a;
 
-    text-transform:uppercase;
+background:
 
-}
+radial-gradient(
+circle,
+#ffffff 0%,
+#e9e2d9 100%
+);
 
+border:
 
-.q6pro-card-title{
-
-    margin-top:15px;
-
-    font-size:
-    clamp(28px,4vw,42px);
-
-    line-height:1.08;
-
-    font-weight:700;
-
-    letter-spacing:-.045em;
-
-    color:#111;
-
-}
-
-
-.q6pro-card-text{
-
-    margin-top:18px;
-
-    font-size:17px;
-
-    line-height:1.6;
-
-    color:#6b645c;
-
-    max-width:600px;
-
-}
-
-
-
-/* ICONS */
-
-.q6pro-icons{
-
-    display:flex;
-
-    gap:12px;
-
-    margin-top:30px;
-
-}
-
-
-.q6pro-icon{
-
-    flex:1;
-
-    min-height:90px;
-
-    padding:15px;
-
-    border-radius:18px;
-
-    background:#f5f1eb;
-
-}
-
-
-.q6pro-icon strong{
-
-    display:block;
-
-    font-size:24px;
-
-    color:#111;
-
-}
-
-
-.q6pro-icon span{
-
-    font-size:12px;
-
-    color:#776f67;
+1px solid rgba(0,0,0,.05);
 
 }
 
 
 
 /* =========================================================
-ARROWS
+   ARROWS
 ========================================================= */
 
 
-#q6pro-controls{
+.q6pro-gallery-arrow{
 
-    display:flex;
+position:absolute;
 
-    justify-content:center;
+top:50%;
 
-    gap:12px;
+transform:
+translateY(-50%);
 
-    margin-top:20px;
+width:52px;
+
+height:52px;
+
+border-radius:50%;
+
+border:0;
+
+background:white;
+
+box-shadow:
+
+0 10px 30px rgba(0,0,0,.12);
+
+font-size:22px;
+
+cursor:pointer;
+
+z-index:10;
+
+}
+
+
+#q6pro-gallery-prev{
+
+left:20px;
+
+}
+
+
+#q6pro-gallery-next{
+
+right:20px;
 
 }
 
 
 
-.q6pro-arrow{
+/* =========================================================
+   FEATURE NAV
+========================================================= */
 
-    width:48px;
 
-    height:48px;
+#q6pro-gallery-navigation{
 
-    border-radius:50%;
+display:flex;
 
-    border:0;
+gap:12px;
 
-    background:#e8e3dc;
+overflow-x:auto;
 
-    cursor:pointer;
+scroll-snap-type:x mandatory;
 
-    font-size:22px;
+padding:
+
+10px 22px;
+
+margin-top:20px;
+
+scrollbar-width:none;
 
 }
 
 
-.q6pro-arrow.next{
+#q6pro-gallery-navigation::-webkit-scrollbar{
 
-    background:#10263f;
+display:none;
 
-    color:#fff;
+}
+
+
+
+.q6pro-gallery-tab{
+
+flex:
+
+0 0 auto;
+
+scroll-snap-align:center;
+
+padding:
+
+14px 20px;
+
+border-radius:18px;
+
+border:0;
+
+background:#ebe7e1;
+
+color:#6b645c;
+
+font-size:15px;
+
+font-weight:600;
+
+cursor:pointer;
+
+transition:.35s ease;
+
+white-space:nowrap;
+
+}
+
+
+
+.q6pro-gallery-tab.active{
+
+background:#10263f;
+
+color:white;
+
+}
+
+
+
+/* =========================================================
+   DESCRIPTION CARD
+========================================================= */
+
+
+#q6pro-gallery-content{
+
+max-width:700px;
+
+margin:
+
+24px auto 0;
+
+padding:
+
+0 22px;
+
+text-align:center;
+
+}
+
+
+#q6pro-gallery-number{
+
+font-size:11px;
+
+letter-spacing:.15em;
+
+font-weight:650;
+
+color:#b7262d;
+
+text-transform:uppercase;
+
+}
+
+
+#q6pro-gallery-content-title{
+
+margin-top:12px;
+
+font-size:
+
+clamp(25px,4vw,40px);
+
+font-weight:700;
+
+line-height:1.1;
+
+letter-spacing:-.04em;
+
+color:#111;
+
+}
+
+
+#q6pro-gallery-content-text{
+
+margin-top:16px;
+
+font-size:16px;
+
+line-height:1.65;
+
+color:#6b645c;
+
+}
+
+
+
+/* =========================================================
+   ICONS
+========================================================= */
+
+
+#q6pro-gallery-points{
+
+display:grid;
+
+grid-template-columns:
+repeat(3,1fr);
+
+gap:12px;
+
+max-width:700px;
+
+margin:
+
+30px auto 0;
+
+padding:
+
+0 22px;
+
+}
+
+
+
+.q6pro-gallery-point{
+
+padding:
+
+18px;
+
+border-radius:20px;
+
+background:#fff;
+
+text-align:center;
+
+box-shadow:
+
+0 10px 30px rgba(0,0,0,.05);
+
+}
+
+
+.q6pro-gallery-point strong{
+
+display:block;
+
+font-size:22px;
+
+color:#111;
+
+}
+
+
+.q6pro-gallery-point span{
+
+display:block;
+
+margin-top:6px;
+
+font-size:12px;
+
+line-height:1.4;
+
+color:#7b7269;
 
 }
 
@@ -470,67 +508,83 @@ MOBILE
 @media(max-width:700px){
 
 
-#q6pro-apple-carousel{
+#q6pro-gallery-visual{
 
-    padding:
-    45px 0;
+height:300px;
 
-}
-
-
-#q6pro-slider{
-
-    padding-left:18px;
-
-    gap:16px;
+margin-top:30px;
 
 }
 
 
-.q6pro-apple-card{
+.q6pro-gallery-placeholder{
 
-    flex-basis:
-    88vw;
+width:100%;
 
-    border-radius:25px;
+height:100%;
+
+border-radius:24px;
 
 }
 
 
 
-.q6pro-card-image{
+.q6pro-gallery-arrow{
 
-    height:270px;
+width:42px;
 
-}
+height:42px;
 
-
-
-.q6pro-card-content{
-
-    padding:
-   28px 22px 30px;
-
-}
-
-
-.q6pro-icons{
-
-    flex-direction:column;
-
-}
-
-
-.q6pro-card-number{
-
-    font-size:100px;
+font-size:18px;
 
 }
 
 
 
+#q6pro-gallery-prev{
+
+left:10px;
+
 }
 
+
+#q6pro-gallery-next{
+
+right:10px;
+
+}
+
+
+
+#q6pro-gallery-navigation{
+
+margin-top:5px;
+
+}
+
+
+
+.q6pro-gallery-tab{
+
+font-size:14px;
+
+padding:
+
+13px 18px;
+
+}
+
+
+
+#q6pro-gallery-points{
+
+grid-template-columns:1fr;
+
+}
+
+
+
+}
 
 
 </style>
@@ -541,81 +595,171 @@ MOBILE
 <body>
 
 
-<div id="q6pro-apple-carousel">
+<div id="q6pro-apple-feature-gallery">
 
 
-<div id="q6pro-apple-header">
 
+<div id="q6pro-gallery-header">
 
-<div id="q6pro-apple-eyebrow">
+<div id="q6pro-gallery-eyebrow">
 Q6 PRO TECHNOLOGY
 </div>
 
 
-<div id="q6pro-apple-title">
+<div id="q6pro-gallery-title">
 
-Poznaj technologie,
-<br>
-
+Technologie,
+które robią
 <span>
-które zmieniają mycie szyb.
+różnicę.
 </span>
 
 </div>
 
 
-<div id="q6pro-apple-description">
+<div id="q6pro-gallery-description">
 
-Przesuń, aby odkryć rozwiązania stworzone
-dla dokładniejszego, stabilniejszego
-i bardziej równomiernego czyszczenia.
-
-</div>
-
+Kliknij funkcję i zobacz,
+jak Q6 PRO został zaprojektowany
+dla dokładniejszego mycia szyb.
 
 </div>
 
 
-
-
-<div id="q6pro-slider-wrapper">
-
-
-<div id="q6pro-slider">
+</div>
 
 
 
-<!-- CARD 1 -->
-
-<div class="q6pro-apple-card">
 
 
-<div class="q6pro-card-image dark">
+<div id="q6pro-gallery-visual">
 
 
-<div class="q6pro-card-placeholder">
+<button
+class="q6pro-gallery-arrow"
+id="q6pro-gallery-prev">
+‹
+</button>
+
+
+
+<div class="q6pro-gallery-image active" data-index="0">
+
+<div class="q6pro-gallery-placeholder">
+
 RENDER ACTIVE DYNAMIC GLIDE™
+
 </div>
-
-
-<div class="q6pro-card-number">
-01
-</div>
-
 
 </div>
 
 
 
-<div class="q6pro-card-content">
+<div class="q6pro-gallery-image" data-index="1">
+
+<div class="q6pro-gallery-placeholder">
+
+RENDER 3-STREFOWA ŚCIERECZKA
+
+</div>
+
+</div>
 
 
-<div class="q6pro-card-label">
+
+<div class="q6pro-gallery-image" data-index="2">
+
+<div class="q6pro-gallery-placeholder">
+
+RENDER SPRAY PULSE 8™
+
+</div>
+
+</div>
+
+
+
+<div class="q6pro-gallery-image" data-index="3">
+
+<div class="q6pro-gallery-placeholder">
+
+RENDER FULL EDGE CLEAN™
+
+</div>
+
+</div>
+
+
+
+<div class="q6pro-gallery-image" data-index="4">
+
+<div class="q6pro-gallery-placeholder">
+
+RENDER SMART CONTROL
+
+</div>
+
+</div>
+
+
+
+
+<button
+class="q6pro-gallery-arrow"
+id="q6pro-gallery-next">
+›
+</button>
+
+
+</div>
+
+
+
+
+
+<div id="q6pro-gallery-navigation">
+
+
+<button class="q6pro-gallery-tab active">
 Active Dynamic Glide™
+</button>
+
+
+<button class="q6pro-gallery-tab">
+3-strefowa ściereczka
+</button>
+
+
+<button class="q6pro-gallery-tab">
+Spray Pulse 8™
+</button>
+
+
+<button class="q6pro-gallery-tab">
+FullEdge Clean™
+</button>
+
+
+<button class="q6pro-gallery-tab">
+Smart Control
+</button>
+
+
 </div>
 
 
-<div class="q6pro-card-title">
+
+
+
+<div id="q6pro-gallery-content">
+
+
+<div id="q6pro-gallery-number">
+01 / 05
+</div>
+
+
+<div id="q6pro-gallery-content-title">
 
 Nie tylko jedzie.
 <br>
@@ -624,20 +768,20 @@ Aktywnie pracuje.
 </div>
 
 
-<div class="q6pro-card-text">
+<div id="q6pro-gallery-content-text">
 
-Kierunkowy system drgań działa po stronie
-prowadzącej robota. Pomaga ograniczać
-smugi i efekt „skóry węża”.
+Kierunkowy system drgań działa po stronie,
+która prowadzi robota podczas jazdy.
+Pomaga ograniczać smugi i efekt
+„skóry węża”.
 
 </div>
 
 
+<div id="q6pro-gallery-points">
 
-<div class="q6pro-icons">
 
-
-<div class="q6pro-icon">
+<div class="q6pro-gallery-point">
 
 <strong>
 ↔
@@ -650,7 +794,7 @@ Drgania zgodne z ruchem
 </div>
 
 
-<div class="q6pro-icon">
+<div class="q6pro-gallery-point">
 
 <strong>
 ✓
@@ -663,7 +807,7 @@ Mniej smug
 </div>
 
 
-<div class="q6pro-icon">
+<div class="q6pro-gallery-point">
 
 <strong>
 360°
@@ -682,315 +826,252 @@ Równomierna praca
 </div>
 
 
-</div>
-
-
-
-
-
-
-<!-- CARD 2 -->
-
-<div class="q6pro-apple-card">
-
-
-<div class="q6pro-card-image">
-
-
-<div class="q6pro-card-placeholder">
-RENDER 3-STREFOWA ŚCIERECZKA
-</div>
-
-
-<div class="q6pro-card-number">
-02
-</div>
-
 
 </div>
 
-
-<div class="q6pro-card-content">
-
-
-<div class="q6pro-card-label">
-3-strefowa ściereczka
-</div>
-
-
-<div class="q6pro-card-title">
-
-Jedna ściereczka.
-<br>
-Trzy etapy.
-
-</div>
-
-
-<div class="q6pro-card-text">
-
-Specjalna struktura materiału odpowiada
-za zbieranie zabrudzeń, mycie oraz
-końcowe polerowanie.
-
-</div>
-
-
-</div>
-
-
-</div>
-
-
-
-
-
-
-<!-- CARD 3 -->
-
-<div class="q6pro-apple-card">
-
-
-<div class="q6pro-card-image">
-
-
-<div class="q6pro-card-placeholder">
-RENDER SPRAY PULSE 8
-</div>
-
-
-<div class="q6pro-card-number">
-03
-</div>
-
-
-</div>
-
-
-<div class="q6pro-card-content">
-
-
-<div class="q6pro-card-label">
-Spray Pulse 8™
-</div>
-
-
-<div class="q6pro-card-title">
-
-8 kierunków natrysku.
-<br>
-Pełna kontrola płynu.
-
-</div>
-
-
-<div class="q6pro-card-text">
-
-Cztery kierunki natrysku po każdej stronie
-robota przygotowują szybę przed myciem.
-
-</div>
-
-
-</div>
-
-
-</div>
-
-
-
-
-
-
-<!-- CARD 4 -->
-
-<div class="q6pro-apple-card">
-
-
-<div class="q6pro-card-image dark">
-
-
-<div class="q6pro-card-placeholder">
-RENDER FULL EDGE CLEAN™
-</div>
-
-
-<div class="q6pro-card-number">
-04
-</div>
-
-
-</div>
-
-
-<div class="q6pro-card-content">
-
-
-<div class="q6pro-card-label">
-FullEdge Clean™
-</div>
-
-
-<div class="q6pro-card-title">
-
-Cała szyba.
-<br>
-Bez kompromisów.
-
-</div>
-
-
-<div class="q6pro-card-text">
-
-Dokładniejsza praca przy krawędziach,
-rogach i uszczelkach.
-
-</div>
-
-
-</div>
-
-
-</div>
-
-
-
-
-
-
-<!-- CARD 5 -->
-
-<div class="q6pro-apple-card">
-
-
-<div class="q6pro-card-image">
-
-
-<div class="q6pro-card-placeholder">
-RENDER SMART CONTROL
-</div>
-
-
-<div class="q6pro-card-number">
-05
-</div>
-
-
-</div>
-
-
-<div class="q6pro-card-content">
-
-
-<div class="q6pro-card-label">
-Smart Control
-</div>
-
-
-<div class="q6pro-card-title">
-
-Stabilność.
-<br>
-Kontrola.
-<br>
-Precyzja.
-
-</div>
-
-
-<div class="q6pro-card-text">
-
-AI Cleaning Path 4.0,
-Anti-Wind 3.0 oraz kontrola docisku
-wspierają stabilną pracę robota.
-
-</div>
-
-
-</div>
-
-
-</div>
-
-
-
-</div>
-
-
-
-</div>
-
-
-
-
-<div id="q6pro-controls">
-
-<button class="q6pro-arrow" id="q6pro-left">
-←
-</button>
-
-<button class="q6pro-arrow next" id="q6pro-right">
-→
-</button>
-
-</div>
-
-
-
-</div>
 
 
 
 
 <script>
 
-
-const slider =
-document.getElementById(
-"q6pro-slider"
-);
+(function(){
 
 
-const cards =
+const tabs =
 document.querySelectorAll(
-".q6pro-apple-card"
+".q6pro-gallery-tab"
+);
+
+
+const images =
+document.querySelectorAll(
+".q6pro-gallery-image"
+);
+
+
+const number =
+document.getElementById(
+"q6pro-gallery-number"
+);
+
+
+const title =
+document.getElementById(
+"q6pro-gallery-content-title"
+);
+
+
+const text =
+document.getElementById(
+"q6pro-gallery-content-text"
+);
+
+
+const data=[
+
+
+{
+
+title:
+"Nie tylko jedzie.<br>Aktywnie pracuje.",
+
+text:
+"Kierunkowy system drgań działa po stronie, która prowadzi robota podczas jazdy. Pomaga ograniczać smugi i efekt „skóry węża”."
+
+},
+
+
+{
+
+title:
+"Jedna ściereczka.<br>Trzy etapy.",
+
+text:
+"Specjalna struktura materiału łączy zbieranie zabrudzeń, mycie oraz końcowe polerowanie powierzchni."
+
+},
+
+
+{
+
+title:
+"8 kierunków natrysku.<br>Pełna kontrola płynu.",
+
+text:
+"Spray Pulse 8™ przygotowuje szybę przed każdym przejazdem dzięki równomiernemu natryskowi."
+
+},
+
+
+{
+
+title:
+"Cała szyba.<br>Bez kompromisów.",
+
+text:
+"FullEdge Clean™ pomaga dokładniej pracować przy krawędziach, rogach i uszczelkach."
+
+},
+
+
+{
+
+title:
+"Stabilność.<br>Kontrola.<br>Precyzja.",
+
+text:
+"AI Cleaning Path 4.0, Anti-Wind 3.0 oraz kontrola docisku wspierają stabilną pracę robota."
+
+}
+
+];
+
+
+let current=0;
+
+
+function activate(index){
+
+
+current=index;
+
+
+tabs.forEach(
+(t,i)=>
+t.classList.toggle(
+"active",
+i===index
+)
+);
+
+
+images.forEach(
+(img,i)=>
+img.classList.toggle(
+"active",
+i===index
+)
+);
+
+
+number.innerHTML=
+String(index+1).padStart(2,"0")
++
+" / 05";
+
+
+title.innerHTML=
+data[index].title;
+
+
+text.innerHTML=
+data[index].text;
+
+
+
+tabs[index].scrollIntoView({
+
+behavior:"smooth",
+
+block:"nearest",
+
+inline:"center"
+
+});
+
+
+}
+
+
+
+
+tabs.forEach(
+(tab,index)=>{
+
+tab.onclick=()=>activate(index);
+
+}
+
 );
 
 
 
 document
-.getElementById("q6pro-right")
+.getElementById(
+"q6pro-gallery-next"
+)
 .onclick=()=>{
 
-slider.scrollBy({
-
-left:
-cards[0].offsetWidth + 24,
-
-behavior:"smooth"
-
-});
+activate(
+(current+1)%data.length
+);
 
 };
 
 
 
 document
-.getElementById("q6pro-left")
+.getElementById(
+"q6pro-gallery-prev"
+)
 .onclick=()=>{
 
-slider.scrollBy({
-
-left:
--(cards[0].offsetWidth + 24),
-
-behavior:"smooth"
-
-});
+activate(
+(current-1+data.length)%data.length
+);
 
 };
 
 
+
+let startX=0;
+
+
+document
+.getElementById(
+"q6pro-gallery-visual"
+)
+.addEventListener(
+"touchstart",
+e=>{
+
+startX=e.touches[0].clientX;
+
+}
+);
+
+
+document
+.getElementById(
+"q6pro-gallery-visual"
+)
+.addEventListener(
+"touchend",
+e=>{
+
+let diff=
+e.changedTouches[0].clientX-startX;
+
+
+if(diff < -50)
+activate(
+(current+1)%data.length
+);
+
+
+if(diff > 50)
+activate(
+(current-1+data.length)%data.length
+);
+
+
+}
+);
+
+
+
+})();
 
 </script>
 
