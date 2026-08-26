@@ -1,0 +1,477 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>COBBO Q6 PRO - slider "Co go wyr&#243;&#380;nia"</title>
+  <link rel="stylesheet" href="https://v1.fontapi.ir/css/SFProDisplay">
+  <style>
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      background: #f7f2ea;
+      font-family: SF Pro Display, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif !important;
+    }
+
+    /* ============================================================
+       COBBO Q6 PRO - slider funkcji
+       Wszystkie polskie znaki jako encje HTML => dzialaja niezaleznie
+       od kodowania strony, na ktorej osadzisz ten modul.
+       ID-ki maja prefiks q6pro..., wiec modul moze wspolistniec
+       na jednej stronie z galeria funkcji Q6 PRO.
+       ============================================================ */
+    #q6proSliderModule {
+      width: 100%;
+      box-sizing: border-box;
+      padding: 8px 16px 42px 16px;
+      background: #f7f2ea;
+      color: #111111;
+      font-family: SF Pro Display, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif !important;
+      overflow: hidden;
+    }
+    #q6proSliderModule * {
+      box-sizing: border-box;
+    }
+    #q6proSliderWrap {
+      max-width: 1280px;
+      margin: 0 auto;
+    }
+    #q6proSliderTitle {
+      margin: 0 0 22px 0;
+      font-family: SF Pro Display, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif !important;
+      font-size: 32px;
+      line-height: 36px;
+      font-weight: 600;
+      color: rgb(29,29,31);
+      letter-spacing: -0.6px;
+    }
+
+    /* ---------- Okno przewijania ---------- */
+    #q6proSliderWindow {
+      width: 100%;
+      overflow-x: auto;
+      overflow-y: hidden;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      overscroll-behavior-x: contain;
+      touch-action: pan-x pan-y;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+      padding: 0 0 8px 0;
+      cursor: grab;
+    }
+    #q6proSliderWindow::-webkit-scrollbar {
+      display: none;
+    }
+    #q6proSliderWindow.is-dragging {
+      cursor: grabbing;
+      scroll-snap-type: none;
+    }
+    #q6proSliderTrack {
+      display: flex;
+      gap: 20px;
+      padding: 0 8px;
+    }
+
+    /* ---------- Slajd ---------- */
+    #q6proSliderTrack > div {
+      position: relative;
+      flex: 0 0 78%;
+      min-height: 620px;
+      border-radius: 32px;
+      overflow: hidden;
+      background: #ece8e2;
+      scroll-snap-align: center;
+    }
+    #q6proSliderTrack > div img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center center;
+      display: block;
+      -webkit-user-drag: none;
+      user-select: none;
+    }
+    /* Rozjasnienie pod tekstem - gwarantuje czytelnosc na dowolnym renderze */
+    #q6proSliderTrack > div::after {
+      content: "";
+      position: absolute;
+      inset: 0 0 auto 0;
+      height: 52%;
+      z-index: 1;
+      pointer-events: none;
+      background: linear-gradient(180deg,
+        rgba(247,242,234,0.92) 0%,
+        rgba(247,242,234,0.62) 34%,
+        rgba(247,242,234,0.00) 100%);
+    }
+    #q6proSliderTrack > div > div[data-text] {
+      position: absolute;
+      top: 38px;
+      left: 42px;
+      right: 42px;
+      z-index: 2;
+      text-align: center;
+    }
+    #q6proSliderTrack > div > div[data-text] div[data-headline] {
+      max-width: 860px;
+      margin: 0 auto 10px auto;
+      font-family: SF Pro Display, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif !important;
+      font-size: clamp(34px, 3.6vw, 46px);
+      line-height: 1.04;
+      font-weight: 700;
+      color: rgba(0,0,0,0.92);
+      letter-spacing: -1.2px;
+    }
+    #q6proSliderTrack > div > div[data-text] div[data-subline] {
+      max-width: 880px;
+      margin: 0 auto;
+      font-family: SF Pro Display, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif !important;
+      font-size: clamp(20px, 2vw, 24px);
+      line-height: 1.18;
+      font-weight: 500;
+      color: rgba(0,0,0,0.78);
+      letter-spacing: -0.45px;
+    }
+    #q6proSliderTrack > div > div[data-text] div[data-subline] b {
+      font-weight: 700;
+      color: rgba(0,0,0,0.92);
+    }
+
+    /* ---------- Nawigacja ---------- */
+    #q6proSliderNav {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      padding-top: 18px;
+    }
+    #q6proPrev,
+    #q6proNext {
+      width: 52px;
+      height: 52px;
+      border: 0;
+      border-radius: 50%;
+      background: #ffffff;
+      color: #111111;
+      font-size: 24px;
+      line-height: 1;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 10px 24px rgba(0,0,0,0.08);
+      font-family: SF Pro Display, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif !important;
+      transition: background 0.2s ease, transform 0.2s ease;
+    }
+    #q6proPrev:hover,
+    #q6proNext:hover {
+      background: #f2eee7;
+    }
+    #q6proPrev:active,
+    #q6proNext:active {
+      transform: scale(0.93);
+    }
+    #q6proDots {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 0 4px;
+    }
+    #q6proDots button {
+      width: 9px;
+      height: 9px;
+      border: 0;
+      border-radius: 999px;
+      background: rgba(0,0,0,0.24);
+      cursor: pointer;
+      transition: width 0.22s ease, background 0.22s ease;
+      padding: 0;
+    }
+    #q6proDots button[aria-current="true"] {
+      width: 34px;
+      background: rgba(0,0,0,0.72);
+    }
+    #q6proPrev:focus-visible,
+    #q6proNext:focus-visible,
+    #q6proDots button:focus-visible,
+    #q6proSliderTrack > div:focus-visible {
+      outline: 2px solid #0071e3;
+      outline-offset: 3px;
+    }
+
+    /* ---------- Breakpointy ---------- */
+    @media (max-width: 1024px) {
+      #q6proSliderTrack > div {
+        flex: 0 0 84%;
+        min-height: 560px;
+      }
+      #q6proSliderTrack > div > div[data-text] {
+        top: 32px;
+        left: 30px;
+        right: 30px;
+      }
+      #q6proSliderTrack > div > div[data-text] div[data-headline] {
+        font-size: 34px;
+        line-height: 1.05;
+      }
+      #q6proSliderTrack > div > div[data-text] div[data-subline] {
+        font-size: 20px;
+        line-height: 1.2;
+      }
+    }
+    @media (max-width: 767px) {
+      #q6proSliderModule {
+        padding: 4px 12px 32px 12px;
+      }
+      #q6proSliderTitle {
+        margin: 0 0 16px 0;
+        font-size: 32px;
+        line-height: 36px;
+        font-weight: 600;
+      }
+      #q6proSliderTrack {
+        gap: 14px;
+        padding: 0 2px;
+      }
+      #q6proSliderTrack > div {
+        flex: 0 0 88%;
+        min-height: 500px;
+        border-radius: 28px;
+      }
+      #q6proSliderTrack > div::after {
+        height: 58%;
+      }
+      #q6proSliderTrack > div > div[data-text] {
+        top: 24px;
+        left: 18px;
+        right: 18px;
+      }
+      #q6proSliderTrack > div > div[data-text] div[data-headline] {
+        font-size: 27px;
+        line-height: 1.06;
+        font-weight: 700;
+        letter-spacing: -0.8px;
+        margin-bottom: 7px;
+      }
+      #q6proSliderTrack > div > div[data-text] div[data-subline] {
+        font-size: 17px;
+        line-height: 1.2;
+        letter-spacing: -0.25px;
+      }
+      #q6proSliderNav {
+        gap: 10px;
+        padding-top: 14px;
+      }
+      #q6proPrev,
+      #q6proNext {
+        width: 46px;
+        height: 46px;
+        font-size: 21px;
+      }
+    }
+    @media (max-width: 420px) {
+      #q6proSliderTrack > div {
+        flex: 0 0 90%;
+        min-height: 470px;
+      }
+      #q6proSliderTrack > div > div[data-text] {
+        top: 22px;
+        left: 15px;
+        right: 15px;
+      }
+      #q6proSliderTrack > div > div[data-text] div[data-headline] {
+        font-size: 24px;
+        line-height: 1.07;
+      }
+      #q6proSliderTrack > div > div[data-text] div[data-subline] {
+        font-size: 16px;
+        line-height: 1.2;
+      }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      #q6proSliderModule * {
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="q6proSliderModule">
+    <div id="q6proSliderWrap">
+      <h2 id="q6proSliderTitle">Co go wyr&#243;&#380;nia.</h2>
+
+      <div id="q6proSliderWindow">
+        <div id="q6proSliderTrack">
+
+          <!-- SLAJD 1 - PLACEHOLDER GRAFIKI: podmien src na render Q6 PRO -->
+          <div role="group" aria-roledescription="slajd" aria-label="1 z 4: Active Dynamic Glide" tabindex="0">
+            <div data-text>
+              <div data-headline>Koniec ze smugami.</div>
+              <div data-subline><b>Active Dynamic Glide&#8482;</b> &#8212; drgaj&#261;cy ruch &#347;ciereczek synchronizowany z kierunkiem jazdy.</div>
+            </div>
+            <img src="https://cobbo.pl/upload/cobbo/images/pro28elite/mopowanie.webp"
+                 alt="COBBO Q6 PRO - Active Dynamic Glide" decoding="async">
+          </div>
+
+          <!-- SLAJD 2 - PLACEHOLDER GRAFIKI -->
+          <div role="group" aria-roledescription="slajd" aria-label="2 z 4: Spray Pulse 8 Technology" tabindex="0">
+            <div data-text>
+              <div data-headline>R&#243;wnomiernie na ca&#322;ej szybie.</div>
+              <div data-subline><b>Spray Pulse 8 Technology</b> &#8212; osiem precyzyjnych dysz dla r&#243;wnomiernego pokrycia mytej powierzchni.</div>
+            </div>
+            <img src="https://cobbo.pl/upload/cobbo/images/pro28elite/mop-kraw.webp"
+                 alt="COBBO Q6 PRO - Spray Pulse 8 Technology" loading="lazy" decoding="async">
+          </div>
+
+          <!-- SLAJD 3 - PLACEHOLDER GRAFIKI -->
+          <div role="group" aria-roledescription="slajd" aria-label="3 z 4: Edge Rotation System" tabindex="0">
+            <div data-text>
+              <div data-headline>Czysto a&#380; do kraw&#281;dzi.</div>
+              <div data-subline><b>Edge Rotation System</b> &#8212; zwi&#281;kszona efektywno&#347;&#263; mycia przy kraw&#281;dziach okien.</div>
+            </div>
+            <img src="https://cobbo.pl/upload/cobbo/images/pro28elite/antywplot.webp"
+                 alt="COBBO Q6 PRO - Edge Rotation System" loading="lazy" decoding="async">
+          </div>
+
+          <!-- SLAJD 4 - PLACEHOLDER GRAFIKI -->
+          <div role="group" aria-roledescription="slajd" aria-label="4 z 4: AI Cleaning Path 4.0 i Anti-Wind Spray System 3.0" tabindex="0">
+            <div data-text>
+              <div data-headline>Zaplanowana trasa.<br>Stabilny natrysk.</div>
+              <div data-subline><b>AI Cleaning Path 4.0</b> i <b>Anti-Wind Spray System 3.0</b> &#8212; najnowsze wersje autorskich system&#243;w COBBO Robotics.</div>
+            </div>
+            <img src="https://cobbo.pl/upload/cobbo/images/pro28elite/newgen.webp"
+                 alt="COBBO Q6 PRO - AI Cleaning Path 4.0 i Anti-Wind Spray System 3.0" loading="lazy" decoding="async">
+          </div>
+
+        </div>
+      </div>
+
+      <div id="q6proSliderNav">
+        <button type="button" id="q6proPrev" aria-label="Poprzedni slajd">&#8249;</button>
+        <div id="q6proDots">
+          <button type="button" aria-label="Slajd 1" aria-current="true"></button>
+          <button type="button" aria-label="Slajd 2" aria-current="false"></button>
+          <button type="button" aria-label="Slajd 3" aria-current="false"></button>
+          <button type="button" aria-label="Slajd 4" aria-current="false"></button>
+        </div>
+        <button type="button" id="q6proNext" aria-label="Nast&#281;pny slajd">&#8250;</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+  (function () {
+    var module = document.getElementById('q6proSliderModule');
+    if (!module || module.getAttribute('data-q6pro-slider-ready') === '1') return;
+    module.setAttribute('data-q6pro-slider-ready', '1');
+
+    var win    = document.getElementById('q6proSliderWindow');
+    var track  = document.getElementById('q6proSliderTrack');
+    var slides = Array.prototype.slice.call(track.children);
+    var prev   = document.getElementById('q6proPrev');
+    var next   = document.getElementById('q6proNext');
+    var dots   = Array.prototype.slice.call(document.getElementById('q6proDots').children);
+    var index  = 0;
+    var timer  = null;
+
+    var reduced = window.matchMedia
+      ? window.matchMedia('(prefers-reduced-motion: reduce)').matches
+      : false;
+
+    function paintDots(i) {
+      dots.forEach(function (d, n) {
+        d.setAttribute('aria-current', n === i ? 'true' : 'false');
+      });
+    }
+
+    /* Przewijamy TYLKO kontener - nigdy scrollIntoView, ktore
+       przy starcie przeskakiwaloby cala strona do slidera. */
+    function goTo(i, smooth) {
+      if (i < 0) i = slides.length - 1;
+      if (i >= slides.length) i = 0;
+      index = i;
+      var slideRect = slides[i].getBoundingClientRect();
+      var winRect = win.getBoundingClientRect();
+      var delta = (slideRect.left + slideRect.width / 2) - (winRect.left + winRect.width / 2);
+      var left = Math.round(win.scrollLeft + delta);
+      if (win.scrollTo) {
+        win.scrollTo({ left: left, behavior: (smooth === false || reduced) ? 'auto' : 'smooth' });
+      } else {
+        win.scrollLeft = left;
+      }
+      paintDots(index);
+    }
+
+    function detect() {
+      var center = win.scrollLeft + win.clientWidth / 2;
+      var best = 0, bestDist = Infinity;
+      slides.forEach(function (s, i) {
+        var d = Math.abs(center - (s.offsetLeft + s.clientWidth / 2));
+        if (d < bestDist) { bestDist = d; best = i; }
+      });
+      index = best;
+      paintDots(index);
+    }
+
+    prev.addEventListener('click', function () { goTo(index - 1); });
+    next.addEventListener('click', function () { goTo(index + 1); });
+    dots.forEach(function (d, i) {
+      d.addEventListener('click', function () { goTo(i); });
+    });
+
+    win.addEventListener('scroll', function () {
+      if (timer) clearTimeout(timer);
+      timer = setTimeout(detect, 70);
+    }, { passive: true });
+
+    /* Klawiatura: strzalki gdy slider jest w focusie */
+    module.addEventListener('keydown', function (e) {
+      if (e.key === 'ArrowRight') { e.preventDefault(); goTo(index + 1); }
+      else if (e.key === 'ArrowLeft') { e.preventDefault(); goTo(index - 1); }
+    });
+
+    /* Przeciaganie myszka na desktopie (palec obsluguje natywny scroll) */
+    var dragging = false, startX = 0, startScroll = 0, moved = 0;
+    win.addEventListener('pointerdown', function (e) {
+      if (e.pointerType !== 'mouse' || e.button !== 0) return;
+      dragging = true; moved = 0;
+      startX = e.clientX;
+      startScroll = win.scrollLeft;
+    });
+    win.addEventListener('pointermove', function (e) {
+      if (!dragging) return;
+      var dx = e.clientX - startX;
+      if (Math.abs(dx) > moved) moved = Math.abs(dx);
+      if (moved > 4) { win.classList.add('is-dragging'); e.preventDefault(); }
+      win.scrollLeft = startScroll - dx;
+    });
+    function endDrag() {
+      if (!dragging) return;
+      dragging = false;
+      if (win.classList.contains('is-dragging')) {
+        win.classList.remove('is-dragging');
+        detect();
+        goTo(index);
+      }
+      setTimeout(function () { moved = 0; }, 0);
+    }
+    win.addEventListener('pointerup', endDrag);
+    win.addEventListener('pointercancel', endDrag);
+    win.addEventListener('pointerleave', endDrag);
+    win.addEventListener('dragstart', function (e) { e.preventDefault(); });
+
+    window.addEventListener('resize', function () {
+      if (timer) clearTimeout(timer);
+      timer = setTimeout(function () { goTo(index, false); }, 120);
+    });
+
+    /* Start bez animacji i bez ruszania scrollem strony */
+    goTo(0, false);
+  })();
+  </script>
+</body>
+</html>
