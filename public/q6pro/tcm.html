@@ -1,560 +1,496 @@
+<!-- ================================================================
+     COBBO Q6 PRO - galeria funkcji
+     Wersja poprawiona: polskie znaki jako encje HTML (odporne na
+     zle ustawione kodowanie strony), kafelki przesuwane palcem,
+     dostepnosc, brak skokow layoutu.
+     ================================================================ -->
 <div id="q6pro-feature-gallery">
-
 <style>
-
 #q6pro-feature-gallery{
-width:100%;
-overflow:hidden;
-font-family:SF Pro Display,-apple-system,sans-serif;
-background:#fff;
-color:#111;
+  /* Kolory w jednym miejscu - latwo podmienic pod brand */
+  --q6-bg:#fff;
+  --q6-fg:#111;
+  --q6-muted:#6e6e73;
+  --q6-chip:#f5f5f7;
+  --q6-chip-fg:#111;
+  --q6-chip-active:#111;
+  --q6-chip-active-fg:#fff;
+  --q6-arrow:#e8e8ed;
+  --q6-radius:28px;
+
+  width:100%;
+  overflow:hidden;
+  font-family:"SF Pro Display","SF Pro Text",-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,"Helvetica Neue",Arial,sans-serif;
+  background:var(--q6-bg);
+  color:var(--q6-fg);
+  -webkit-font-smoothing:antialiased;
 }
+#q6pro-feature-gallery *{box-sizing:border-box;}
+#q6pro-feature-gallery button{font:inherit;}
 
-#q6pro-feature-gallery *{
-box-sizing:border-box;
-}
-
-
+/* ---------- Naglowek ---------- */
 #q6pro-gallery-title{
-font-size:clamp(34px,5vw,56px);
-line-height:1.05;
-letter-spacing:-0.045em;
-font-weight:700;
-max-width:900px;
-margin:0 auto;
-padding:50px 24px 30px;
+  font-size:clamp(30px,5vw,56px);
+  line-height:1.05;
+  letter-spacing:-0.045em;
+  font-weight:700;
+  max-width:900px;
+  margin:0 auto;
+  padding:50px 24px 30px;
 }
 
-
+/* ---------- Scena / obraz ---------- */
 #q6pro-gallery-stage{
-position:relative;
-width:100%;
-max-width:1200px;
-height:620px;
-margin:auto;
-overflow:hidden;
+  position:relative;
+  width:100%;
+  max-width:1200px;
+  height:clamp(320px,48vw,620px);
+  margin:0 auto;
+  overflow:hidden;
+  touch-action:pan-y;            /* pion przewija strone, poziom = swipe */
+  -webkit-user-select:none;
+  user-select:none;
+}
+.q6pro-slide{
+  position:absolute;
+  inset:0;
+  margin:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  opacity:0;
+  visibility:hidden;
+  transform:scale(.985);
+  transition:opacity .45s ease,transform .45s ease,visibility 0s .45s;
+  pointer-events:none;
+}
+.q6pro-slide.is-active{
+  opacity:1;
+  visibility:visible;
+  transform:none;
+  transition:opacity .45s ease,transform .45s ease;
+}
+.q6pro-slide img{
+  width:85%;
+  height:85%;
+  object-fit:contain;
+  -webkit-user-drag:none;
+  pointer-events:none;
+}
+.q6pro-placeholder{
+  width:85%;
+  height:85%;
+  border-radius:var(--q6-radius);
+  background:radial-gradient(circle,#fff,#ece8e2);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  padding:16px;
+  font-size:13px;
+  font-weight:600;
+  letter-spacing:.12em;
+  color:#aaa;
 }
 
-
-#q6pro-gallery-image{
-width:100%;
-height:100%;
-display:flex;
-align-items:center;
-justify-content:center;
-transition:.5s ease;
+/* ---------- Strzalki ---------- */
+.q6pro-arrow{
+  position:absolute;
+  top:50%;
+  transform:translateY(-50%);
+  width:46px;
+  height:46px;
+  border-radius:50%;
+  border:0;
+  background:var(--q6-arrow);
+  color:var(--q6-fg);
+  font-size:28px;
+  line-height:1;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+  z-index:5;
+  transition:background .2s ease,transform .2s ease;
 }
+.q6pro-arrow:hover{background:#dcdce3;}
+.q6pro-arrow:active{transform:translateY(-50%) scale(.92);}
+#q6pro-gallery-arrow-left{left:20px;}
+#q6pro-gallery-arrow-right{right:20px;}
 
-
-#q6pro-gallery-image img{
-width:85%;
-height:85%;
-object-fit:contain;
+/* ---------- Pasek kafelkow ---------- */
+#q6pro-gallery-strip{
+  position:relative;
+  max-width:1200px;
+  margin:0 auto;
 }
-
-
-#q6pro-gallery-placeholder{
-width:85%;
-height:85%;
-border-radius:28px;
-background:
-radial-gradient(circle,#fff,#ece8e2);
-display:flex;
-align-items:center;
-justify-content:center;
-font-size:13px;
-font-weight:600;
-letter-spacing:.12em;
-color:#aaa;
+/* delikatne wygaszenie krawedzi = sygnal, ze da sie przesuwac */
+#q6pro-gallery-strip::before,
+#q6pro-gallery-strip::after{
+  content:"";
+  position:absolute;
+  top:0;
+  bottom:0;
+  width:48px;
+  pointer-events:none;
+  z-index:2;
+  opacity:0;
+  transition:opacity .25s ease;
 }
-
-
+#q6pro-gallery-strip::before{
+  left:0;
+  background:linear-gradient(90deg,var(--q6-bg),rgba(255,255,255,0));
+}
+#q6pro-gallery-strip::after{
+  right:0;
+  background:linear-gradient(270deg,var(--q6-bg),rgba(255,255,255,0));
+}
+#q6pro-gallery-strip.can-left::before{opacity:1;}
+#q6pro-gallery-strip.can-right::after{opacity:1;}
 
 #q6pro-gallery-buttons{
-display:flex;
-gap:12px;
-padding:20px 24px;
-overflow-x:auto;
-scrollbar-width:none;
-scroll-snap-type:x mandatory;
+  position:relative;
+  display:flex;
+  gap:12px;
+  padding:20px 24px;
+  overflow-x:auto;
+  overflow-y:hidden;
+  scrollbar-width:none;
+  -ms-overflow-style:none;
+  -webkit-overflow-scrolling:touch;   /* plynny bezwlad na iOS */
+  overscroll-behavior-x:contain;      /* brak "gumy" calej strony */
+  touch-action:pan-x;                 /* palec przesuwa pasek */
+  scroll-padding-inline:24px;
+  cursor:grab;
 }
-
-
-#q6pro-gallery-buttons::-webkit-scrollbar{
-display:none;
-}
-
+#q6pro-gallery-buttons::-webkit-scrollbar{display:none;}
+#q6pro-gallery-buttons.is-dragging{cursor:grabbing;scroll-behavior:auto;}
 
 .q6pro-feature-button{
-
-flex:0 0 auto;
-
-height:58px;
-
-padding:0 22px;
-
-border:0;
-
-border-radius:30px;
-
-background:#f5f5f7;
-
-display:flex;
-
-align-items:center;
-
-gap:10px;
-
-font-size:16px;
-
-color:#111;
-
-cursor:pointer;
-
-scroll-snap-align:center;
-
-transition:.3s ease;
-
+  flex:0 0 auto;
+  height:58px;
+  padding:0 22px;
+  border:0;
+  border-radius:30px;
+  background:var(--q6-chip);
+  color:var(--q6-chip-fg);
+  display:flex;
+  align-items:center;
+  gap:10px;
+  font-size:16px;
+  white-space:nowrap;
+  cursor:pointer;
+  -webkit-user-select:none;
+  user-select:none;
+  -webkit-tap-highlight-color:transparent;
+  transition:background .3s ease,color .3s ease,transform .2s ease;
+}
+.q6pro-feature-button:active{transform:scale(.97);}
+.q6pro-feature-button .q6pro-plus{
+  width:24px;
+  height:24px;
+  border-radius:50%;
+  border:1px solid #777;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:18px;
+  line-height:1;
+  transition:border-color .3s ease,transform .3s ease;
+}
+.q6pro-feature-button[aria-selected="true"]{
+  background:var(--q6-chip-active);
+  color:var(--q6-chip-active-fg);
+}
+.q6pro-feature-button[aria-selected="true"] .q6pro-plus{
+  border-color:currentColor;
+  background:rgba(255,255,255,.12);
+}
+.q6pro-feature-button:focus-visible,
+.q6pro-arrow:focus-visible{
+  outline:2px solid #0071e3;
+  outline-offset:3px;
 }
 
-
-.q6pro-feature-button span{
-
-width:24px;
-height:24px;
-
-border-radius:50%;
-
-border:1px solid #777;
-
-display:flex;
-
-align-items:center;
-
-justify-content:center;
-
-font-size:18px;
-
-}
-
-
-.q6pro-feature-button.active{
-
-background:#111;
-
-color:#fff;
-
-}
-
-
-.q6pro-feature-button.active span{
-
-border-color:#fff;
-
-}
-
-
-
+/* ---------- Opisy (nakladane w gridzie => brak skoku wysokosci) ---------- */
 #q6pro-gallery-description{
-
-max-width:900px;
-margin:10px auto 0;
-padding:0 24px 50px;
-
+  display:grid;
+  max-width:900px;
+  margin:10px auto 0;
+  padding:0 24px 50px;
+}
+.q6pro-panel{
+  grid-area:1/1;
+  opacity:0;
+  visibility:hidden;
+  transform:translateY(8px);
+  transition:opacity .4s ease,transform .4s ease,visibility 0s .4s;
+}
+.q6pro-panel.is-active{
+  opacity:1;
+  visibility:visible;
+  transform:none;
+  transition:opacity .4s ease,transform .4s ease;
+}
+.q6pro-panel h3{
+  font-size:clamp(24px,3.2vw,32px);
+  line-height:1.1;
+  letter-spacing:-.035em;
+  font-weight:700;
+  margin:0 0 12px;
+}
+.q6pro-panel p{
+  font-size:17px;
+  line-height:1.55;
+  color:var(--q6-muted);
+  max-width:650px;
+  margin:0;
 }
 
-
-#q6pro-gallery-description h3{
-
-font-size:32px;
-line-height:1.1;
-letter-spacing:-.035em;
-margin:0 0 12px;
-}
-
-
-#q6pro-gallery-description p{
-
-font-size:17px;
-line-height:1.55;
-color:#6e6e73;
-max-width:650px;
-
-}
-
-
-
-#q6pro-gallery-arrow-left,
-#q6pro-gallery-arrow-right{
-
-position:absolute;
-
-top:50%;
-
-transform:translateY(-50%);
-
-width:46px;
-height:46px;
-
-border-radius:50%;
-
-border:0;
-
-background:#e8e8ed;
-
-font-size:28px;
-
-cursor:pointer;
-
-z-index:5;
-
-}
-
-
-#q6pro-gallery-arrow-left{
-left:20px;
-}
-
-
-#q6pro-gallery-arrow-right{
-right:20px;
-}
-
-
-
+/* ---------- Mobile ---------- */
 @media(max-width:700px){
-
-#q6pro-gallery-stage{
-
-height:320px;
-
+  #q6pro-gallery-title{padding:35px 24px 24px;}
+  .q6pro-slide img,
+  .q6pro-placeholder{width:100%;height:100%;}
+  .q6pro-arrow{width:38px;height:38px;font-size:22px;}
+  #q6pro-gallery-arrow-left{left:10px;}
+  #q6pro-gallery-arrow-right{right:10px;}
+  #q6pro-gallery-buttons{padding:16px;gap:10px;}
+  .q6pro-feature-button{height:52px;padding:0 18px;font-size:15px;}
+  #q6pro-gallery-description{padding:0 24px 40px;}
 }
 
-
-#q6pro-gallery-image img,
-#q6pro-gallery-placeholder{
-
-width:100%;
-height:100%;
-
+/* ---------- Ciemny motyw (opcjonalnie - dziala tylko jesli strona go wspiera) ---------- */
+@media(prefers-color-scheme:dark){
+  #q6pro-feature-gallery.q6pro-auto-dark{
+    --q6-bg:#000;--q6-fg:#f5f5f7;--q6-muted:#a1a1a6;
+    --q6-chip:#1d1d1f;--q6-chip-fg:#f5f5f7;
+    --q6-chip-active:#f5f5f7;--q6-chip-active-fg:#111;
+    --q6-arrow:#2c2c2e;
+  }
 }
 
-
-#q6pro-gallery-title{
-
-padding-top:35px;
-
+/* ---------- Szacunek dla ustawien dostepnosci ---------- */
+@media(prefers-reduced-motion:reduce){
+  #q6pro-feature-gallery *{
+    transition-duration:.01ms !important;
+    animation-duration:.01ms !important;
+    scroll-behavior:auto !important;
+  }
 }
-
-
-#q6pro-gallery-arrow-left,
-#q6pro-gallery-arrow-right{
-
-width:38px;
-height:38px;
-font-size:22px;
-
-}
-
-
-}
-
-
 </style>
 
-
-
 <h2 id="q6pro-gallery-title">
-Poznaj COBBO Q6 PRO<br>
-z każdej strony.
+  Poznaj COBBO Q6 PRO<br>
+  z ka&#380;dej strony.
 </h2>
 
-
-
 <div id="q6pro-gallery-stage">
+  <button type="button" class="q6pro-arrow" id="q6pro-gallery-arrow-left" aria-label="Poprzednia funkcja">&#8249;</button>
 
+  <!-- Podmien .q6pro-placeholder na <img src="..." alt="..."> gdy beda rendery.
+       Pierwszy obraz: loading="eager", pozostale: loading="lazy" -->
+  <figure class="q6pro-slide is-active" data-slide="0">
+    <div class="q6pro-placeholder">RENDER FUNKCJI 1<br>Active Dynamic Glide&#8482;</div>
+  </figure>
+  <figure class="q6pro-slide" data-slide="1">
+    <div class="q6pro-placeholder">RENDER FUNKCJI 2<br>3-strefowa &#347;ciereczka</div>
+  </figure>
+  <figure class="q6pro-slide" data-slide="2">
+    <div class="q6pro-placeholder">RENDER FUNKCJI 3<br>Spray Pulse 8&#8482;</div>
+  </figure>
+  <figure class="q6pro-slide" data-slide="3">
+    <div class="q6pro-placeholder">RENDER FUNKCJI 4<br>FullEdge Clean&#8482;</div>
+  </figure>
+  <figure class="q6pro-slide" data-slide="4">
+    <div class="q6pro-placeholder">RENDER FUNKCJI 5<br>Smart Control</div>
+  </figure>
 
-<button id="q6pro-gallery-arrow-left">
-‹
-</button>
-
-
-<div id="q6pro-gallery-image">
-
-<div id="q6pro-gallery-placeholder">
-MIEJSCE NA RENDER / ANIMACJĘ
+  <button type="button" class="q6pro-arrow" id="q6pro-gallery-arrow-right" aria-label="Nast&#281;pna funkcja">&#8250;</button>
 </div>
 
+<div id="q6pro-gallery-strip">
+  <div id="q6pro-gallery-buttons" role="tablist" aria-label="Funkcje COBBO Q6 PRO">
+    <button type="button" class="q6pro-feature-button" role="tab" id="q6pro-tab-0" aria-controls="q6pro-panel-0" aria-selected="true" tabindex="0">
+      <span class="q6pro-plus" aria-hidden="true">+</span>Active Dynamic Glide&#8482;
+    </button>
+    <button type="button" class="q6pro-feature-button" role="tab" id="q6pro-tab-1" aria-controls="q6pro-panel-1" aria-selected="false" tabindex="-1">
+      <span class="q6pro-plus" aria-hidden="true">+</span>3-strefowa &#347;ciereczka
+    </button>
+    <button type="button" class="q6pro-feature-button" role="tab" id="q6pro-tab-2" aria-controls="q6pro-panel-2" aria-selected="false" tabindex="-1">
+      <span class="q6pro-plus" aria-hidden="true">+</span>Spray Pulse 8&#8482;
+    </button>
+    <button type="button" class="q6pro-feature-button" role="tab" id="q6pro-tab-3" aria-controls="q6pro-panel-3" aria-selected="false" tabindex="-1">
+      <span class="q6pro-plus" aria-hidden="true">+</span>FullEdge Clean&#8482;
+    </button>
+    <button type="button" class="q6pro-feature-button" role="tab" id="q6pro-tab-4" aria-controls="q6pro-panel-4" aria-selected="false" tabindex="-1">
+      <span class="q6pro-plus" aria-hidden="true">+</span>Smart Control
+    </button>
+  </div>
 </div>
-
-
-<button id="q6pro-gallery-arrow-right">
-›
-</button>
-
-
-</div>
-
-
-
-
-
-<div id="q6pro-gallery-buttons">
-
-
-<button class="q6pro-feature-button active">
-<span>+</span>
-Active Dynamic Glide™
-</button>
-
-
-<button class="q6pro-feature-button">
-<span>+</span>
-3-strefowa ściereczka
-</button>
-
-
-<button class="q6pro-feature-button">
-<span>+</span>
-Spray Pulse 8™
-</button>
-
-
-<button class="q6pro-feature-button">
-<span>+</span>
-FullEdge Clean™
-</button>
-
-
-<button class="q6pro-feature-button">
-<span>+</span>
-Smart Control
-</button>
-
-
-</div>
-
-
-
-
 
 <div id="q6pro-gallery-description">
-
-
-<h3>
-Nie tylko jedzie.<br>
-Aktywnie pracuje.
-</h3>
-
-
-<p>
-Kierunkowy system drgań działa po stronie,
-która prowadzi robota podczas jazdy.
-Pomaga ograniczać smugi i efekt „skóry węża”.
-</p>
-
-
+  <div class="q6pro-panel is-active" id="q6pro-panel-0" role="tabpanel" aria-labelledby="q6pro-tab-0">
+    <h3>Nie tylko jedzie.<br>Aktywnie pracuje.</h3>
+    <p>Kierunkowy system drga&#324; dzia&#322;a po stronie, kt&#243;ra prowadzi robota podczas jazdy. Pomaga ogranicza&#263; smugi i efekt &#8222;sk&#243;ry w&#281;&#380;a&#8221;.</p>
+  </div>
+  <div class="q6pro-panel" id="q6pro-panel-1" role="tabpanel" aria-labelledby="q6pro-tab-1">
+    <h3>Jedna &#347;ciereczka.<br>Trzy etapy pracy.</h3>
+    <p>Specjalna struktura materia&#322;u &#322;&#261;czy zbieranie zabrudze&#324;, mycie oraz ko&#324;cowe polerowanie szyby.</p>
+  </div>
+  <div class="q6pro-panel" id="q6pro-panel-2" role="tabpanel" aria-labelledby="q6pro-tab-2">
+    <h3>8 kierunk&#243;w natrysku.<br>P&#322;yn dok&#322;adnie tam, gdzie trzeba.</h3>
+    <p>Spray Pulse 8&#8482; wykorzystuje osiem kierunk&#243;w natrysku, aby r&#243;wnomiernie przygotowa&#263; szyb&#281;.</p>
+  </div>
+  <div class="q6pro-panel" id="q6pro-panel-3" role="tabpanel" aria-labelledby="q6pro-tab-3">
+    <h3>Ca&#322;a szyba.<br>Bez kompromis&#243;w.</h3>
+    <p>FullEdge Clean&#8482; pomaga dok&#322;adniej pracowa&#263; przy kraw&#281;dziach, rogach i uszczelkach.</p>
+  </div>
+  <div class="q6pro-panel" id="q6pro-panel-4" role="tabpanel" aria-labelledby="q6pro-tab-4">
+    <h3>Stabilno&#347;&#263;.<br>Kontrola.<br>Precyzja.</h3>
+    <p>AI Cleaning Path 4.0, Anti-Wind 3.0 oraz kontrola docisku wspieraj&#261; stabiln&#261; prac&#281; robota.</p>
+  </div>
 </div>
 
-
-
-
-
 <script>
-
-(function(){
-
-
-const buttons =
-document.querySelectorAll(
-"#q6pro-gallery-buttons .q6pro-feature-button"
-);
-
-
-const title =
-document.querySelector(
-"#q6pro-gallery-description h3"
-);
-
-
-const text =
-document.querySelector(
-"#q6pro-gallery-description p"
-);
-
-
-const image =
-document.querySelector(
-"#q6pro-gallery-image"
-);
-
-
-const features=[
-
-{
-title:"Nie tylko jedzie.<br>Aktywnie pracuje.",
-text:"Kierunkowy system drgań działa po stronie, która prowadzi robota podczas jazdy. Pomaga ograniczać smugi i efekt „skóry węża”."
-},
-
-{
-title:"Jedna ściereczka.<br>Trzy etapy pracy.",
-text:"Specjalna struktura materiału łączy zbieranie zabrudzeń, mycie oraz końcowe polerowanie szyby."
-},
-
-{
-title:"8 kierunków natrysku.<br>Płyn dokładnie tam, gdzie trzeba.",
-text:"Spray Pulse 8™ wykorzystuje osiem kierunków natrysku, aby równomiernie przygotować szybę."
-},
-
-{
-title:"Cała szyba.<br>Bez kompromisów.",
-text:"FullEdge Clean™ pomaga dokładniej pracować przy krawędziach, rogach i uszczelkach."
-},
-
-{
-title:"Stabilność.<br>Kontrola.<br>Precyzja.",
-text:"AI Cleaning Path 4.0, Anti-Wind 3.0 oraz kontrola docisku wspierają stabilną pracę robota."
-}
-
-];
-
-
-let current=0;
-
-
-
-function change(index){
-
-current=index;
-
-
-buttons.forEach((b,i)=>{
-
-b.classList.toggle(
-"active",
-i===index
-);
-
-});
-
-
-
-title.innerHTML=
-features[index].title;
-
-
-text.innerHTML=
-features[index].text;
-
-
-
-image.style.opacity=0;
-
-
-setTimeout(()=>{
-
-image.innerHTML=
-'<div id="q6pro-gallery-placeholder">RENDER FUNKCJI '+(index+1)+'</div>';
-
-image.style.opacity=1;
-
-},200);
-
-
-}
-
-
-
-buttons.forEach((button,index)=>{
-
-button.onclick=()=>{
-
-change(index);
-
-};
-
-});
-
-
-
-document
-.getElementById(
-"q6pro-gallery-arrow-right"
-)
-.onclick=()=>{
-
-change(
-(current+1)%features.length
-);
-
-};
-
-
-document
-.getElementById(
-"q6pro-gallery-arrow-left"
-)
-.onclick=()=>{
-
-change(
-(current-1+features.length)%features.length
-);
-
-};
-
-
-
-
-const slider =
-document.getElementById(
-"q6pro-gallery-buttons"
-);
-
-
-let start=0;
-
-
-slider.addEventListener(
-"touchstart",
-e=>{
-
-start=e.touches[0].clientX;
-
-});
-
-
-slider.addEventListener(
-"touchend",
-e=>{
-
-let diff=
-e.changedTouches[0].clientX-start;
-
-
-if(Math.abs(diff)>60){
-
-if(diff<0){
-
-change(
-(current+1)%features.length
-);
-
-}else{
-
-change(
-(current-1+features.length)%features.length
-);
-
-}
-
-}
-
-});
-
-
+(function () {
+  var root = document.getElementById("q6pro-feature-gallery");
+  if (!root || root.getAttribute("data-q6pro-ready") === "1") return;
+  root.setAttribute("data-q6pro-ready", "1");
+
+  var strip    = root.querySelector("#q6pro-gallery-strip");
+  var tablist  = root.querySelector("#q6pro-gallery-buttons");
+  var tabs     = Array.prototype.slice.call(root.querySelectorAll(".q6pro-feature-button"));
+  var slides   = Array.prototype.slice.call(root.querySelectorAll(".q6pro-slide"));
+  var panels   = Array.prototype.slice.call(root.querySelectorAll(".q6pro-panel"));
+  var stage    = root.querySelector("#q6pro-gallery-stage");
+  var prevBtn  = root.querySelector("#q6pro-gallery-arrow-left");
+  var nextBtn  = root.querySelector("#q6pro-gallery-arrow-right");
+  var total    = tabs.length;
+  var current  = 0;
+
+  var reduced = window.matchMedia
+    ? window.matchMedia("(prefers-reduced-motion: reduce)").matches
+    : false;
+
+  /* ---------- Zmiana funkcji ---------- */
+  function show(index, opts) {
+    index = (index % total + total) % total;
+    current = index;
+    opts = opts || {};
+
+    tabs.forEach(function (tab, i) {
+      var on = i === index;
+      tab.setAttribute("aria-selected", on ? "true" : "false");
+      tab.setAttribute("tabindex", on ? "0" : "-1");
+    });
+    slides.forEach(function (s, i) { s.classList.toggle("is-active", i === index); });
+    panels.forEach(function (p, i) {
+      p.classList.toggle("is-active", i === index);
+    });
+
+    centerTab(tabs[index]);
+    if (opts.focus) tabs[index].focus();
+  }
+
+  /* ---------- Aktywny kafelek zawsze widoczny ---------- */
+  function centerTab(tab) {
+    if (!tab) return;
+    var target = tab.offsetLeft - (tablist.clientWidth - tab.offsetWidth) / 2;
+    var max = tablist.scrollWidth - tablist.clientWidth;
+    target = Math.max(0, Math.min(target, max));
+    if (tablist.scrollTo) {
+      tablist.scrollTo({ left: target, behavior: reduced ? "auto" : "smooth" });
+    } else {
+      tablist.scrollLeft = target;
+    }
+  }
+
+  /* ---------- Wygaszanie krawedzi paska ---------- */
+  function updateEdges() {
+    var max = tablist.scrollWidth - tablist.clientWidth;
+    strip.classList.toggle("can-left", tablist.scrollLeft > 4);
+    strip.classList.toggle("can-right", tablist.scrollLeft < max - 4);
+  }
+  tablist.addEventListener("scroll", updateEdges, { passive: true });
+  window.addEventListener("resize", updateEdges);
+  updateEdges();
+
+  /* ---------- Klik w kafelek ---------- */
+  tabs.forEach(function (tab, i) {
+    tab.addEventListener("click", function () { show(i); });
+  });
+
+  /* ---------- Strzalki ---------- */
+  prevBtn.addEventListener("click", function () { show(current - 1); });
+  nextBtn.addEventListener("click", function () { show(current + 1); });
+
+  /* ---------- Klawiatura (strzalki, Home/End) ---------- */
+  tablist.addEventListener("keydown", function (e) {
+    var map = { ArrowRight: current + 1, ArrowLeft: current - 1, Home: 0, End: total - 1 };
+    if (!(e.key in map)) return;
+    e.preventDefault();
+    show(map[e.key], { focus: true });
+  });
+
+  /* ---------- Swipe palcem na scenie = zmiana funkcji ---------- */
+  var sx = 0, sy = 0, tracking = false;
+  stage.addEventListener("touchstart", function (e) {
+    if (e.touches.length !== 1) return;
+    sx = e.touches[0].clientX;
+    sy = e.touches[0].clientY;
+    tracking = true;
+  }, { passive: true });
+  stage.addEventListener("touchend", function (e) {
+    if (!tracking) return;
+    tracking = false;
+    var dx = e.changedTouches[0].clientX - sx;
+    var dy = e.changedTouches[0].clientY - sy;
+    if (Math.abs(dx) > 45 && Math.abs(dx) > Math.abs(dy) * 1.2) {
+      show(dx < 0 ? current + 1 : current - 1);
+    }
+  }, { passive: true });
+  stage.addEventListener("touchcancel", function () { tracking = false; }, { passive: true });
+
+  /* ---------- Przeciaganie paska myszka (desktop) ----------
+     Palec obsluguje natywny scroll przegladarki - nie ruszamy go. */
+  var dragging = false, startX = 0, startScroll = 0, moved = 0;
+
+  tablist.addEventListener("pointerdown", function (e) {
+    if (e.pointerType !== "mouse" || e.button !== 0) return;
+    dragging = true;
+    moved = 0;
+    startX = e.clientX;
+    startScroll = tablist.scrollLeft;
+    /* UWAGA: klasy "is-dragging" NIE dodajemy tutaj - dodana na pointerdown
+       zmienialaby stan kafelka jeszcze przed kliknieciem. */
+  });
+  tablist.addEventListener("pointermove", function (e) {
+    if (!dragging) return;
+    var dx = e.clientX - startX;
+    if (Math.abs(dx) > moved) moved = Math.abs(dx);
+    if (moved > 4) {
+      tablist.classList.add("is-dragging");
+      e.preventDefault();
+    }
+    tablist.scrollLeft = startScroll - dx;
+  });
+  function endDrag() {
+    if (!dragging) return;
+    dragging = false;
+    tablist.classList.remove("is-dragging");
+    setTimeout(function () { moved = 0; }, 0);
+  }
+  tablist.addEventListener("pointerup", endDrag);
+  tablist.addEventListener("pointercancel", endDrag);
+  tablist.addEventListener("pointerleave", endDrag);
+  tablist.addEventListener("click", function (e) {
+    if (moved > 6) { e.preventDefault(); e.stopPropagation(); }
+  }, true);
+  tablist.addEventListener("dragstart", function (e) { e.preventDefault(); });
+
+  /* ---------- Start ---------- */
+  show(0);
 })();
-
 </script>
-
-
 </div>
