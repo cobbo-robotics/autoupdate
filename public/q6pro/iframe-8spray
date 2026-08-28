@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: transparent;
+}
+
+video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+</style>
+
+</head>
+
+<body>
+
+<video 
+  autoplay 
+  muted 
+  loop 
+  playsinline
+  preload="auto">
+  
+  <source src="https://cobbo.pl/upload/cobbo/opisy-produktow/q6pro/8spray.mp4" type="video/mp4">
+
+</video>
+
+</body>
+</html>
