@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>COBBO Smart Fry 360 AI</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      background: #000;
+      font-family: Arial, sans-serif;
+      overflow: hidden;
+    }
+
+    #smartfry360-ai-section {
+      width: 100%;
+      background: #000;
+      overflow: hidden;
+    }
+
+    #smartfry360-ai-inner {
+      position: relative;
+      max-width: 1700px;
+      margin: 0 auto;
+      padding: 34px 34px 70px;
+      color: #fff;
+      background:
+        radial-gradient(circle at center, rgba(210, 145, 20, 0.20), transparent 43%),
+        linear-gradient(180deg, #000 0%, #0c0700 58%, #000 100%);
+      min-height: 980px;
+    }
+
+    #smartfry360-ai-title {
+      text-align: center;
+      position: relative;
+      z-index: 6;
+      margin-bottom: 6px;
+    }
+
+    #smartfry360-ai-title-label {
+      display: block;
+      margin-bottom: 10px;
+      font-size: 14px;
+      letter-spacing: 9px;
+      color: rgba(218, 171, 69, 0.78);
+      text-transform: uppercase;
+    }
+
+    #smartfry360-ai-title-heading {
+      margin: 0;
+      font-size: clamp(48px, 7vw, 92px);
+      line-height: 0.95;
+      font-weight: 300;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    #smartfry360-ai-title-heading strong {
+      color: #d6a421;
+      font-weight: 400;
+    }
+
+    #smartfry360-ai-product {
+      position: relative;
+      max-width: 1500px;
+      margin: 0 auto;
+      min-height: 760px;
+    }
+
+    #smartfry360-product-stage {
+      position: relative;
+      width: 100%;
+      min-height: 760px;
+    }
+
+    #smartfry360-product-stage::after {
+      content: "";
+      position: absolute;
+      left: 50%;
+      bottom: 38px;
+      transform: translateX(-50%);
+      width: 520px;
+      height: 92px;
+      border-radius: 50%;
+      background:
+        radial-gradient(
+          ellipse at center,
+          rgba(232, 176, 61, 0.22) 0%,
+          rgba(232, 176, 61, 0.12) 30%,
+          rgba(0, 0, 0, 0.72) 68%,
+          rgba(0, 0, 0, 0) 100%
+        );
+      filter: blur(10px);
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    #smartfry360-product-img {
+      display: block;
+      width: 48%;
+      max-width: 700px;
+      min-width: 560px;
+      margin: 4px auto 0;
+      position: relative;
+      z-index: 2;
+    }
+
+    #smartfry360-hotspot-1,
+    #smartfry360-hotspot-2,
+    #smartfry360-hotspot-3 {
+      position: absolute;
+      z-index: 5;
+      width: 42px;
+      height: 42px;
+      border: 3px solid #d6a421;
+      border-radius: 50%;
+      background: #000;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 21px;
+      box-shadow: 0 0 18px rgba(214, 164, 33, 0.65);
+    }
+
+    #smartfry360-hotspot-1 {
+      top: 270px;
+      left: 50.2%;
+    }
+
+    #smartfry360-hotspot-2 {
+      top: 236px;
+      left: 55.4%;
+    }
+
+    #smartfry360-hotspot-3 {
+      top: 594px;
+      left: 52.8%;
+    }
+
+    #smartfry360-callout-1,
+    #smartfry360-callout-2,
+    #smartfry360-callout-3 {
+      position: absolute;
+      z-index: 4;
+      width: 320px;
+      padding: 18px 20px;
+      border: 1px solid rgba(214, 164, 33, 0.78);
+      background: rgba(0, 0, 0, 0.76);
+      backdrop-filter: blur(8px);
+      border-radius: 16px;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.35);
+    }
+
+    #smartfry360-callout-1 strong,
+    #smartfry360-callout-2 strong,
+    #smartfry360-callout-3 strong {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 21px;
+      color: #f5d27a;
+      line-height: 1.2;
+    }
+
+    #smartfry360-callout-1 span,
+    #smartfry360-callout-2 span,
+    #smartfry360-callout-3 span {
+      display: block;
+      font-size: 15px;
+      line-height: 1.4;
+      color: rgba(255, 255, 255, 0.88);
+    }
+
+    #smartfry360-callout-1 {
+      top: 175px;
+      left: 10px;
+    }
+
+    #smartfry360-callout-2 {
+      top: 175px;
+      right: 10px;
+    }
+
+    #smartfry360-callout-3 {
+      top: 560px;
+      left: 92px;
+    }
+
+    #smartfry360-mobile-features {
+      display: none;
+    }
+
+    @media (max-width: 1200px) {
+      #smartfry360-ai-inner {
+        min-height: 930px;
+      }
+
+      #smartfry360-ai-product,
+      #smartfry360-product-stage {
+        min-height: 710px;
+      }
+
+      #smartfry360-product-img {
+        width: 56%;
+        max-width: 650px;
+        min-width: 480px;
+      }
+
+      #smartfry360-callout-1,
+      #smartfry360-callout-2,
+      #smartfry360-callout-3 {
+        width: 280px;
+      }
+
+      #smartfry360-hotspot-1 {
+        top: 250px;
+        left: 49.2%;
+      }
+
+      #smartfry360-hotspot-2 {
+        top: 222px;
+        left: 56%;
+      }
+
+      #smartfry360-hotspot-3 {
+        top: 550px;
+        left: 53%;
+      }
+
+      #smartfry360-callout-1 {
+        top: 160px;
+        left: 0;
+      }
+
+      #smartfry360-callout-2 {
+        top: 160px;
+        right: 0;
+      }
+
+      #smartfry360-callout-3 {
+        top: 520px;
+        left: 40px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      html,
+      body {
+        overflow-x: hidden;
+        overflow-y: auto;
+      }
+
+      #smartfry360-ai-inner {
+        padding: 28px 16px 40px;
+        min-height: auto;
+      }
+
+      #smartfry360-ai-title-label {
+        font-size: 10px;
+        letter-spacing: 4px;
+        margin-bottom: 8px;
+      }
+
+      #smartfry360-ai-title-heading {
+        font-size: clamp(38px, 12vw, 62px);
+        letter-spacing: 1px;
+      }
+
+      #smartfry360-ai-product,
+      #smartfry360-product-stage {
+        min-height: auto;
+      }
+
+      #smartfry360-product-img {
+        width: 100%;
+        max-width: 560px;
+        min-width: 0;
+      }
+
+      #smartfry360-product-stage::after {
+        width: 280px;
+        height: 56px;
+        bottom: 16px;
+      }
+
+      #smartfry360-callout-1,
+      #smartfry360-callout-2,
+      #smartfry360-callout-3 {
+        display: none;
+      }
+
+      #smartfry360-hotspot-1,
+      #smartfry360-hotspot-2,
+      #smartfry360-hotspot-3 {
+        width: 34px;
+        height: 34px;
+        font-size: 16px;
+      }
+
+      #smartfry360-hotspot-1 {
+        top: 42%;
+        left: 47%;
+      }
+
+      #smartfry360-hotspot-2 {
+        top: 38%;
+        left: 58%;
+      }
+
+      #smartfry360-hotspot-3 {
+        top: 84%;
+        left: 53%;
+      }
+
+      #smartfry360-mobile-features {
+        display: grid;
+        gap: 12px;
+        max-width: 560px;
+        margin: 26px auto 0;
+      }
+
+      #smartfry360-mobile-feature-1,
+      #smartfry360-mobile-feature-2,
+      #smartfry360-mobile-feature-3 {
+        padding: 15px 16px;
+        border-radius: 14px;
+        background: rgba(0, 0, 0, 0.8);
+        border: 1px solid rgba(214, 164, 33, 0.55);
+      }
+
+      #smartfry360-mobile-feature-1 strong,
+      #smartfry360-mobile-feature-2 strong,
+      #smartfry360-mobile-feature-3 strong {
+        display: block;
+        margin-bottom: 5px;
+        color: #f5d27a;
+        font-size: 18px;
+        line-height: 1.25;
+      }
+
+      #smartfry360-mobile-feature-1 span,
+      #smartfry360-mobile-feature-2 span,
+      #smartfry360-mobile-feature-3 span {
+        display: block;
+        color: rgba(255, 255, 255, 0.88);
+        font-size: 15px;
+        line-height: 1.4;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <section id="smartfry360-ai-section">
+    <div id="smartfry360-ai-inner">
+
+      <div id="smartfry360-ai-title">
+        <span id="smartfry360-ai-title-label">
+          INTELIGENTNA FRYTKOWNICA BEZTŁUSZCZOWA
+        </span>
+
+        <h2 id="smartfry360-ai-title-heading">
+          COBBO Smart Fry 360 <strong>AI</strong>
+        </h2>
+      </div>
+
+      <div id="smartfry360-ai-product">
+        <div id="smartfry360-product-stage">
+
+          <img
+            id="smartfry360-product-img"
+            src="https://cobbo.pl/upload/cobbo/airfryer-ekran-side.png"
+            alt="COBBO Smart Fry 360 AI"
+          >
+
+          <div id="smartfry360-hotspot-1">1</div>
+          <div id="smartfry360-hotspot-2">2</div>
+          <div id="smartfry360-hotspot-3">3</div>
+
+          <div id="smartfry360-callout-1">
+            <strong>Dwie kamery AI rozpoznają potrawę</strong>
+            <span>
+              Wbudowany system dwóch kamer pozwala AI rozpoznać przygotowywaną
+              potrawę i dobrać do niej odpowiedni program — temperaturę, czas
+              pieczenia oraz moment przypomnienia o obróceniu lub potrząśnięciu.
+            </span>
+          </div>
+
+          <div id="smartfry360-callout-2">
+            <strong>Cyfrowy panel dotykowy</strong>
+            <span>
+              Czytelne sterowanie pozwala wygodnie wybierać tryb AI/AUTO
+              lub samodzielnie ustawić temperaturę i czas w trybie DIY.
+            </span>
+          </div>
+
+          <div id="smartfry360-callout-3">
+            <strong>Podświetlany wizjer</strong>
+            <span>
+              Przezroczyste okno i wewnętrzne oświetlenie pozwalają obserwować
+              przygotowywaną potrawę bez konieczności otwierania kosza.
+            </span>
+          </div>
+
+        </div>
+      </div>
+
+      <div id="smartfry360-mobile-features">
+
+        <div id="smartfry360-mobile-feature-1">
+          <strong>1. Dwie kamery AI rozpoznają potrawę</strong>
+          <span>
+            System AI wykorzystuje dwie wbudowane kamery do rozpoznania
+            przygotowywanej potrawy, a następnie dobiera odpowiedni program:
+            temperaturę, czas pieczenia oraz moment przypomnienia o obróceniu
+            lub potrząśnięciu.
+          </span>
+        </div>
+
+        <div id="smartfry360-mobile-feature-2">
+          <strong>2. Cyfrowy panel dotykowy</strong>
+          <span>
+            Wygodnie wybierz tryb AI/AUTO albo przejdź do trybu DIY
+            i ustaw temperaturę oraz czas ręcznie.
+          </span>
+        </div>
+
+        <div id="smartfry360-mobile-feature-3">
+          <strong>3. Podświetlany wizjer</strong>
+          <span>
+            Obserwuj postępy przygotowywania potrawy przez przezroczyste
+            okno z wewnętrznym oświetleniem — bez konieczności otwierania kosza.
+          </span>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+</body>
+</html>
