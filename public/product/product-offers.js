@@ -1,57 +1,183 @@
 (function () {
   "use strict";
 
-  const CONFIG = {
-    maxWidth: 400,
+  /* =========================================================
+     COBBO PRODUCT OFFERS
+     centralny moduł promocji na karcie produktu
+  ========================================================= */
 
+  const CONFIG = {
     payu: {
       posId: "4149561",
       key: "e1"
     },
 
-    warrantyUrl: "https://cobbo.pl/Gwarancja-c309",
-
     promo10Url:
       "https://cobbo.pl/news/n/1527/Regulamin-promocji-1-1-20",
 
     /*
-      Tutaj później wpisujesz JEDEN link do promocji -15%.
-      Nie trzeba zmieniać niczego na kartach produktów.
+      Link gwarancji dobierany automatycznie wg ID produktu.
+      ID odczytywane jest z URL, np.:
+      ...Q6-PRO-p634 -> 634
     */
-    promo15Url: ""
+    warrantyByProductId: {
+
+      /* FRYTKOWNICE */
+      630: "https://cobbo.pl/Frytkownice-beztluszczowe-c333",
+
+      /* SUSZARKI */
+      545: "https://cobbo.pl/Suszarki-do-wlosow-c304",
+      553: "https://cobbo.pl/Suszarki-do-wlosow-c304",
+
+      /* KUWETY */
+      548: "https://cobbo.pl/Kuwety-dla-zwierzat-c302",
+      549: "https://cobbo.pl/Kuwety-dla-zwierzat-c302",
+
+      /* ODKURZACZE */
+      490: "https://cobbo.pl/Odkurzacze-pionowe-c301",
+      482: "https://cobbo.pl/Odkurzacze-pionowe-c301",
+      451: "https://cobbo.pl/Odkurzacze-pionowe-c301",
+      452: "https://cobbo.pl/Odkurzacze-pionowe-c301",
+
+      /* PRASOWALNICE */
+      546: "https://cobbo.pl/Prasowalnice-parowe-c303",
+      547: "https://cobbo.pl/Prasowalnice-parowe-c303",
+
+      /* ROBOTY DO OKIEN */
+      255: "https://cobbo.pl/Roboty-do-okien-c298",
+      317: "https://cobbo.pl/Roboty-do-okien-c298",
+      349: "https://cobbo.pl/Roboty-do-okien-c298",
+      559: "https://cobbo.pl/Roboty-do-okien-c298",
+      419: "https://cobbo.pl/Roboty-do-okien-c298",
+      634: "https://cobbo.pl/Roboty-do-okien-c298",
+
+      /* ROBOT SPRZĄTAJĄCY ULTRA */
+      352: "https://cobbo.pl/PRO-28-3D-ULTRA-c334",
+
+      /* ROBOTY KUCHENNE */
+      411: "https://cobbo.pl/Roboty-kuchenne-c299",
+      575: "https://cobbo.pl/Roboty-kuchenne-c299",
+
+      /* ELITE */
+      622: "https://cobbo.pl/PRO-28-ELITE-c335"
+    }
   };
+
 
   const GRID_ID = "cobbo-product-offers";
   const STYLE_ID = "cobbo-product-offers-styles";
+
   const PAYU_SCRIPT =
     "https://static.payu.com/res/v2/widget-mini-installments.js";
 
   let lastPrice = null;
   let payuLoadPromise = null;
 
-  /* ==========================================
+
+  /* =========================================================
+     PRODUCT ID
+  ========================================================= */
+
+  function getProductId() {
+
+    /*
+      Najpierw adres bieżącej strony.
+      Przykład:
+      /Robot-do-mycia-okien-COBBO-Q6-PRO-p634
+    */
+
+    let match =
+      window.location.pathname.match(/-p(\d+)(?:\/|$)/i);
+
+    if (match) {
+      return parseInt(match[1], 10);
+    }
+
+
+    /*
+      Fallback: canonical.
+    */
+
+    const canonical =
+      document.querySelector('link[rel="canonical"]');
+
+    if (canonical && canonical.href) {
+
+      match =
+        canonical.href.match(/-p(\d+)(?:\/|$)/i);
+
+      if (match) {
+        return parseInt(match[1], 10);
+      }
+    }
+
+    return null;
+  }
+
+
+  /* =========================================================
+     WARRANTY URL
+  ========================================================= */
+
+  function getWarrantyUrl() {
+
+    const productId =
+      getProductId();
+
+    if (!productId) {
+      return null;
+    }
+
+    return (
+      CONFIG.warrantyByProductId[productId] ||
+      null
+    );
+  }
+
+
+  /* =========================================================
      STYLE
-  ========================================== */
+  ========================================================= */
 
   function injectStyles() {
-    if (document.getElementById(STYLE_ID)) return;
 
-    const style = document.createElement("style");
-    style.id = STYLE_ID;
+    if (
+      document.getElementById(STYLE_ID)
+    ) {
+      return;
+    }
+
+    const style =
+      document.createElement("style");
+
+    style.id =
+      STYLE_ID;
 
     style.textContent = `
+
+      /* ======================================
+         GRID
+      ====================================== */
+
       #${GRID_ID},
       #${GRID_ID} * {
         box-sizing: border-box;
       }
 
       #${GRID_ID} {
+
         width: 100%;
-        max-width: ${CONFIG.maxWidth}px;
+
         display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 9px;
-        margin: 10px 0 12px 0;
+
+        grid-template-columns:
+          repeat(2, minmax(0, 1fr));
+
+        gap: 10px;
+
+        margin:
+          12px 0 14px 0;
+
         font-family:
           "SF Pro Display",
           -apple-system,
@@ -61,193 +187,238 @@
           sans-serif;
       }
 
-      #${GRID_ID} .cobbo-offer-card {
+
+      /* ======================================
+         CARD
+      ====================================== */
+
+      #${GRID_ID}
+      .cobbo-offer-card {
+
         position: relative;
+
         display: flex;
+
         flex-direction: column;
+
         justify-content: flex-end;
 
         min-width: 0;
-        min-height: 102px;
 
-        padding: 14px 14px 13px;
+        height: 118px;
+
+        min-height: 118px;
+
+        padding:
+          16px 15px 15px;
 
         overflow: hidden;
 
-        border-radius: 15px;
-        border: 1px solid rgba(255,255,255,.14);
+        border-radius: 16px;
+
+        border:
+          1px solid
+          rgba(255,255,255,.16);
 
         color: #fff;
+
         text-decoration: none !important;
 
         box-shadow:
-          0 5px 14px rgba(0,0,0,.12);
+          0 5px 15px
+          rgba(0,0,0,.14);
 
         transition:
           transform .18s ease,
           box-shadow .18s ease;
       }
 
+
       @media (hover:hover) {
-        #${GRID_ID} a.cobbo-offer-card:hover {
-          transform: translateY(-2px);
+
+        #${GRID_ID}
+        a.cobbo-offer-card:hover {
+
+          transform:
+            translateY(-2px);
 
           box-shadow:
-            0 8px 20px rgba(0,0,0,.17);
+            0 8px 21px
+            rgba(0,0,0,.18);
         }
       }
 
-      #${GRID_ID} .cobbo-offer-card::before {
+
+      /* ======================================
+         GOLD LINE
+      ====================================== */
+
+      #${GRID_ID}
+      .cobbo-offer-card::before {
+
         content: "";
+
         position: absolute;
-        left: 14px;
-        top: 13px;
+
+        left: 15px;
+
+        top: 14px;
 
         width: 38px;
+
         height: 3px;
 
         border-radius: 999px;
 
-        background: #f0c94d;
+        background:
+          #f0c94d;
 
-        z-index: 2;
+        z-index: 3;
       }
 
-      #${GRID_ID} .cobbo-offer-ghost {
+
+      /* ======================================
+         BACKGROUND SYMBOL
+      ====================================== */
+
+      #${GRID_ID}
+      .cobbo-offer-ghost {
+
         position: absolute;
 
-        right: -7px;
-        bottom: -19px;
+        right: -8px;
 
-        font-size: 73px;
+        bottom: -20px;
+
+        font-size: 80px;
+
         font-weight: 900;
+
         line-height: 1;
 
-        letter-spacing: -4px;
+        letter-spacing: -5px;
 
-        color: rgba(255,255,255,.11);
+        color:
+          rgba(255,255,255,.10);
 
         z-index: 1;
+
         pointer-events: none;
+
         user-select: none;
       }
 
-      #${GRID_ID} .cobbo-offer-content {
+
+      #${GRID_ID}
+      .cobbo-offer-content {
+
         position: relative;
-        z-index: 2;
+
+        z-index: 3;
+
+        width: 100%;
 
         min-width: 0;
       }
 
-      #${GRID_ID} .cobbo-offer-main {
+
+      /* ======================================
+         TEXT
+      ====================================== */
+
+      #${GRID_ID}
+      .cobbo-offer-main {
+
         display: block;
 
         margin: 0;
 
         color: #fff;
 
-        font-size: 18px;
+        font-size: 20px;
+
         font-weight: 900;
 
-        line-height: 1.05;
+        line-height: .98;
+
+        letter-spacing: -.5px;
 
         text-transform: uppercase;
-
-        letter-spacing: -.25px;
       }
 
-      #${GRID_ID} .cobbo-offer-sub {
-        display: block;
-
-        margin-top: 5px;
-
-        color: rgba(255,255,255,.88);
-
-        font-size: 12.5px;
-        font-weight: 600;
-
-        line-height: 1.15;
-      }
-
-
-      /* PAYU */
-
-      #${GRID_ID} .cobbo-offer-payu {
-        background:
-          linear-gradient(
-            135deg,
-            #0f5e35 0%,
-            #09391f 100%
-          );
-      }
-
-
-      /* GWARANCJA */
-
-      #${GRID_ID} .cobbo-offer-warranty {
-        background:
-          linear-gradient(
-            135deg,
-            #1a2a6c 0%,
-            #101835 100%
-          );
-      }
-
-
-      /* -10% */
-
-      #${GRID_ID} .cobbo-offer-promo10 {
-        background:
-          linear-gradient(
-            135deg,
-            #e30613 0%,
-            #b8000b 100%
-          );
-      }
-
-
-      /* -15% */
-
-      #${GRID_ID} .cobbo-offer-promo15 {
-        background:
-          linear-gradient(
-            135deg,
-            #262626 0%,
-            #050505 100%
-          );
-
-        border-color:
-          rgba(240,201,77,.28);
-      }
-
-      #${GRID_ID} .cobbo-offer-promo15::before {
-        background:
-          linear-gradient(
-            90deg,
-            #f0c94d,
-            #ffe58a
-          );
-      }
-
-      #${GRID_ID} .cobbo-offer-promo15 .cobbo-offer-ghost {
-        color: rgba(240,201,77,.15);
-      }
-
-
-      /* ====================================
-         PAYU - NADPISANIE DOMYŚLNYCH STYLI
-      ==================================== */
-
-      #${GRID_ID} #cobbo-payu-slot {
-        position: relative;
-        z-index: 3;
-
-        width: 100%;
-        min-width: 0;
-      }
 
       #${GRID_ID}
-      #cobbo-payu-slot
+      .cobbo-offer-sub {
+
+        display: block;
+
+        margin-top: 7px;
+
+        color:
+          rgba(255,255,255,.92);
+
+        font-size: 13px;
+
+        font-weight: 650;
+
+        line-height: 1.12;
+      }
+
+
+      /* ======================================
+         PAYU
+      ====================================== */
+
+      #${GRID_ID}
+      .cobbo-offer-payu {
+
+        background:
+          linear-gradient(
+            135deg,
+            #0f6339 0%,
+            #0a4226 100%
+          );
+
+        cursor: pointer;
+      }
+
+
+      #${GRID_ID}
+      .cobbo-payu-label {
+
+        display: block;
+
+        margin-bottom: 5px;
+
+        color:
+          rgba(255,255,255,.94);
+
+        font-size: 13px;
+
+        font-weight: 650;
+
+        line-height: 1.1;
+      }
+
+
+      #${GRID_ID}
+      .cobbo-payu-slot {
+
+        display: block;
+
+        width: 100%;
+
+        min-height: 31px;
+      }
+
+
+      /*
+        Czyścimy wygląd oryginalnego
+        widgetu PayU, żeby został
+        praktycznie tylko wynik raty.
+      */
+
+      #${GRID_ID}
       .payu-mini-installments-widget {
 
         position: relative !important;
@@ -255,18 +426,24 @@
         display: block !important;
 
         width: 100% !important;
+
         max-width: none !important;
 
         height: auto !important;
+
         min-height: 0 !important;
+
         max-height: none !important;
 
         margin: 0 !important;
+
         padding: 0 !important;
 
-        background: transparent !important;
+        background:
+          transparent !important;
 
         border: 0 !important;
+
         border-radius: 0 !important;
 
         box-shadow: none !important;
@@ -276,40 +453,50 @@
         color: #fff !important;
       }
 
+
       #${GRID_ID}
-      #cobbo-payu-slot
       .payu-mini-installments-widget::before,
 
       #${GRID_ID}
-      #cobbo-payu-slot
       .payu-mini-installments-widget::after {
-        display: none !important;
+
         content: none !important;
+
+        display: none !important;
       }
 
+
       #${GRID_ID}
-      #cobbo-payu-slot
       .payu-mini-installments-widget a {
 
-        position: relative !important;
+        display: block !important;
 
-        display: flex !important;
-        flex-direction: column !important;
+        margin: 0 !important;
 
-        width: 100% !important;
+        padding: 0 !important;
 
         color: #fff !important;
 
         text-decoration: none !important;
-
-        z-index: 3 !important;
       }
 
-      #${GRID_ID}
-      #cobbo-payu-slot
-      .payu-mini-installments-widget-amount {
 
-        order: 1 !important;
+      /*
+        Ukrywamy tekst generowany przez PayU,
+        ponieważ własny tekst:
+        "Rata 0% już od:"
+        mamy zawsze nad kwotą.
+      */
+
+      #${GRID_ID}
+      .payu-mini-installments-widget-label {
+
+        display: none !important;
+      }
+
+
+      #${GRID_ID}
+      .payu-mini-installments-widget-amount {
 
         display: block !important;
 
@@ -317,144 +504,234 @@
 
         color: #fff !important;
 
-        font-size: 22px !important;
+        font-size: 28px !important;
+
         font-weight: 900 !important;
 
         line-height: 1 !important;
 
+        letter-spacing: -.7px !important;
+
         white-space: nowrap !important;
       }
 
+
+      /* ======================================
+         WARRANTY
+      ====================================== */
+
       #${GRID_ID}
-      #cobbo-payu-slot
-      .payu-mini-installments-widget-label {
+      .cobbo-offer-warranty {
 
-        order: 2 !important;
-
-        display: block !important;
-
-        margin: 5px 0 0 !important;
-
-        color: rgba(255,255,255,.88) !important;
-
-        font-size: 12.5px !important;
-        font-weight: 600 !important;
-
-        line-height: 1.15 !important;
-
-        white-space: normal !important;
+        background:
+          linear-gradient(
+            135deg,
+            #213375 0%,
+            #111a3d 100%
+          );
       }
 
 
-      /* PAYU LOADING / FALLBACK */
+      /* ======================================
+         PROMO -10
+      ====================================== */
 
-      #${GRID_ID} .cobbo-payu-fallback-main {
-        display: block;
+      #${GRID_ID}
+      .cobbo-offer-promo10 {
 
-        color: #fff;
-
-        font-size: 18px;
-        font-weight: 900;
-
-        line-height: 1.05;
-      }
-
-      #${GRID_ID} .cobbo-payu-fallback-sub {
-        display: block;
-
-        margin-top: 5px;
-
-        color: rgba(255,255,255,.88);
-
-        font-size: 12.5px;
-        font-weight: 600;
-
-        line-height: 1.15;
+        background:
+          linear-gradient(
+            135deg,
+            #ef0715 0%,
+            #c0000c 100%
+          );
       }
 
 
-      /* MOBILE */
+      /* ======================================
+         PROMO -15
+      ====================================== */
 
-      @media (max-width: 370px) {
+      #${GRID_ID}
+      .cobbo-offer-promo15 {
+
+        background:
+          linear-gradient(
+            135deg,
+            #242421 0%,
+            #080808 100%
+          );
+
+        border-color:
+          rgba(240,201,77,.30);
+
+        cursor: default;
+      }
+
+
+      #${GRID_ID}
+      .cobbo-offer-promo15::before {
+
+        background:
+          linear-gradient(
+            90deg,
+            #f0c94d,
+            #ffe892
+          );
+      }
+
+
+      #${GRID_ID}
+      .cobbo-offer-promo15
+      .cobbo-offer-ghost {
+
+        color:
+          rgba(240,201,77,.12);
+      }
+
+
+      /* ======================================
+         WARRANTY NOT AVAILABLE
+      ====================================== */
+
+      #${GRID_ID}
+      .cobbo-offer-disabled {
+
+        cursor: default;
+
+        opacity: .86;
+      }
+
+
+      /* ======================================
+         MOBILE
+      ====================================== */
+
+      @media
+      (max-width: 380px) {
 
         #${GRID_ID} {
-          gap: 7px;
+
+          gap: 8px;
         }
 
-        #${GRID_ID} .cobbo-offer-card {
-          min-height: 100px;
+
+        #${GRID_ID}
+        .cobbo-offer-card {
+
+          height: 113px;
+
+          min-height: 113px;
+
           padding:
-            13px 11px
-            12px;
+            15px 12px 13px;
         }
 
-        #${GRID_ID} .cobbo-offer-card::before {
-          left: 11px;
-          width: 32px;
-        }
-
-        #${GRID_ID} .cobbo-offer-main {
-          font-size: 16px;
-        }
-
-        #${GRID_ID} .cobbo-offer-sub {
-          font-size: 11.5px;
-        }
 
         #${GRID_ID}
-        #cobbo-payu-slot
+        .cobbo-offer-card::before {
+
+          left: 12px;
+        }
+
+
+        #${GRID_ID}
+        .cobbo-offer-main {
+
+          font-size: 18px;
+        }
+
+
+        #${GRID_ID}
+        .cobbo-offer-sub {
+
+          font-size: 12px;
+        }
+
+
+        #${GRID_ID}
+        .cobbo-payu-label {
+
+          font-size: 12px;
+        }
+
+
+        #${GRID_ID}
         .payu-mini-installments-widget-amount {
-          font-size: 19px !important;
-        }
 
-        #${GRID_ID}
-        #cobbo-payu-slot
-        .payu-mini-installments-widget-label {
-          font-size: 11.5px !important;
+          font-size: 25px !important;
         }
       }
+
     `;
 
-    document.head.appendChild(style);
-  }
-
-
-  /* ==========================================
-     CENA
-  ========================================== */
-
-  function findPriceElement() {
-    return (
-      document.querySelector(
-        ".product-price .price-special .core_cardPriceSpecial[data-price]"
-      ) ||
-      document.querySelector(
-        ".product-price .price-special .core_priceFormat[data-price]"
-      ) ||
-      document.querySelector(
-        ".product-price [data-price]"
-      )
+    document.head.appendChild(
+      style
     );
   }
 
-  function getProductPrice() {
-    const priceEl = findPriceElement();
 
-    if (!priceEl) return null;
+  /* =========================================================
+     PRICE
+  ========================================================= */
+
+  function findPriceElement() {
+
+    return (
+
+      document.querySelector(
+        ".product-price .price-special .core_cardPriceSpecial[data-price]"
+      )
+
+      ||
+
+      document.querySelector(
+        ".product-price .price-special .core_priceFormat[data-price]"
+      )
+
+      ||
+
+      document.querySelector(
+        ".product-price [data-price]"
+      )
+
+    );
+  }
+
+
+  function getProductPrice() {
+
+    const priceEl =
+      findPriceElement();
+
+    if (!priceEl) {
+      return null;
+    }
 
     const raw =
-      priceEl.getAttribute("data-price");
+      priceEl.getAttribute(
+        "data-price"
+      );
 
-    if (!raw) return null;
+    if (!raw) {
+      return null;
+    }
 
     const price =
       parseFloat(
+
         String(raw)
+
           .replace(/\s/g, "")
+
           .replace(",", ".")
+
       );
 
-    if (!Number.isFinite(price)) {
+    if (
+      !Number.isFinite(price)
+    ) {
+
       return null;
     }
 
@@ -462,39 +739,63 @@
   }
 
 
-  /* ==========================================
-     TWORZENIE KAFELKA
-  ========================================== */
+  /* =========================================================
+     NORMAL CARD
+  ========================================================= */
 
-  function createLinkCard(options) {
-    const {
-      className,
-      url,
-      main,
-      sub,
-      ghost
-    } = options;
+  function createCard({
+    className,
+    url,
+    main,
+    sub,
+    ghost
+  }) {
 
-    const element =
-      url
-        ? document.createElement("a")
-        : document.createElement("div");
+    let card;
 
-    element.className =
-      "cobbo-offer-card " + className;
+
+    /*
+      Jeżeli jest URL:
+      <a>
+
+      Jeżeli nie:
+      zwykły <div>
+    */
 
     if (url) {
-      element.href = url;
+
+      card =
+        document.createElement("a");
+
+      card.href =
+        url;
+
+    } else {
+
+      card =
+        document.createElement("div");
+
+      card.classList.add(
+        "cobbo-offer-disabled"
+      );
     }
 
-    const ghostEl =
+
+    card.classList.add(
+      "cobbo-offer-card",
+      className
+    );
+
+
+    const ghostElement =
       document.createElement("span");
 
-    ghostEl.className =
+    ghostElement.className =
       "cobbo-offer-ghost";
 
-    ghostEl.textContent =
+    ghostElement.textContent =
       ghost;
+
 
     const content =
       document.createElement("span");
@@ -502,94 +803,148 @@
     content.className =
       "cobbo-offer-content";
 
-    const mainEl =
+
+    const mainElement =
       document.createElement("span");
 
-    mainEl.className =
+    mainElement.className =
       "cobbo-offer-main";
 
-    mainEl.textContent =
+    mainElement.textContent =
       main;
 
-    const subEl =
+
+    const subElement =
       document.createElement("span");
 
-    subEl.className =
+    subElement.className =
       "cobbo-offer-sub";
 
-    subEl.textContent =
+    subElement.textContent =
       sub;
 
-    content.appendChild(mainEl);
-    content.appendChild(subEl);
 
-    element.appendChild(ghostEl);
-    element.appendChild(content);
+    content.appendChild(
+      mainElement
+    );
 
-    return element;
+    content.appendChild(
+      subElement
+    );
+
+
+    card.appendChild(
+      ghostElement
+    );
+
+    card.appendChild(
+      content
+    );
+
+
+    return card;
   }
 
 
-  /* ==========================================
+  /* =========================================================
      GRID
-  ========================================== */
+  ========================================================= */
 
   function buildGrid() {
-    if (document.getElementById(GRID_ID)) {
+
+    if (
+      document.getElementById(
+        GRID_ID
+      )
+    ) {
       return;
     }
 
-    const priceEl =
+
+    const priceElement =
       findPriceElement();
 
-    if (!priceEl) return;
+    if (!priceElement) {
+      return;
+    }
+
 
     const productPrice =
-      priceEl.closest(".product-price");
+      priceElement.closest(
+        ".product-price"
+      );
 
-    if (!productPrice) return;
+    if (!productPrice) {
+      return;
+    }
+
 
     const grid =
-      document.createElement("div");
+      document.createElement(
+        "div"
+      );
 
-    grid.id = GRID_ID;
+    grid.id =
+      GRID_ID;
 
 
-    /* PAYU */
+    /* =====================================================
+       1. PAYU
+    ===================================================== */
 
     const payuCard =
-      document.createElement("div");
+      document.createElement(
+        "div"
+      );
 
     payuCard.className =
       "cobbo-offer-card cobbo-offer-payu";
 
+
     payuCard.innerHTML = `
-      <span class="cobbo-offer-ghost">0%</span>
+
+      <span
+        class="cobbo-offer-ghost"
+      >
+        0%
+      </span>
 
       <div
-        id="cobbo-payu-slot"
         class="cobbo-offer-content"
       >
-        <span class="cobbo-payu-fallback-main">
-          RATY 0%
+
+        <span
+          class="cobbo-payu-label"
+        >
+          Rata 0% już od:
         </span>
 
-        <span class="cobbo-payu-fallback-sub">
-          Sprawdź wysokość raty
-        </span>
+        <div
+          id="cobbo-payu-slot"
+          class="cobbo-payu-slot"
+        ></div>
+
       </div>
+
     `;
 
 
-    /* GWARANCJA */
+    /* =====================================================
+       2. WARRANTY
+    ===================================================== */
 
-    const warranty =
-      createLinkCard({
+    const warrantyUrl =
+      getWarrantyUrl();
+
+
+    const warrantyCard =
+      createCard({
+
         className:
           "cobbo-offer-warranty",
 
         url:
-          CONFIG.warrantyUrl,
+          warrantyUrl,
 
         main:
           "DOKUP GWARANCJĘ",
@@ -599,13 +954,17 @@
 
         ghost:
           "+"
+
       });
 
 
-    /* -10% */
+    /* =====================================================
+       3. -10%
+    ===================================================== */
 
-    const promo10 =
-      createLinkCard({
+    const promo10Card =
+      createCard({
+
         className:
           "cobbo-offer-promo10",
 
@@ -620,18 +979,23 @@
 
         ghost:
           "1+1"
+
       });
 
 
-    /* -15% */
+    /* =====================================================
+       4. -15%
+       BRAK LINKU CELOWO
+    ===================================================== */
 
-    const promo15 =
-      createLinkCard({
+    const promo15Card =
+      createCard({
+
         className:
           "cobbo-offer-promo15",
 
         url:
-          CONFIG.promo15Url,
+          null,
 
         main:
           "-15% NA TEN PRODUKT",
@@ -641,13 +1005,26 @@
 
         ghost:
           "15%"
+
       });
 
 
-    grid.appendChild(payuCard);
-    grid.appendChild(warranty);
-    grid.appendChild(promo10);
-    grid.appendChild(promo15);
+    grid.appendChild(
+      payuCard
+    );
+
+    grid.appendChild(
+      warrantyCard
+    );
+
+    grid.appendChild(
+      promo10Card
+    );
+
+    grid.appendChild(
+      promo15Card
+    );
+
 
     productPrice.insertAdjacentElement(
       "afterend",
@@ -656,9 +1033,9 @@
   }
 
 
-  /* ==========================================
-     PAYU
-  ========================================== */
+  /* =========================================================
+     LOAD PAYU
+  ========================================================= */
 
   function loadPayU() {
 
@@ -666,160 +1043,237 @@
       window.OpenPayU &&
       window.OpenPayU.Installments
     ) {
+
       return Promise.resolve();
     }
 
+
     if (payuLoadPromise) {
+
       return payuLoadPromise;
     }
 
+
     payuLoadPromise =
-      new Promise(function (
-        resolve,
-        reject
-      ) {
+      new Promise(
+        function (
+          resolve,
+          reject
+        ) {
 
-        let existing =
-          document.querySelector(
-            'script[src="' +
-            PAYU_SCRIPT +
-            '"]'
-          );
+          const existing =
+            document.querySelector(
+              'script[src="' +
+              PAYU_SCRIPT +
+              '"]'
+            );
 
-        if (existing) {
 
-          if (
-            window.OpenPayU &&
-            window.OpenPayU.Installments
-          ) {
-            resolve();
+          if (existing) {
+
+            if (
+              window.OpenPayU &&
+              window.OpenPayU.Installments
+            ) {
+
+              resolve();
+
+              return;
+            }
+
+
+            existing.addEventListener(
+              "load",
+              resolve,
+              {
+                once: true
+              }
+            );
+
+
+            existing.addEventListener(
+              "error",
+              reject,
+              {
+                once: true
+              }
+            );
+
+
             return;
           }
 
-          existing.addEventListener(
-            "load",
-            resolve,
-            { once: true }
+
+          const script =
+            document.createElement(
+              "script"
+            );
+
+
+          script.src =
+            PAYU_SCRIPT;
+
+
+          script.async =
+            true;
+
+
+          script.onload =
+            resolve;
+
+
+          script.onerror =
+            reject;
+
+
+          document.head.appendChild(
+            script
           );
 
-          existing.addEventListener(
-            "error",
-            reject,
-            { once: true }
-          );
-
-          return;
         }
+      );
 
-        const script =
-          document.createElement("script");
-
-        script.src =
-          PAYU_SCRIPT;
-
-        script.async =
-          true;
-
-        script.dataset.cobboPayu =
-          "1";
-
-        script.onload =
-          resolve;
-
-        script.onerror =
-          reject;
-
-        document.head.appendChild(
-          script
-        );
-      });
 
     return payuLoadPromise;
   }
 
 
+  /* =========================================================
+     PAYU FALLBACK
+  ========================================================= */
+
   function payuFallback() {
+
     const slot =
       document.getElementById(
         "cobbo-payu-slot"
       );
 
-    if (!slot) return;
 
-    slot.innerHTML = `
-      <span class="cobbo-payu-fallback-main">
-        RATY 0%
-      </span>
+    if (!slot) {
+      return;
+    }
 
-      <span class="cobbo-payu-fallback-sub">
-        Sprawdź dostępne opcje płatności
-      </span>
-    `;
+
+    slot.innerHTML =
+      '<span style="' +
+
+        'display:block;' +
+
+        'font-size:26px;' +
+
+        'font-weight:900;' +
+
+        'line-height:1;' +
+
+        'color:#fff;' +
+
+      '">' +
+
+        'Sprawdź raty' +
+
+      '</span>';
   }
 
+
+  /* =========================================================
+     PAYU
+  ========================================================= */
 
   function renderPayU() {
 
     const price =
       getProductPrice();
 
+
     const slot =
       document.getElementById(
         "cobbo-payu-slot"
       );
 
-    if (!price || !slot) {
+
+    if (
+      !price ||
+      !slot
+    ) {
       return;
     }
 
-    if (price === lastPrice) {
+
+    if (
+      price === lastPrice &&
+      slot.children.length
+    ) {
       return;
     }
 
-    lastPrice = price;
 
-    slot.innerHTML = "";
+    lastPrice =
+      price;
+
+
+    slot.innerHTML =
+      "";
+
 
     loadPayU()
+
       .then(function () {
 
         if (
           !window.OpenPayU ||
           !window.OpenPayU.Installments
         ) {
-          payuFallback();
-          return;
+
+          throw new Error(
+            "OpenPayU unavailable"
+          );
         }
 
-        return window.OpenPayU
-          .Installments
-          .miniInstallment(
-            "#cobbo-payu-slot",
-            {
-              creditAmount:
-                price,
 
-              posId:
-                CONFIG.payu.posId,
+        return (
+          window
+            .OpenPayU
+            .Installments
+            .miniInstallment(
 
-              key:
-                CONFIG.payu.key,
+              "#cobbo-payu-slot",
 
-              showLongDescription:
-                false
-            }
-          );
+              {
+
+                creditAmount:
+                  price,
+
+                posId:
+                  CONFIG.payu.posId,
+
+                key:
+                  CONFIG.payu.key,
+
+                showLongDescription:
+                  false
+
+              }
+
+            )
+        );
+
       })
+
+
       .then(function (result) {
 
         if (
           result &&
           result.isWidgetAvailable === false
         ) {
+
           payuFallback();
         }
 
       })
+
+
       .catch(function (error) {
 
         console.error(
@@ -828,97 +1282,302 @@
         );
 
         payuFallback();
+
       });
   }
 
 
-  /* ==========================================
-     OBSERWACJA ZMIANY CENY
-  ========================================== */
+  /* =========================================================
+     REMOVE OLD PAYU
+  ========================================================= */
 
-  function observePrice() {
-    const productPrice =
-      document.querySelector(
-        ".product-price"
+  function removeLegacyPayU() {
+
+    /*
+      Jeżeli na stronie nadal znajduje się
+      stary widget PayU, usuwamy jego kopię.
+
+      NIE ruszamy PayU znajdującego się
+      wewnątrz naszego nowego gridu.
+    */
+
+    const widgets =
+      document.querySelectorAll(
+        ".payu-mini-installments-widget"
       );
 
-    if (!productPrice) return;
 
-    let timer = null;
+    widgets.forEach(
+      function (widget) {
 
-    const observer =
-      new MutationObserver(function () {
+        if (
+          !widget.closest(
+            "#" + GRID_ID
+          )
+        ) {
 
-        clearTimeout(timer);
+          const parent =
+            widget.parentElement;
 
-        timer =
-          setTimeout(function () {
-            renderPayU();
-          }, 150);
-      });
 
-    observer.observe(
-      productPrice,
-      {
-        subtree: true,
-        childList: true,
-        characterData: true,
-        attributes: true,
-        attributeFilter: [
-          "data-price"
-        ]
+          widget.remove();
+
+
+          /*
+            Usuwamy pusty wrapper starego
+            #installment-mini.
+          */
+
+          if (
+            parent &&
+            (
+              parent.id ===
+              "installment-mini"
+
+              ||
+
+              (
+                parent.children.length === 0 &&
+                parent.textContent.trim() === ""
+              )
+            )
+          ) {
+
+            const maybeP =
+              parent.parentElement;
+
+
+            parent.remove();
+
+
+            if (
+              maybeP &&
+              maybeP.tagName === "P" &&
+              maybeP.children.length === 0 &&
+              maybeP.textContent.trim() === ""
+            ) {
+
+              maybeP.remove();
+            }
+          }
+        }
       }
     );
   }
 
 
-  /* ==========================================
-     START
-  ========================================== */
+  /* =========================================================
+     PRICE OBSERVER
+  ========================================================= */
+
+  function observePrice() {
+
+    const productPrice =
+      document.querySelector(
+        ".product-price"
+      );
+
+
+    if (!productPrice) {
+      return;
+    }
+
+
+    let timer =
+      null;
+
+
+    const observer =
+      new MutationObserver(
+        function () {
+
+          clearTimeout(
+            timer
+          );
+
+
+          timer =
+            setTimeout(
+              function () {
+
+                /*
+                  Jeżeli cena produktu
+                  się zmieni, odświeżamy PayU.
+                */
+
+                const newPrice =
+                  getProductPrice();
+
+
+                if (
+                  newPrice !== lastPrice
+                ) {
+
+                  lastPrice =
+                    null;
+
+
+                  renderPayU();
+                }
+
+
+                removeLegacyPayU();
+
+              },
+              180
+            );
+        }
+      );
+
+
+    observer.observe(
+      productPrice,
+      {
+
+        subtree: true,
+
+        childList: true,
+
+        characterData: true,
+
+        attributes: true,
+
+        attributeFilter: [
+          "data-price"
+        ]
+
+      }
+    );
+  }
+
+
+  /* =========================================================
+     GLOBAL LEGACY PAYU WATCHER
+  ========================================================= */
+
+  function watchLegacyPayU() {
+
+    /*
+      Dzięki temu nawet jeśli stary kod
+      PayU uruchomi się chwilę PO naszym,
+      jego drugi duży widget zniknie.
+    */
+
+    const observer =
+      new MutationObserver(
+        function () {
+
+          removeLegacyPayU();
+
+        }
+      );
+
+
+    observer.observe(
+      document.body,
+      {
+
+        childList: true,
+
+        subtree: true
+
+      }
+    );
+  }
+
+
+  /* =========================================================
+     INIT
+  ========================================================= */
 
   function init() {
 
     injectStyles();
 
-    let attempts = 0;
+
+    let attempts =
+      0;
+
 
     const timer =
-      setInterval(function () {
+      setInterval(
+        function () {
 
-        attempts++;
+          attempts++;
 
-        const price =
-          getProductPrice();
 
-        if (price) {
+          const price =
+            getProductPrice();
 
-          clearInterval(timer);
 
-          buildGrid();
+          if (price) {
 
-          renderPayU();
+            clearInterval(
+              timer
+            );
 
-          observePrice();
 
-          return;
-        }
+            buildGrid();
 
-        if (attempts >= 40) {
-          clearInterval(timer);
-        }
 
-      }, 250);
+            renderPayU();
+
+
+            observePrice();
+
+
+            watchLegacyPayU();
+
+
+            /*
+              Czyścimy również PayU,
+              które zdążyło się załadować
+              przed naszym modułem.
+            */
+
+            setTimeout(
+              removeLegacyPayU,
+              500
+            );
+
+
+            setTimeout(
+              removeLegacyPayU,
+              1500
+            );
+
+
+            return;
+          }
+
+
+          if (
+            attempts >= 40
+          ) {
+
+            clearInterval(
+              timer
+            );
+          }
+
+        },
+        250
+      );
   }
 
 
   if (
-    document.readyState === "loading"
+    document.readyState ===
+    "loading"
   ) {
+
     document.addEventListener(
       "DOMContentLoaded",
       init
     );
+
   } else {
+
     init();
   }
 
