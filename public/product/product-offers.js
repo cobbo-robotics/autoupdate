@@ -3,14 +3,7 @@
 
   /* =========================================================
      COBBO PRODUCT OFFERS
-     Wersja centralna:
-     - PayU
-     - gwarancja
-     - promocja -10%
-     - promocja -15%
-     - cały CSS
-     - automatyczna cena
-     - automatyczny link gwarancji
+     PayU + Gwarancja + -10% + -15%
   ========================================================= */
 
 
@@ -28,9 +21,8 @@
     promo10Url:
       "https://cobbo.pl/news/n/1527/Regulamin-promocji-1-1-20",
 
-    /*
-      Link gwarancji na podstawie ID produktu.
-    */
+    promo15Url:
+      "https://cobbo.pl/news/n/1633/Regulamin-promocji-15-na-pierwszy-produkt",
 
     warrantyByProductId: {
 
@@ -128,26 +120,18 @@
   let currentPayUPrice =
     null;
 
-  let payuOpenWidget =
-    null;
-
 
   /* =========================================================
-     NORMALIZACJA TEKSTU
+     POMOCNICZE
   ========================================================= */
 
   function normalizeText(text) {
 
     return String(text || "")
-
       .toLowerCase()
-
       .replace(/[–—-]/g, " ")
-
       .replace(/[()+]/g, " ")
-
       .replace(/\s+/g, " ")
-
       .trim();
   }
 
@@ -161,10 +145,7 @@
     let match;
 
 
-    /* =====================================================
-       1. URL
-       np. ...-p634
-    ===================================================== */
+    /* 1. ID z URL */
 
     match =
       window.location.pathname.match(
@@ -180,9 +161,7 @@
     }
 
 
-    /* =====================================================
-       2. CANONICAL
-    ===================================================== */
+    /* 2. Canonical */
 
     const canonical =
       document.querySelector(
@@ -209,9 +188,7 @@
     }
 
 
-    /* =====================================================
-       3. DATA ATTRIBUTES SKYSHOP
-    ===================================================== */
+    /* 3. Dane HTML SkyShop */
 
     const selectors = [
 
@@ -281,9 +258,7 @@
     }
 
 
-    /* =====================================================
-       4. FALLBACK NA NAZWĘ PRODUKTU
-    ===================================================== */
+    /* 4. Fallback po nazwie produktu */
 
     const h1 =
       document.querySelector("h1");
@@ -296,31 +271,8 @@
       );
 
 
-    /*
-      WAŻNE:
-      dłuższe / bardziej precyzyjne
-      nazwy muszą być przed krótszymi.
-    */
-
     const PRODUCT_NAME_MAP = [
 
-      /* G7 */
-      {
-        names: [
-          "g7 pro"
-        ],
-        id: 452
-      },
-
-      {
-        names: [
-          "g7"
-        ],
-        id: 451
-      },
-
-
-      /* Q6 */
       {
         names: [
           "q6 pro"
@@ -335,8 +287,6 @@
         id: 419
       },
 
-
-      /* E6 */
       {
         names: [
           "e6 pro"
@@ -352,8 +302,6 @@
         id: 349
       },
 
-
-      /* E5 */
       {
         names: [
           "e5"
@@ -361,8 +309,6 @@
         id: 317
       },
 
-
-      /* I5 */
       {
         names: [
           "i5"
@@ -370,8 +316,20 @@
         id: 255
       },
 
+      {
+        names: [
+          "g7 pro"
+        ],
+        id: 452
+      },
 
-      /* ROBOTY KUCHENNE */
+      {
+        names: [
+          "g7"
+        ],
+        id: 451
+      },
+
       {
         names: [
           "7 black pro",
@@ -388,8 +346,6 @@
         id: 411
       },
 
-
-      /* ROBOTY SPRZĄTAJĄCE */
       {
         names: [
           "pro 28 3d ultra"
@@ -405,8 +361,6 @@
         id: 622
       },
 
-
-      /* ODKURZACZE */
       {
         names: [
           "m5 vapor",
@@ -422,12 +376,10 @@
         id: 482
       },
 
-
-      /* PRASOWALNICE */
       {
         names: [
           "steam one pro 40",
-          'prasowalnica 40'
+          "prasowalnica 40"
         ],
         id: 546
       },
@@ -436,13 +388,11 @@
         names: [
           "steam one compact",
           "compact 32",
-          'prasowalnica 32'
+          "prasowalnica 32"
         ],
         id: 547
       },
 
-
-      /* KUWETY */
       {
         names: [
           "kuweta k1",
@@ -459,8 +409,6 @@
         id: 549
       },
 
-
-      /* BEAUTY */
       {
         names: [
           "d9 supreme",
@@ -469,8 +417,6 @@
         id: 553
       },
 
-
-      /* AIRFRYER */
       {
         names: [
           "smart fry 360",
@@ -506,7 +452,7 @@
 
 
     console.warn(
-      "COBBO Offers: nie rozpoznano ID produktu",
+      "COBBO Offers: nie rozpoznano ID produktu.",
       {
         pathname:
           window.location.pathname,
@@ -522,7 +468,7 @@
 
 
   /* =========================================================
-     GWARANCJA
+     LINK GWARANCJI
   ========================================================= */
 
   function getWarrantyUrl() {
@@ -537,10 +483,9 @@
 
 
     return (
-      CONFIG
-        .warrantyByProductId[
-          productId
-        ]
+      CONFIG.warrantyByProductId[
+        productId
+      ]
 
       ||
 
@@ -576,9 +521,9 @@
 
     style.textContent = `
 
-      /* =================================================
-         RESET MODUŁU
-      ================================================= */
+      /* ==========================================
+         RESET
+      ========================================== */
 
       #${GRID_ID},
       #${GRID_ID} * {
@@ -588,9 +533,9 @@
       }
 
 
-      /* =================================================
-         GRID 2 x 2
-      ================================================= */
+      /* ==========================================
+         GRID
+      ========================================== */
 
       #${GRID_ID} {
 
@@ -622,9 +567,9 @@
       }
 
 
-      /* =================================================
-         KARTA
-      ================================================= */
+      /* ==========================================
+         KAFELKI
+      ========================================== */
 
       #${GRID_ID}
       .cobbo-offer-card {
@@ -671,11 +616,11 @@
             .16
           );
 
-        text-decoration:
-          none !important;
-
         color:
           #ffffff !important;
+
+        text-decoration:
+          none !important;
 
         box-shadow:
           0 6px 16px
@@ -715,9 +660,9 @@
       }
 
 
-      /* =================================================
+      /* ==========================================
          ZŁOTA LINIA
-      ================================================= */
+      ========================================== */
 
       #${GRID_ID}
       .cobbo-offer-card::before {
@@ -751,9 +696,9 @@
       }
 
 
-      /* =================================================
+      /* ==========================================
          DUŻY SYMBOL W TLE
-      ================================================= */
+      ========================================== */
 
       #${GRID_ID}
       .cobbo-offer-ghost {
@@ -798,9 +743,9 @@
       }
 
 
-      /* =================================================
+      /* ==========================================
          CONTENT
-      ================================================= */
+      ========================================== */
 
       #${GRID_ID}
       .cobbo-offer-content {
@@ -822,9 +767,9 @@
       }
 
 
-      /* =================================================
-         STANDARDOWY NAGŁÓWEK
-      ================================================= */
+      /* ==========================================
+         STANDARDOWY TYTUŁ
+      ========================================== */
 
       #${GRID_ID}
       .cobbo-offer-main {
@@ -858,9 +803,9 @@
       }
 
 
-      /* =================================================
-         DUŻE -10% / -15%
-      ================================================= */
+      /* ==========================================
+         -10% / -15%
+      ========================================== */
 
       #${GRID_ID}
       .cobbo-offer-discount {
@@ -917,9 +862,9 @@
       }
 
 
-      /* =================================================
+      /* ==========================================
          PODPIS
-      ================================================= */
+      ========================================== */
 
       #${GRID_ID}
       .cobbo-offer-sub {
@@ -942,16 +887,16 @@
           13px;
 
         font-weight:
-          650;
+          600;
 
         line-height:
           1.12;
       }
 
 
-      /* =================================================
-         PAYU - KARTA
-      ================================================= */
+      /* ==========================================
+         PAYU KAFEL
+      ========================================== */
 
       #${GRID_ID}
       .cobbo-offer-payu {
@@ -968,9 +913,9 @@
       }
 
 
-      /* =================================================
-         PAYU - SLOT
-      ================================================= */
+      /* ==========================================
+         PAYU SLOT
+      ========================================== */
 
       #${GRID_ID}
       #cobbo-payu-slot {
@@ -991,14 +936,13 @@
           0;
 
         min-height:
-          46px;
+          49px;
       }
 
 
-      /* =================================================
-         PAYU
-         CAŁKOWITE NADPISANIE DOMYŚLNEGO WIDGETU
-      ================================================= */
+      /* ==========================================
+         GŁÓWNY KONTENER PAYU
+      ========================================== */
 
       #${GRID_ID}
       #cobbo-payu-slot
@@ -1060,7 +1004,9 @@
       }
 
 
-      /* USUWAMY DEKORACJE PAYU */
+      /* ==========================================
+         USUWAMY ORYGINALNE DEKORACJE PAYU
+      ========================================== */
 
       #${GRID_ID}
       #cobbo-payu-slot
@@ -1078,7 +1024,9 @@
       }
 
 
-      /* LINK PAYU */
+      /* ==========================================
+         LINK PAYU
+      ========================================== */
 
       #${GRID_ID}
       #cobbo-payu-slot
@@ -1116,21 +1064,23 @@
       }
 
 
-      /* =================================================
-         PAYU
+      /* ==========================================
+         PAYU LABEL
          "Rata 0% już od:"
-      ================================================= */
+      ========================================== */
 
       #${GRID_ID}
       #cobbo-payu-slot
-      .payu-mini-installments-widget-label,
-
-      #${GRID_ID}
-      #cobbo-payu-slot
-      .payu-mini-installments-widget-details {
+      .payu-mini-installments-widget-label {
 
         display:
           block !important;
+
+        width:
+          max-content !important;
+
+        max-width:
+          100% !important;
 
         margin:
           0 0 6px 0 !important;
@@ -1161,32 +1111,42 @@
       }
 
 
-      /* PAYU SEPARATOR */
+      /* ==========================================
+         DWUKROPEK PAYU
+         PayU tworzy go osobno.
+         Chowamy go całkowicie.
+      ========================================== */
 
       #${GRID_ID}
       #cobbo-payu-slot
       .payu-mini-installments-widget-separator {
 
-        color:
-          #ffffff !important;
+        display:
+          none !important;
 
-        font-size:
-          14px !important;
+        visibility:
+          hidden !important;
 
-        font-weight:
-          600 !important;
+        width:
+          0 !important;
 
-        line-height:
-          1.1 !important;
+        height:
+          0 !important;
 
-        font-family:
-          inherit !important;
+        margin:
+          0 !important;
+
+        padding:
+          0 !important;
+
+        overflow:
+          hidden !important;
       }
 
 
-      /* =================================================
-         PAYU KWOTA RATY
-      ================================================= */
+      /* ==========================================
+         KWOTA RATY
+      ========================================== */
 
       #${GRID_ID}
       #cobbo-payu-slot
@@ -1224,9 +1184,9 @@
       }
 
 
-      /* =================================================
+      /* ==========================================
          PAYU PLACEHOLDER
-      ================================================= */
+      ========================================== */
 
       #${GRID_ID}
       .cobbo-payu-loading-label {
@@ -1234,8 +1194,8 @@
         display:
           block;
 
-        margin-bottom:
-          6px;
+        margin:
+          0 0 6px 0;
 
         color:
           #ffffff;
@@ -1248,6 +1208,9 @@
 
         line-height:
           1.1;
+
+        white-space:
+          nowrap;
       }
 
 
@@ -1256,6 +1219,9 @@
 
         display:
           block;
+
+        margin:
+          0;
 
         color:
           #ffffff;
@@ -1268,12 +1234,15 @@
 
         line-height:
           .95;
+
+        letter-spacing:
+          -1px;
       }
 
 
-      /* =================================================
+      /* ==========================================
          GWARANCJA
-      ================================================= */
+      ========================================== */
 
       #${GRID_ID}
       .cobbo-offer-warranty {
@@ -1284,12 +1253,15 @@
             #213577 0%,
             #111a3d 100%
           );
+
+        cursor:
+          pointer;
       }
 
 
-      /* =================================================
+      /* ==========================================
          -10%
-      ================================================= */
+      ========================================== */
 
       #${GRID_ID}
       .cobbo-offer-promo10 {
@@ -1300,12 +1272,15 @@
             #ef0715 0%,
             #c0000c 100%
           );
+
+        cursor:
+          pointer;
       }
 
 
-      /* =================================================
+      /* ==========================================
          -15%
-      ================================================= */
+      ========================================== */
 
       #${GRID_ID}
       .cobbo-offer-promo15 {
@@ -1326,7 +1301,7 @@
           );
 
         cursor:
-          default;
+          pointer;
       }
 
 
@@ -1356,9 +1331,9 @@
       }
 
 
-      /* =================================================
+      /* ==========================================
          MOBILE
-      ================================================= */
+      ========================================== */
 
       @media (max-width: 480px) {
 
@@ -1431,26 +1406,13 @@
 
         #${GRID_ID}
         #cobbo-payu-slot
-        .payu-mini-installments-widget-label,
-
-        #${GRID_ID}
-        #cobbo-payu-slot
-        .payu-mini-installments-widget-details {
+        .payu-mini-installments-widget-label {
 
           font-size:
             13px !important;
 
           margin-bottom:
             5px !important;
-        }
-
-
-        #${GRID_ID}
-        #cobbo-payu-slot
-        .payu-mini-installments-widget-separator {
-
-          font-size:
-            13px !important;
         }
 
 
@@ -1464,6 +1426,22 @@
 
 
         #${GRID_ID}
+        .cobbo-payu-loading-label {
+
+          font-size:
+            13px;
+        }
+
+
+        #${GRID_ID}
+        .cobbo-payu-loading-amount {
+
+          font-size:
+            29px;
+        }
+
+
+        #${GRID_ID}
         .cobbo-offer-ghost {
 
           font-size:
@@ -1472,9 +1450,9 @@
       }
 
 
-      /* =================================================
-         BARDZO MAŁE TELEFONY
-      ================================================= */
+      /* ==========================================
+         MAŁE EKRANY
+      ========================================== */
 
       @media (max-width: 350px) {
 
@@ -1533,11 +1511,7 @@
 
         #${GRID_ID}
         #cobbo-payu-slot
-        .payu-mini-installments-widget-label,
-
-        #${GRID_ID}
-        #cobbo-payu-slot
-        .payu-mini-installments-widget-details {
+        .payu-mini-installments-widget-label {
 
           font-size:
             12px !important;
@@ -1550,6 +1524,22 @@
 
           font-size:
             26px !important;
+        }
+
+
+        #${GRID_ID}
+        .cobbo-payu-loading-label {
+
+          font-size:
+            12px;
+        }
+
+
+        #${GRID_ID}
+        .cobbo-payu-loading-amount {
+
+          font-size:
+            26px;
         }
       }
 
@@ -1592,17 +1582,17 @@
 
   function getProductPrice() {
 
-    const priceElement =
+    const element =
       findPriceElement();
 
 
-    if (!priceElement) {
+    if (!element) {
       return null;
     }
 
 
     const raw =
-      priceElement.getAttribute(
+      element.getAttribute(
         "data-price"
       );
 
@@ -1612,25 +1602,21 @@
     }
 
 
-    const normalized =
-      String(raw)
-
-        .trim()
-
-        .replace(/\s/g, "")
-
-        .replace(",", ".");
-
-
     const price =
       parseFloat(
-        normalized
+
+        String(raw)
+          .trim()
+          .replace(/\s/g, "")
+          .replace(",", ".")
+
       );
 
 
     if (
       !Number.isFinite(price)
     ) {
+
       return null;
     }
 
@@ -1640,7 +1626,7 @@
 
 
   /* =========================================================
-     TWORZENIE STANDARDOWEJ KARTY
+     TWORZENIE KARTY
   ========================================================= */
 
   function createCard({
@@ -1659,26 +1645,12 @@
 
   }) {
 
-    let card;
-
-
-    if (url) {
-
-      card =
-        document.createElement(
-          "a"
-        );
-
-      card.href =
-        url;
-
-    } else {
-
-      card =
-        document.createElement(
-          "div"
-        );
-    }
+    const card =
+      document.createElement(
+        url
+          ? "a"
+          : "div"
+      );
 
 
     card.className =
@@ -1686,7 +1658,12 @@
       className;
 
 
-    /* SYMBOL TŁA */
+    if (url) {
+
+      card.href =
+        url;
+    }
+
 
     const ghostElement =
       document.createElement(
@@ -1702,8 +1679,6 @@
       ghost;
 
 
-    /* CONTENT */
-
     const content =
       document.createElement(
         "span"
@@ -1714,8 +1689,6 @@
       "cobbo-offer-content";
 
 
-    /* NAGŁÓWEK */
-
     const mainElement =
       document.createElement(
         "span"
@@ -1725,12 +1698,6 @@
     mainElement.className =
       "cobbo-offer-main";
 
-
-    /*
-      Jeżeli mamy discount,
-      np. -10% lub -15%,
-      wyróżniamy go większą czcionką.
-    */
 
     if (discount) {
 
@@ -1785,8 +1752,6 @@
     }
 
 
-    /* PODPIS */
-
     const subElement =
       document.createElement(
         "span"
@@ -1800,8 +1765,6 @@
     subElement.textContent =
       sub;
 
-
-    /* SKŁADANIE */
 
     content.appendChild(
       mainElement
@@ -1828,7 +1791,7 @@
 
 
   /* =========================================================
-     BUDOWANIE GRIDU
+     GRID
   ========================================================= */
 
   function buildGrid() {
@@ -1872,9 +1835,9 @@
       GRID_ID;
 
 
-    /* =====================================================
-       1. PAYU
-    ===================================================== */
+    /* =====================================
+       PAYU
+    ===================================== */
 
     const payuCard =
       document.createElement(
@@ -1882,21 +1845,25 @@
       );
 
 
-    payuCard.className =
-      "cobbo-offer-card cobbo-offer-payu";
-
-
     payuCard.id =
       "cobbo-payu-card";
 
 
+    payuCard.className =
+      "cobbo-offer-card cobbo-offer-payu";
+
+
     payuCard.innerHTML = `
 
-      <span class="cobbo-offer-ghost">
+      <span
+        class="cobbo-offer-ghost"
+      >
         0%
       </span>
 
-      <div class="cobbo-offer-content">
+      <div
+        class="cobbo-offer-content"
+      >
 
         <div
           id="cobbo-payu-slot"
@@ -1921,9 +1888,9 @@
     `;
 
 
-    /* =====================================================
-       2. GWARANCJA
-    ===================================================== */
+    /* =====================================
+       GWARANCJA
+    ===================================== */
 
     const warrantyUrl =
       getWarrantyUrl();
@@ -1957,9 +1924,9 @@
     }
 
 
-    /* =====================================================
-       3. -10%
-    ===================================================== */
+    /* =====================================
+       -10%
+    ===================================== */
 
     const promo10Card =
       createCard({
@@ -1985,10 +1952,9 @@
       });
 
 
-    /* =====================================================
-       4. -15%
-       BEZ LINKU
-    ===================================================== */
+    /* =====================================
+       -15%
+    ===================================== */
 
     const promo15Card =
       createCard({
@@ -1997,7 +1963,7 @@
           "cobbo-offer-promo15",
 
         url:
-          null,
+          CONFIG.promo15Url,
 
         discount:
           "-15%",
@@ -2014,9 +1980,9 @@
       });
 
 
-    /* =====================================================
+    /* =====================================
        KOLEJNOŚĆ
-    ===================================================== */
+    ===================================== */
 
     grid.appendChild(
       payuCard
@@ -2041,10 +2007,6 @@
     );
 
 
-    /* =====================================================
-       WSTAWIENIE POD CENĄ
-    ===================================================== */
-
     productPrice.insertAdjacentElement(
       "afterend",
       grid
@@ -2053,15 +2015,10 @@
 
 
   /* =========================================================
-     ŁADOWANIE BIBLIOTEKI PAYU
+     ŁADOWANIE PAYU
   ========================================================= */
 
   function loadPayU() {
-
-    /*
-      Jeśli PayU już istnieje,
-      nie ładujemy drugi raz.
-    */
 
     if (
       window.OpenPayU &&
@@ -2071,11 +2028,6 @@
       return Promise.resolve();
     }
 
-
-    /*
-      Jeśli ładowanie już trwa,
-      używamy istniejącego Promise.
-    */
 
     if (payuLoadPromise) {
 
@@ -2090,11 +2042,6 @@
           reject
         ) {
 
-          /*
-            Sprawdzamy, czy ktoś wcześniej
-            dodał skrypt PayU.
-          */
-
           const existing =
             document.querySelector(
               'script[src="' +
@@ -2104,11 +2051,6 @@
 
 
           if (existing) {
-
-            /*
-              Jeśli API już istnieje,
-              kończymy.
-            */
 
             if (
               window.OpenPayU &&
@@ -2143,10 +2085,6 @@
           }
 
 
-          /*
-            Tworzymy skrypt PayU dynamicznie.
-          */
-
           const script =
             document.createElement(
               "script"
@@ -2168,10 +2106,7 @@
 
 
           script.onload =
-            function () {
-
-              resolve();
-            };
+            resolve;
 
 
           script.onerror =
@@ -2179,22 +2114,15 @@
 
               reject(
                 new Error(
-                  "Nie udało się załadować biblioteki PayU."
+                  "Nie udało się załadować PayU."
                 )
               );
             };
 
 
-          /*
-            Biblioteka ląduje fizycznie
-            w HEAD, ale nie trzeba jej
-            wpisywać ręcznie w SkyShop.
-          */
-
           document.head.appendChild(
             script
           );
-
         }
       );
 
@@ -2204,7 +2132,167 @@
 
 
   /* =========================================================
-     PAYU - BRAK DOSTĘPNOŚCI
+     POPRAWKA TEKSTU PAYU
+  ========================================================= */
+
+  function fixPayULabel() {
+
+    const slot =
+      document.getElementById(
+        "cobbo-payu-slot"
+      );
+
+
+    if (!slot) {
+      return;
+    }
+
+
+    const label =
+      slot.querySelector(
+        ".payu-mini-installments-widget-label"
+      );
+
+
+    const separator =
+      slot.querySelector(
+        ".payu-mini-installments-widget-separator"
+      );
+
+
+    if (separator) {
+
+      separator.style.setProperty(
+        "display",
+        "none",
+        "important"
+      );
+
+
+      separator.style.setProperty(
+        "visibility",
+        "hidden",
+        "important"
+      );
+    }
+
+
+    if (label) {
+
+      /*
+        Wpisujemy dwukropek bezpośrednio
+        do labela, dzięki czemu nie może
+        przeskoczyć do nowej linii.
+      */
+
+      label.textContent =
+        "Rata 0% już od:";
+
+
+      label.style.setProperty(
+        "white-space",
+        "nowrap",
+        "important"
+      );
+
+
+      label.style.setProperty(
+        "display",
+        "block",
+        "important"
+      );
+    }
+  }
+
+
+  /* =========================================================
+     KLIKALNY CAŁY PAYU CARD
+  ========================================================= */
+
+  function activatePayUCard() {
+
+    const card =
+      document.getElementById(
+        "cobbo-payu-card"
+      );
+
+
+    const slot =
+      document.getElementById(
+        "cobbo-payu-slot"
+      );
+
+
+    if (
+      !card ||
+      !slot
+    ) {
+      return;
+    }
+
+
+    const payuLink =
+      slot.querySelector(
+        "a"
+      );
+
+
+    if (!payuLink) {
+      return;
+    }
+
+
+    card.setAttribute(
+      "role",
+      "button"
+    );
+
+
+    card.setAttribute(
+      "tabindex",
+      "0"
+    );
+
+
+    card.onclick =
+      function (event) {
+
+        /*
+          Jeżeli klient kliknął już
+          bezpośrednio w link PayU,
+          nie robimy nic dodatkowego.
+        */
+
+        if (
+          event.target.closest("a")
+        ) {
+
+          return;
+        }
+
+
+        payuLink.click();
+      };
+
+
+    card.onkeydown =
+      function (event) {
+
+        if (
+          event.key === "Enter" ||
+          event.key === " "
+        ) {
+
+          event.preventDefault();
+
+          payuLink.click();
+        }
+      };
+  }
+
+
+  /* =========================================================
+     UKRYWANIE PAYU
   ========================================================= */
 
   function hidePayUCard() {
@@ -2215,23 +2303,16 @@
       );
 
 
-    if (!card) {
-      return;
+    if (card) {
+
+      card.style.display =
+        "none";
     }
-
-
-    /*
-      Jeśli PayU nie jest dostępne
-      dla danej kwoty, chowamy kafelek.
-    */
-
-    card.style.display =
-      "none";
   }
 
 
   /* =========================================================
-     PAYU - RENDER
+     RENDER PAYU
   ========================================================= */
 
   function renderPayU() {
@@ -2262,8 +2343,8 @@
 
 
     /*
-      Nie renderujemy drugi raz,
-      jeśli cena się nie zmieniła.
+      Nie renderujemy ponownie
+      dla tej samej ceny.
     */
 
     if (
@@ -2272,6 +2353,7 @@
         ".payu-mini-installments-widget"
       )
     ) {
+
       return;
     }
 
@@ -2280,13 +2362,17 @@
       price;
 
 
-    payuOpenWidget =
+    card.style.display =
+      "flex";
+
+
+    card.onclick =
       null;
 
 
-    /*
-      Placeholder podczas ładowania.
-    */
+    card.onkeydown =
+      null;
+
 
     slot.innerHTML = `
 
@@ -2305,10 +2391,6 @@
     `;
 
 
-    card.style.display =
-      "flex";
-
-
     loadPayU()
 
       .then(
@@ -2325,20 +2407,9 @@
           }
 
 
-          /*
-            Czyścimy placeholder tuż
-            przed wygenerowaniem PayU.
-          */
-
           slot.innerHTML =
             "";
 
-
-          /*
-            showLongDescription TRUE
-            jak w pierwotnym działającym
-            rozwiązaniu.
-          */
 
           return (
             window
@@ -2373,13 +2444,8 @@
       .then(
         function (result) {
 
-          /*
-            Jeśli PayU dla tej kwoty
-            nie jest dostępne.
-          */
-
           if (
-            !result ||
+            result &&
             result.isWidgetAvailable === false
           ) {
 
@@ -2390,92 +2456,50 @@
 
 
           /*
-            Zapamiętujemy oficjalną
-            funkcję PayU do otwierania
-            popupu.
+            Poprawiamy tekst natychmiast.
           */
 
-          if (
-            typeof result.openWidget ===
-            "function"
-          ) {
-
-            payuOpenWidget =
-              result.openWidget;
-          }
+          fixPayULabel();
 
 
           /*
-            Cały zielony kafelek
-            będzie klikalny.
+            PayU czasami modyfikuje DOM
+            chwilę po utworzeniu widgetu.
           */
 
-          card.onclick =
-            function (event) {
-
-              /*
-                Jeśli kliknięto bezpośrednio
-                link PayU, pozwalamy mu
-                działać normalnie.
-              */
-
-              if (
-                event.target.closest(
-                  "a"
-                )
-              ) {
-                return;
-              }
-
-
-              if (
-                typeof payuOpenWidget ===
-                "function"
-              ) {
-
-                event.preventDefault();
-
-                payuOpenWidget();
-              }
-            };
-
-
-          card.setAttribute(
-            "role",
-            "button"
+          setTimeout(
+            fixPayULabel,
+            50
           );
 
 
-          card.setAttribute(
-            "tabindex",
-            "0"
+          setTimeout(
+            fixPayULabel,
+            150
+          );
+
+
+          setTimeout(
+            fixPayULabel,
+            400
           );
 
 
           /*
-            Obsługa Enter / Space.
+            Uaktywniamy kliknięcie
+            całego zielonego kafelka.
           */
 
-          card.onkeydown =
-            function (event) {
-
-              if (
-                event.key === "Enter" ||
-                event.key === " "
-              ) {
-
-                event.preventDefault();
+          setTimeout(
+            activatePayUCard,
+            50
+          );
 
 
-                if (
-                  typeof payuOpenWidget ===
-                  "function"
-                ) {
-
-                  payuOpenWidget();
-                }
-              }
-            };
+          setTimeout(
+            activatePayUCard,
+            200
+          );
         }
       )
 
@@ -2496,15 +2520,13 @@
 
 
   /* =========================================================
-     USUWANIE STARYCH ELEMENTÓW
-     zabezpieczenie na czas migracji
+     USUWANIE STAREGO KODU / WIDGETÓW
+     NA CZAS MIGRACJI
   ========================================================= */
 
   function removeLegacyWidgets() {
 
-    /*
-      STARY PAYU
-    */
+    /* STARE PAYU */
 
     const oldPayuWidgets =
       document.querySelectorAll(
@@ -2520,6 +2542,7 @@
             "#" + GRID_ID
           )
         ) {
+
           return;
         }
 
@@ -2530,30 +2553,35 @@
           );
 
 
-        const wrapper =
-          installment
-            ? installment.parentElement
-            : widget.parentElement;
+        if (installment) {
+
+          const wrapper =
+            installment.parentElement;
 
 
-        if (
-          wrapper &&
-          wrapper.tagName === "P"
-        ) {
+          if (
+            wrapper &&
+            wrapper.tagName === "P"
+          ) {
 
-          wrapper.remove();
+            wrapper.remove();
 
-        } else {
+          } else {
 
-          widget.remove();
+            installment.remove();
+          }
+
+
+          return;
         }
+
+
+        widget.remove();
       }
     );
 
 
-    /*
-      STARY KAFELEK GWARANCJI
-    */
+    /* STARA GWARANCJA */
 
     const oldWarranty =
       document.getElementById(
@@ -2583,9 +2611,7 @@
     }
 
 
-    /*
-      STARY KAFELEK 1+1
-    */
+    /* STARE 1+1 */
 
     const oldBundle =
       document.getElementById(
@@ -2617,7 +2643,7 @@
 
 
   /* =========================================================
-     OBSERWACJA ZMIANY CENY
+     OBSERWOWANIE CENY
   ========================================================= */
 
   function observePrice() {
@@ -2700,8 +2726,7 @@
 
 
   /* =========================================================
-     KRÓTKI WATCHER STARYCH WIDGETÓW
-     tylko na czas ładowania strony
+     CZYSZCZENIE STARYCH WIDGETÓW PRZEZ KILKA SEKUND
   ========================================================= */
 
   function cleanupLegacyForMoment() {
@@ -2769,41 +2794,17 @@
             );
 
 
-            /*
-              Usuwamy pozostałości
-              starego rozwiązania.
-            */
-
             removeLegacyWidgets();
 
-
-            /*
-              Budujemy moduł.
-            */
 
             buildGrid();
 
 
-            /*
-              Ładujemy PayU.
-            */
-
             renderPayU();
 
 
-            /*
-              Obserwujemy ewentualną
-              zmianę ceny produktu.
-            */
-
             observePrice();
 
-
-            /*
-              Przez pierwsze kilka sekund
-              pilnujemy, czy stary kod
-              nie dorzuci elementów.
-            */
 
             cleanupLegacyForMoment();
 
@@ -2811,10 +2812,6 @@
             return;
           }
 
-
-          /*
-            Maksymalnie ok. 10 sekund.
-          */
 
           if (
             attempts >= 40
