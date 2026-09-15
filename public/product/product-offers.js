@@ -80,39 +80,279 @@
 
   function getProductId() {
 
-    /*
-      Najpierw adres bieżącej strony.
-      Przykład:
-      /Robot-do-mycia-okien-COBBO-Q6-PRO-p634
-    */
+  /* =====================================================
+     1. ID Z ADRESU
+     np. Q6 PRO ...-p634
+  ===================================================== */
 
-    let match =
-      window.location.pathname.match(/-p(\d+)(?:\/|$)/i);
+  let match =
+    window.location.pathname.match(
+      /-p(\d+)(?:\/|$)/i
+    );
+
+  if (match) {
+    return parseInt(match[1], 10);
+  }
+
+
+  /* =====================================================
+     2. CANONICAL
+  ===================================================== */
+
+  const canonical =
+    document.querySelector(
+      'link[rel="canonical"]'
+    );
+
+  if (
+    canonical &&
+    canonical.href
+  ) {
+
+    match =
+      canonical.href.match(
+        /-p(\d+)(?:\/|$)/i
+      );
 
     if (match) {
-      return parseInt(match[1], 10);
+      return parseInt(
+        match[1],
+        10
+      );
     }
-
-
-    /*
-      Fallback: canonical.
-    */
-
-    const canonical =
-      document.querySelector('link[rel="canonical"]');
-
-    if (canonical && canonical.href) {
-
-      match =
-        canonical.href.match(/-p(\d+)(?:\/|$)/i);
-
-      if (match) {
-        return parseInt(match[1], 10);
-      }
-    }
-
-    return null;
   }
+
+
+  /* =====================================================
+     3. PRÓBA ODCZYTU ID Z HTML SKYSHOP
+  ===================================================== */
+
+  const possibleElements = [
+    '[data-product-id]',
+    '[data-productid]',
+    '[data-product]',
+    '[data-id-product]',
+    'input[name="product_id"]',
+    'input[name="productId"]'
+  ];
+
+
+  for (
+    const selector
+    of possibleElements
+  ) {
+
+    const element =
+      document.querySelector(
+        selector
+      );
+
+    if (!element) {
+      continue;
+    }
+
+
+    const possibleId =
+
+      element.dataset.productId ||
+
+      element.dataset.productid ||
+
+      element.getAttribute(
+        "data-product"
+      ) ||
+
+      element.getAttribute(
+        "data-id-product"
+      ) ||
+
+      element.value;
+
+
+    if (
+      possibleId &&
+      /^\d+$/.test(
+        String(possibleId)
+      )
+    ) {
+
+      return parseInt(
+        possibleId,
+        10
+      );
+    }
+  }
+
+
+  /* =====================================================
+     4. FALLBACK NA NAZWĘ PRODUKTU
+
+     To zabezpiecza produkty SkyShop,
+     których URL nie zawiera -pXXX.
+  ===================================================== */
+
+  const titleElement =
+    document.querySelector("h1");
+
+  const title =
+    titleElement
+      ? titleElement.textContent
+          .trim()
+          .toLowerCase()
+      : "";
+
+
+  /*
+    WAŻNE:
+    bardziej szczegółowe nazwy muszą
+    być PRZED krótszymi.
+
+    Czyli:
+    G7 PRO przed G7
+    Q6 PRO przed Q6
+    e6 PRO przed e6
+  */
+
+  const PRODUCT_NAME_MAP = [
+
+    {
+      text: "g7 pro",
+      id: 452
+    },
+
+    {
+      text: "g7",
+      id: 451
+    },
+
+    {
+      text: "q6 pro",
+      id: 634
+    },
+
+    {
+      text: "q6",
+      id: 419
+    },
+
+    {
+      text: "e6 pro",
+      id: 559
+    },
+
+    {
+      text: "e6",
+      id: 349
+    },
+
+    {
+      text: "e5",
+      id: 317
+    },
+
+    {
+      text: "i5",
+      id: 255
+    },
+
+    {
+      text: "7 smart-i",
+      id: 411
+    },
+
+    {
+      text: "7 smart i",
+      id: 411
+    },
+
+    {
+      text: "7 black pro",
+      id: 575
+    },
+
+    {
+      text: "pro 28 elite",
+      id: 622
+    },
+
+    {
+      text: "pro 28 3d ultra",
+      id: 352
+    },
+
+    {
+      text: "m5 vapor",
+      id: 490
+    },
+
+    {
+      text: "ultra steam uv",
+      id: 482
+    },
+
+    {
+      text: "steam one pro",
+      id: 546
+    },
+
+    {
+      text: "compact 32",
+      id: 547
+    },
+
+    {
+      text: "kuweta k1",
+      id: 548
+    },
+
+    {
+      text: "kuweta k2",
+      id: 549
+    },
+
+    {
+      text: "d9",
+      id: 553
+    },
+
+    {
+      text: "smart fry",
+      id: 630
+    }
+
+  ];
+
+
+  for (
+    const product
+    of PRODUCT_NAME_MAP
+  ) {
+
+    if (
+      title.includes(
+        product.text
+      )
+    ) {
+
+      return product.id;
+    }
+  }
+
+
+  console.warn(
+    "COBBO: nie udało się rozpoznać ID produktu",
+    {
+      pathname:
+        window.location.pathname,
+
+      title:
+        title
+    }
+  );
+
+
+  return null;
+}
 
 
   /* =========================================================
