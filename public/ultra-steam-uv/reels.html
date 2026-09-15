@@ -1,0 +1,742 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Zobacz COBBO w praktyce</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      background: transparent;
+      font-family:
+        "SF Pro Display",
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        Arial,
+        sans-serif;
+      color: #111;
+    }
+
+    button,
+    iframe {
+      font: inherit;
+    }
+
+    .cobbo-reels {
+      width: 100%;
+      max-width: 1420px;
+      margin: 0 auto;
+      padding: 26px 58px 34px;
+    }
+
+    .cobbo-reels__header {
+      text-align: center;
+      max-width: 760px;
+      margin: 0 auto 28px;
+      padding: 0 12px;
+    }
+
+    .cobbo-reels__header h2 {
+      margin: 0 0 9px;
+      font-size: clamp(25px, 2.3vw, 34px);
+      line-height: 1.12;
+      font-weight: 750;
+      letter-spacing: -0.025em;
+      color: #111;
+    }
+
+    .cobbo-reels__header p {
+      margin: 0;
+      color: #676767;
+      font-size: 15px;
+      line-height: 1.55;
+    }
+
+    .cobbo-reels__slider {
+      position: relative;
+      width: 100%;
+    }
+
+    .cobbo-reels__track {
+      display: grid;
+      grid-auto-flow: column;
+      grid-auto-columns: 23%;
+      gap: 16px;
+
+      width: 100%;
+      overflow-x: auto;
+      overflow-y: hidden;
+
+      scroll-snap-type: x mandatory;
+      scroll-behavior: smooth;
+
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+
+      overscroll-behavior-x: contain;
+
+      cursor: grab;
+      user-select: none;
+      -webkit-user-select: none;
+
+      padding: 4px 2px 14px;
+    }
+
+    .cobbo-reels__track::-webkit-scrollbar {
+      display: none;
+    }
+
+    .cobbo-reels__track.is-dragging {
+      cursor: grabbing;
+      scroll-behavior: auto;
+      scroll-snap-type: none;
+    }
+
+    .cobbo-reel {
+      position: relative;
+
+      width: 100%;
+      aspect-ratio: 9 / 16;
+
+      scroll-snap-align: start;
+      overflow: hidden;
+
+      border-radius: 22px;
+      background: #f2f2f2;
+
+      box-shadow:
+        0 8px 24px rgba(0, 0, 0, 0.08),
+        0 2px 6px rgba(0, 0, 0, 0.04);
+
+      transition:
+        transform 180ms ease,
+        box-shadow 180ms ease;
+
+      isolation: isolate;
+    }
+
+    .cobbo-reel:hover {
+      transform: translateY(-4px);
+      box-shadow:
+        0 14px 34px rgba(0, 0, 0, 0.13),
+        0 4px 10px rgba(0, 0, 0, 0.05);
+    }
+
+    .cobbo-reel__embed {
+      position: absolute;
+      inset: 0;
+
+      width: 100%;
+      height: 100%;
+
+      border: 0;
+      background: #fff;
+
+      pointer-events: none;
+
+      transform: scale(1.01);
+      transform-origin: center;
+    }
+
+    .cobbo-reel__overlay {
+      position: absolute;
+      inset: 0;
+      z-index: 3;
+
+      border: 0;
+      padding: 0;
+
+      background:
+        linear-gradient(
+          to bottom,
+          rgba(0, 0, 0, 0.02) 55%,
+          rgba(0, 0, 0, 0.36) 100%
+        );
+
+      cursor: pointer;
+    }
+
+    .cobbo-reel__play {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+
+      width: 62px;
+      height: 62px;
+
+      transform: translate(-50%, -50%);
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      border-radius: 50%;
+
+      background: rgba(255, 255, 255, 0.94);
+
+      box-shadow:
+        0 8px 28px rgba(0, 0, 0, 0.18);
+
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+
+      transition:
+        transform 180ms ease,
+        background 180ms ease;
+    }
+
+    .cobbo-reel:hover .cobbo-reel__play {
+      transform: translate(-50%, -50%) scale(1.07);
+      background: #fff;
+    }
+
+    .cobbo-reel__play::before {
+      content: "";
+
+      display: block;
+
+      margin-left: 4px;
+
+      width: 0;
+      height: 0;
+
+      border-top: 9px solid transparent;
+      border-bottom: 9px solid transparent;
+      border-left: 15px solid #111;
+    }
+
+    .cobbo-reel__instagram {
+      position: absolute;
+
+      left: 14px;
+      right: 14px;
+      bottom: 14px;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      min-height: 35px;
+
+      padding: 7px 14px;
+
+      border-radius: 999px;
+
+      background: rgba(0, 0, 0, 0.66);
+
+      color: #fff;
+
+      font-size: 12px;
+      line-height: 1;
+      font-weight: 650;
+
+      letter-spacing: 0.01em;
+
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+
+    .cobbo-reels__arrow {
+      position: absolute;
+      z-index: 10;
+
+      top: 50%;
+
+      width: 46px;
+      height: 46px;
+
+      padding: 0;
+      border: 0;
+      border-radius: 50%;
+
+      transform: translateY(-50%);
+
+      background: #fff;
+      color: #111;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      font-size: 32px;
+      line-height: 1;
+      font-weight: 300;
+
+      cursor: pointer;
+
+      box-shadow:
+        0 7px 22px rgba(0, 0, 0, 0.15);
+
+      transition:
+        transform 150ms ease,
+        opacity 150ms ease,
+        box-shadow 150ms ease;
+    }
+
+    .cobbo-reels__arrow:hover {
+      transform: translateY(-50%) scale(1.06);
+
+      box-shadow:
+        0 9px 28px rgba(0, 0, 0, 0.2);
+    }
+
+    .cobbo-reels__arrow--left {
+      left: -23px;
+    }
+
+    .cobbo-reels__arrow--right {
+      right: -23px;
+    }
+
+    .cobbo-reels__arrow:disabled {
+      opacity: 0.28;
+      cursor: default;
+      pointer-events: none;
+    }
+
+    @media (max-width: 1100px) {
+      .cobbo-reels {
+        padding-left: 48px;
+        padding-right: 48px;
+      }
+
+      .cobbo-reels__track {
+        grid-auto-columns: 31%;
+      }
+    }
+
+    @media (max-width: 760px) {
+      .cobbo-reels {
+        padding:
+          20px
+          18px
+          28px;
+      }
+
+      .cobbo-reels__header {
+        text-align: left;
+        margin-bottom: 20px;
+        padding: 0 2px;
+      }
+
+      .cobbo-reels__header h2 {
+        font-size: 26px;
+      }
+
+      .cobbo-reels__header p {
+        font-size: 14px;
+      }
+
+      .cobbo-reels__slider {
+        padding-left: 0;
+        padding-right: 0;
+      }
+
+      .cobbo-reels__track {
+        grid-auto-columns: 72%;
+        gap: 13px;
+
+        margin-right: -18px;
+        padding-right: 18px;
+      }
+
+      .cobbo-reel {
+        border-radius: 19px;
+      }
+
+      .cobbo-reels__arrow {
+        width: 42px;
+        height: 42px;
+
+        font-size: 29px;
+
+        background: rgba(255, 255, 255, 0.96);
+      }
+
+      .cobbo-reels__arrow--left {
+        left: -10px;
+      }
+
+      .cobbo-reels__arrow--right {
+        right: -10px;
+      }
+
+      .cobbo-reel__play {
+        width: 56px;
+        height: 56px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <section class="cobbo-reels">
+
+    <div class="cobbo-reels__header">
+      <h2>Zobacz COBBO w praktyce</h2>
+
+      <p>
+        Sprawdź, jak nasze urządzenia prezentują się w codziennym użytkowaniu.
+        Zobacz materiały przygotowane przez twórców i przekonaj się,
+        jak COBBO sprawdza się w praktyce.
+      </p>
+    </div>
+
+    <div class="cobbo-reels__slider">
+
+      <button
+        class="cobbo-reels__arrow cobbo-reels__arrow--left"
+        type="button"
+        aria-label="Poprzednie filmy"
+      >
+        ‹
+      </button>
+
+      <div
+        class="cobbo-reels__track"
+        id="cobboReelsTrack"
+      ></div>
+
+      <button
+        class="cobbo-reels__arrow cobbo-reels__arrow--right"
+        type="button"
+        aria-label="Następne filmy"
+      >
+        ›
+      </button>
+
+    </div>
+
+  </section>
+
+
+  <script>
+    (() => {
+
+      /*
+       * ==========================================================
+       * LISTA ROLEK
+       * ==========================================================
+       *
+       * Przy kolejnych produktach podmieniamy wyłącznie tę listę.
+       */
+
+      const reels = [
+        "https://www.instagram.com/reel/DUIP1orgvCl/",
+        "https://www.instagram.com/reels/DcxjoioNhFK/",
+        "https://www.instagram.com/reels/DcdwVWgCnBc/",
+        "https://www.instagram.com/reels/DafaE6ht9BB/"
+      ];
+
+
+      const track = document.getElementById("cobboReelsTrack");
+
+      const buttonLeft =
+        document.querySelector(".cobbo-reels__arrow--left");
+
+      const buttonRight =
+        document.querySelector(".cobbo-reels__arrow--right");
+
+
+      /*
+       * ==========================================================
+       * HELPERY
+       * ==========================================================
+       */
+
+      function getReelId(url) {
+        const match =
+          String(url).match(/instagram\.com\/reels?\/([^/?#]+)/i);
+
+        return match ? match[1] : null;
+      }
+
+
+      function getEmbedUrl(url) {
+        const id = getReelId(url);
+
+        if (!id) {
+          return "";
+        }
+
+        return `https://www.instagram.com/reel/${id}/embed/`;
+      }
+
+
+      /*
+       * ==========================================================
+       * GENEROWANIE KART
+       * ==========================================================
+       */
+
+      reels.forEach((reelUrl, index) => {
+
+        const card = document.createElement("article");
+
+        card.className = "cobbo-reel";
+
+
+        const iframe = document.createElement("iframe");
+
+        iframe.className = "cobbo-reel__embed";
+        iframe.src = getEmbedUrl(reelUrl);
+
+        iframe.loading =
+          index < 2
+            ? "eager"
+            : "lazy";
+
+        iframe.title =
+          `Instagram Reel ${index + 1}`;
+
+        iframe.allow =
+          "autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share";
+
+        iframe.setAttribute("allowfullscreen", "");
+
+
+        const button = document.createElement("button");
+
+        button.type = "button";
+        button.className = "cobbo-reel__overlay";
+
+        button.setAttribute(
+          "aria-label",
+          `Otwórz film ${index + 1}`
+        );
+
+
+        const play = document.createElement("span");
+
+        play.className = "cobbo-reel__play";
+
+
+        const instagram = document.createElement("span");
+
+        instagram.className = "cobbo-reel__instagram";
+        instagram.textContent = "Zobacz film";
+
+
+        button.appendChild(play);
+        button.appendChild(instagram);
+
+
+        button.addEventListener("click", () => {
+
+          window.parent.postMessage(
+            {
+              type: "COBBO_REEL_OPEN",
+              index: index,
+              reels: reels
+            },
+            "*"
+          );
+
+        });
+
+
+        card.appendChild(iframe);
+        card.appendChild(button);
+
+        track.appendChild(card);
+
+      });
+
+
+      /*
+       * ==========================================================
+       * NAWIGACJA STRZAŁKAMI
+       * ==========================================================
+       */
+
+      function getScrollDistance() {
+
+        const firstCard =
+          track.querySelector(".cobbo-reel");
+
+        if (!firstCard) {
+          return 300;
+        }
+
+        const style =
+          window.getComputedStyle(track);
+
+        const gap =
+          parseFloat(style.columnGap || style.gap || 0);
+
+        return firstCard.offsetWidth + gap;
+      }
+
+
+      buttonLeft.addEventListener("click", () => {
+
+        track.scrollBy({
+          left: -getScrollDistance(),
+          behavior: "smooth"
+        });
+
+      });
+
+
+      buttonRight.addEventListener("click", () => {
+
+        track.scrollBy({
+          left: getScrollDistance(),
+          behavior: "smooth"
+        });
+
+      });
+
+
+      function updateArrowState() {
+
+        const maxScroll =
+          track.scrollWidth - track.clientWidth;
+
+        buttonLeft.disabled =
+          track.scrollLeft <= 5;
+
+        buttonRight.disabled =
+          track.scrollLeft >= maxScroll - 5;
+
+      }
+
+
+      track.addEventListener(
+        "scroll",
+        updateArrowState,
+        {
+          passive: true
+        }
+      );
+
+      window.addEventListener(
+        "resize",
+        updateArrowState
+      );
+
+
+      /*
+       * ==========================================================
+       * PRZECIĄGANIE MYSZKĄ
+       * ==========================================================
+       */
+
+      let pointerDown = false;
+
+      let startX = 0;
+      let startScrollLeft = 0;
+      let moved = false;
+
+
+      track.addEventListener(
+        "pointerdown",
+        (event) => {
+
+          pointerDown = true;
+          moved = false;
+
+          startX = event.clientX;
+          startScrollLeft = track.scrollLeft;
+
+          track.classList.add("is-dragging");
+
+          track.setPointerCapture?.(
+            event.pointerId
+          );
+
+        }
+      );
+
+
+      track.addEventListener(
+        "pointermove",
+        (event) => {
+
+          if (!pointerDown) {
+            return;
+          }
+
+          const delta =
+            event.clientX - startX;
+
+          if (Math.abs(delta) > 5) {
+            moved = true;
+          }
+
+          track.scrollLeft =
+            startScrollLeft - delta;
+
+        }
+      );
+
+
+      function endPointer() {
+
+        if (!pointerDown) {
+          return;
+        }
+
+        pointerDown = false;
+
+        track.classList.remove(
+          "is-dragging"
+        );
+
+      }
+
+
+      track.addEventListener(
+        "pointerup",
+        endPointer
+      );
+
+      track.addEventListener(
+        "pointercancel",
+        endPointer
+      );
+
+
+      /*
+       * Zapobiega przypadkowemu otwarciu filmu,
+       * gdy użytkownik faktycznie przeciągał slider.
+       */
+
+      track.addEventListener(
+        "click",
+        (event) => {
+
+          if (!moved) {
+            return;
+          }
+
+          event.preventDefault();
+          event.stopPropagation();
+
+          moved = false;
+
+        },
+        true
+      );
+
+
+      requestAnimationFrame(
+        updateArrowState
+      );
+
+    })();
+  </script>
+
+</body>
+</html>
