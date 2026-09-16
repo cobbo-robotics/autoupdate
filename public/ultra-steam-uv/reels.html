@@ -371,12 +371,31 @@
 
       .cobbo-reels__track {
         gap: 13px;
-        padding: 4px 18px 16px;
+
+        /*
+          Karta ma 76vw szerokości.
+          Połowa pozostałej przestrzeni po bokach = 12vw,
+          dzięki czemu pierwszy film od razu startuje na środku.
+        */
+        padding:
+          4px
+          12vw
+          16px;
+
+        scroll-padding-inline: 12vw;
       }
 
       .cobbo-reel {
-        flex: 0 0 76%;
+        flex: 0 0 76vw;
+        max-width: 360px;
+
         border-radius: 19px;
+
+        /*
+          Każda kolejna rolka po przesunięciu
+          zatrzymuje się centralnie.
+        */
+        scroll-snap-align: center;
       }
 
       .cobbo-reel__video-click {
