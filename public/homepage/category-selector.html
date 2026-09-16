@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>Odkryj COBBO</title>
+  <title>Kategorie COBBO</title>
 
   <style>
     * {
@@ -17,6 +17,7 @@
       padding: 0;
       width: 100%;
       background: transparent;
+
       font-family:
         "SF Pro Display",
         -apple-system,
@@ -24,6 +25,7 @@
         "Segoe UI",
         Arial,
         sans-serif;
+
       color: #111;
     }
 
@@ -35,14 +37,21 @@
     .cobbo-categories {
       --page-padding: 28px;
       --gap: 28px;
+
       --accent-bg: #fff8e6;
+
       --text: #111111;
-      --muted: #707070;
-      --border: #cfcfcf;
+      --muted: #6d6d6d;
+      --border: #d2d2d2;
+
+      --image-height: 230px;
 
       width: 100%;
       overflow: hidden;
-      padding: 34px 0 18px;
+
+      padding: 34px 0 16px;
+
+      background: #ffffff;
     }
 
     .cobbo-categories__inner {
@@ -51,38 +60,49 @@
       margin: 0 auto;
     }
 
-    /* =========================
+    /* =========================================================
        HEADER
-    ========================= */
+    ========================================================= */
 
     .cobbo-categories__header {
       padding: 0 var(--page-padding);
     }
 
     .cobbo-categories__eyebrow {
-      margin: 0 0 7px;
+      margin: 0 0 8px;
+
       font-size: 13px;
       line-height: 1.2;
       font-weight: 700;
-      letter-spacing: 0.06em;
+
+      letter-spacing: 0.055em;
       text-transform: uppercase;
+
+      color: #111;
     }
 
     .cobbo-categories__title {
       margin: 0;
+
+      max-width: 760px;
+
       font-size: clamp(30px, 3vw, 42px);
-      line-height: 1.05;
+      line-height: 1.06;
       font-weight: 700;
+
       letter-spacing: -0.035em;
+
+      color: var(--text);
     }
 
-    /* =========================
+    /* =========================================================
        TABS
-    ========================= */
+    ========================================================= */
 
     .cobbo-categories__tabs-wrapper {
       margin-top: 18px;
       padding: 0 var(--page-padding);
+
       overflow: hidden;
     }
 
@@ -114,12 +134,14 @@
       border-radius: 9px;
 
       background: #ffffff;
-      color: #666;
+      color: #666666;
 
       font-size: 15px;
-      font-weight: 500;
+      font-weight: 600;
 
       cursor: pointer;
+
+      white-space: nowrap;
 
       transition:
         background 0.2s ease,
@@ -138,41 +160,54 @@
     }
 
     .cobbo-tab.is-active {
-      background: #111;
-      border-color: #111;
-      color: #fff;
+      background: #111111;
+      border-color: #111111;
+      color: #ffffff;
     }
 
-    /* =========================
-       PRODUCT AREA
-    ========================= */
+    /* =========================================================
+       STAGE
+    ========================================================= */
 
     .cobbo-categories__stage {
       position: relative;
+
       margin-top: 22px;
-      padding: 0 var(--page-padding) 0;
+      padding: 0 var(--page-padding);
+
+      isolation: isolate;
     }
 
     /*
-      Jasny pas w stylu referencji SharkNinja.
-      Zaczyna się mniej więcej w połowie produktów.
+      PAS TŁA
+
+      Najważniejsza poprawka:
+      początek tła jest zależny wyłącznie od wysokości zdjęcia,
+      a nie od wysokości całego slidera.
+
+      Dlatego nie zmienia pozycji pomiędzy kategoriami.
     */
 
     .cobbo-categories__stage::before {
       content: "";
+
       position: absolute;
       z-index: 0;
 
       left: 0;
       right: 0;
 
-      top: 43%;
+      top: calc(var(--image-height) * 0.54);
       bottom: 0;
 
       background: var(--accent-bg);
 
       pointer-events: none;
     }
+
+    /* =========================================================
+       VIEWPORT
+    ========================================================= */
 
     .cobbo-categories__viewport {
       position: relative;
@@ -199,14 +234,15 @@
     .cobbo-categories__track {
       display: flex;
       align-items: stretch;
+
       gap: var(--gap);
 
       min-width: 100%;
     }
 
-    /* =========================
+    /* =========================================================
        CARD
-    ========================= */
+    ========================================================= */
 
     .cobbo-card {
       flex:
@@ -223,7 +259,9 @@
 
     .cobbo-card__link {
       display: block;
+
       width: 100%;
+      height: 100%;
 
       color: inherit;
       text-decoration: none;
@@ -238,9 +276,9 @@
       align-items: flex-end;
       justify-content: center;
 
-      height: 230px;
+      height: var(--image-height);
 
-      padding: 10px 12px 0;
+      padding: 8px 12px 0;
 
       overflow: hidden;
     }
@@ -267,13 +305,13 @@
 
     .cobbo-card__name {
       display: flex;
-      align-items: center;
+      align-items: flex-start;
       justify-content: center;
-      gap: 6px;
+      gap: 7px;
 
-      min-height: 62px;
+      min-height: 68px;
 
-      padding: 18px 8px 12px;
+      padding: 17px 8px 13px;
 
       text-align: center;
 
@@ -281,13 +319,18 @@
       line-height: 1.3;
       font-weight: 500;
 
-      text-decoration: underline;
+      text-decoration-line: underline;
       text-decoration-thickness: 1px;
       text-underline-offset: 3px;
+
+      color: #111;
     }
 
     .cobbo-card__arrow {
+      flex: 0 0 auto;
+
       display: inline-block;
+
       text-decoration: none;
 
       transition: transform 0.2s ease;
@@ -297,9 +340,9 @@
       transform: translateX(4px);
     }
 
-    /* =========================
+    /* =========================================================
        NAVIGATION
-    ========================= */
+    ========================================================= */
 
     .cobbo-categories__navigation {
       position: relative;
@@ -309,9 +352,9 @@
       align-items: center;
       justify-content: center;
 
-      min-height: 58px;
+      min-height: 62px;
 
-      padding: 7px var(--page-padding) 5px;
+      padding: 8px 0 4px;
     }
 
     .cobbo-categories__dots {
@@ -347,15 +390,17 @@
       width: 12px;
       height: 12px;
 
-      background: #222;
+      background: #222222;
     }
 
     .cobbo-categories__arrows {
       position: absolute;
-      right: var(--page-padding);
+
+      right: 0;
       top: 50%;
 
       display: flex;
+      align-items: center;
       gap: 8px;
 
       transform: translateY(-50%);
@@ -366,16 +411,16 @@
       align-items: center;
       justify-content: center;
 
-      width: 36px;
-      height: 36px;
+      width: 38px;
+      height: 38px;
 
       padding: 0;
 
       border: 1px solid #161616;
       border-radius: 50%;
 
-      background: #fff;
-      color: #111;
+      background: #ffffff;
+      color: #111111;
 
       font-size: 21px;
       line-height: 1;
@@ -390,8 +435,8 @@
     }
 
     .cobbo-arrow:hover:not(:disabled) {
-      background: #111;
-      color: #fff;
+      background: #111111;
+      color: #ffffff;
     }
 
     .cobbo-arrow:active:not(:disabled) {
@@ -399,15 +444,16 @@
     }
 
     .cobbo-arrow:disabled {
-      opacity: 0.25;
+      opacity: 0.22;
       cursor: default;
     }
 
-    /* =========================
+    /* =========================================================
        TABLET
-    ========================= */
+    ========================================================= */
 
     @media (max-width: 1100px) {
+
       .cobbo-card {
         flex:
           0 0
@@ -416,48 +462,83 @@
             / 3
           );
       }
+
     }
 
-    /* =========================
+    /* =========================================================
        MOBILE
-    ========================= */
+    ========================================================= */
 
     @media (max-width: 700px) {
+
       .cobbo-categories {
         --page-padding: 18px;
         --gap: 14px;
+        --image-height: 205px;
 
-        padding-top: 24px;
+        padding-top: 22px;
+        padding-bottom: 12px;
       }
 
       .cobbo-categories__eyebrow {
+        margin-bottom: 7px;
+
         font-size: 11px;
       }
 
+      /*
+        Stała wysokość obszaru nagłówka.
+        Dzięki temu zmiana kategorii nie przesuwa
+        całego modułu w górę i w dół.
+      */
+
       .cobbo-categories__title {
+        display: flex;
+        align-items: flex-start;
+
+        min-height: 65px;
+
+        max-width: 390px;
+
         font-size: 30px;
         line-height: 1.08;
       }
 
       .cobbo-categories__tabs-wrapper {
-        margin-top: 15px;
+        margin-top: 11px;
+      }
+
+      .cobbo-categories__tabs {
+        gap: 9px;
       }
 
       .cobbo-tab {
         min-height: 39px;
+
         padding: 0 15px;
+
+        border-radius: 9px;
 
         font-size: 14px;
       }
 
       .cobbo-categories__stage {
-        margin-top: 16px;
+        margin-top: 15px;
 
         /*
-          Zerowy prawy padding pozwala zobaczyć
-          fragment następnego produktu.
+          Bez prawego paddingu, żeby było widać
+          fragment kolejnego produktu.
         */
         padding-right: 0;
+      }
+
+      /*
+        Pas nadal liczony od wysokości grafiki.
+        Nie zmienia pozycji pomiędzy kategoriami.
+      */
+
+      .cobbo-categories__stage::before {
+        top: calc(var(--image-height) * 0.53);
       }
 
       .cobbo-categories__viewport {
@@ -468,19 +549,19 @@
         padding-right: 18px;
       }
 
+      /*
+        Około 2,2 kafelka na ekranie.
+      */
+
       .cobbo-card {
-        /*
-          Około 2,15 produktu na ekranie.
-          Użytkownik od razu widzi, że slider
-          można przesuwać.
-        */
         flex: 0 0 43%;
       }
 
       .cobbo-card__image-area {
-        height: 205px;
-        padding-left: 4px;
-        padding-right: 4px;
+        padding:
+          5px
+          4px
+          0;
       }
 
       .cobbo-card__image {
@@ -494,20 +575,29 @@
       .cobbo-card__name {
         justify-content: flex-start;
 
-        min-height: 64px;
+        min-height: 72px;
 
-        padding: 14px 4px 12px;
+        padding:
+          14px
+          4px
+          13px;
 
         text-align: left;
 
         font-size: 14px;
+        line-height: 1.27;
       }
 
       .cobbo-categories__navigation {
         justify-content: flex-start;
 
-        padding-left: 18px;
-        padding-right: 18px;
+        min-height: 60px;
+
+        padding:
+          7px
+          18px
+          3px
+          0;
       }
 
       .cobbo-categories__dots {
@@ -519,23 +609,34 @@
       }
 
       .cobbo-arrow {
-        width: 38px;
-        height: 38px;
+        width: 39px;
+        height: 39px;
+
+        font-size: 21px;
       }
+
     }
 
-    /* =========================
+    /* =========================================================
        VERY SMALL MOBILE
-    ========================= */
+    ========================================================= */
 
     @media (max-width: 420px) {
+
+      .cobbo-categories {
+        --image-height: 190px;
+      }
+
+      .cobbo-categories__title {
+        min-height: 65px;
+
+        font-size: 29px;
+      }
+
       .cobbo-card {
         flex: 0 0 45%;
       }
 
-      .cobbo-card__image-area {
-        height: 185px;
-      }
     }
   </style>
 </head>
@@ -556,8 +657,11 @@
         KUP WEDŁUG KATEGORII
       </p>
 
-      <h2 class="cobbo-categories__title">
-        Odmień swoją codzienność
+      <h2
+        class="cobbo-categories__title"
+        id="categoryTitle"
+      >
+        Czyste okna bez wysiłku
       </h2>
 
     </header>
@@ -568,7 +672,7 @@
         class="cobbo-categories__tabs"
         id="categoryTabs"
         role="tablist"
-        aria-label="Kategorie"
+        aria-label="Kategorie produktów"
       ></div>
 
     </div>
@@ -625,36 +729,36 @@
 
 </section>
 
+
 <script>
   /* ============================================================
-     KONFIGURACJA
-     ============================================================
+     PLACEHOLDER
 
-     Na razie każdy kafelek korzysta z jednego placeholdera.
-
-     Później wystarczy w konkretnym produkcie zmienić:
-
-     image: PLACEHOLDER
-
-     na przykład na:
-
-     image: "https://cobbo.pl/upload/cobbo/moje-zdjecie.png"
-
+     Później podmieniasz wyłącznie pole "image"
+     przy konkretnym produkcie.
   ============================================================ */
 
   const PLACEHOLDER =
     "https://cobbo.pl/upload/cobbo/q6pro-render-tyl.png";
 
 
+  /* ============================================================
+     DANE
+  ============================================================ */
+
   const CATEGORY_DATA = [
 
-    /* =========================
+    /* =========================================================
        OKNA
-    ========================= */
+    ========================================================= */
 
     {
       id: "okna",
+
       label: "Okna",
+
+      title: "Czyste okna bez wysiłku",
+
       items: [
 
         {
@@ -691,13 +795,17 @@
     },
 
 
-    /* =========================
+    /* =========================================================
        SPRZĄTANIE
-    ========================= */
+    ========================================================= */
 
     {
       id: "sprzatanie",
+
       label: "Sprzątanie",
+
+      title: "Czysty dom na co dzień",
+
       items: [
 
         {
@@ -734,13 +842,17 @@
     },
 
 
-    /* =========================
+    /* =========================================================
        DOM
-    ========================= */
+    ========================================================= */
 
     {
       id: "dom",
+
       label: "Dom",
+
+      title: "Więcej wygody każdego dnia",
+
       items: [
 
         {
@@ -765,13 +877,17 @@
     },
 
 
-    /* =========================
+    /* =========================================================
        ZWIERZĘTA
-    ========================= */
+    ========================================================= */
 
     {
       id: "zwierzeta",
+
       label: "Zwierzęta",
+
+      title: "Komfort dla Ciebie i Twojego pupila",
+
       items: [
 
         {
@@ -796,13 +912,17 @@
     },
 
 
-    /* =========================
+    /* =========================================================
        BEAUTY
-    ========================= */
+    ========================================================= */
 
     {
       id: "beauty",
+
       label: "Beauty",
+
+      title: "Technologia dla Twojej pielęgnacji",
+
       items: [
 
         {
@@ -821,13 +941,17 @@
     },
 
 
-    /* =========================
+    /* =========================================================
        KUCHNIA
-    ========================= */
+    ========================================================= */
 
     {
       id: "kuchnia",
+
       label: "Kuchnia",
+
+      title: "Gotuj prościej, szybciej, sprytniej",
+
       items: [
 
         {
@@ -869,6 +993,9 @@
   /* ============================================================
      ELEMENTY
   ============================================================ */
+
+  const titleElement =
+    document.getElementById("categoryTitle");
 
   const tabsElement =
     document.getElementById("categoryTabs");
@@ -919,7 +1046,8 @@
             : ""
         );
 
-      button.textContent = category.label;
+      button.textContent =
+        category.label;
 
       button.setAttribute(
         "role",
@@ -950,10 +1078,36 @@
 
           renderCards();
 
+          /*
+            Na mobile aktywna zakładka przewija się
+            w widoczne miejsce.
+          */
+
+          requestAnimationFrame(() => {
+
+            const activeButton =
+              tabsElement.querySelector(
+                ".cobbo-tab.is-active"
+              );
+
+            if (activeButton) {
+
+              activeButton.scrollIntoView({
+                behavior: "smooth",
+                block: "nearest",
+                inline: "center"
+              });
+
+            }
+
+          });
+
         }
       );
 
-      tabsElement.appendChild(button);
+      tabsElement.appendChild(
+        button
+      );
 
     });
 
@@ -976,7 +1130,17 @@
       return;
     }
 
+
+    /*
+      Dynamiczny nagłówek.
+    */
+
+    titleElement.textContent =
+      category.title;
+
+
     trackElement.innerHTML = "";
+
 
     category.items.forEach(item => {
 
@@ -997,9 +1161,9 @@
         item.url;
 
       /*
-        Bardzo ważne przy iframe.
-        Produkt otwiera się w głównej stronie,
-        a nie wewnątrz iframe.
+        Ważne przy iframe:
+        strona produktu/kategorii otwiera się
+        w głównym oknie sklepu.
       */
 
       link.target =
@@ -1066,9 +1230,11 @@
         arrow
       );
 
+
       imageArea.appendChild(
         image
       );
+
 
       link.appendChild(
         imageArea
@@ -1078,9 +1244,11 @@
         name
       );
 
+
       article.appendChild(
         link
       );
+
 
       trackElement.appendChild(
         article
@@ -1090,8 +1258,8 @@
 
 
     /*
-      Przenosimy slider na początek
-      po zmianie kategorii.
+      Po zmianie kategorii wracamy
+      na początek slidera.
     */
 
     viewportElement.scrollTo({
@@ -1102,9 +1270,13 @@
 
     requestAnimationFrame(() => {
 
-      buildSnapPositions();
+      requestAnimationFrame(() => {
 
-      updateNavigation();
+        buildSnapPositions();
+
+        updateNavigation();
+
+      });
 
     });
 
@@ -1124,12 +1296,14 @@
         )
       );
 
+
     const maxScroll =
       Math.max(
         0,
         viewportElement.scrollWidth -
         viewportElement.clientWidth
       );
+
 
     const positions = [0];
 
@@ -1142,19 +1316,23 @@
           maxScroll
         );
 
-      positions.push(position);
+      positions.push(
+        position
+      );
 
     });
 
 
-    positions.push(maxScroll);
+    positions.push(
+      maxScroll
+    );
 
 
     /*
-      Usunięcie duplikatów.
+      Usunięcie identycznych wartości.
     */
 
-    snapPositions =
+    const uniquePositions =
       [...new Set(
         positions.map(
           value =>
@@ -1164,12 +1342,12 @@
 
 
     /*
-      Gdy różnice są bardzo małe,
-      traktujemy je jako ten sam punkt.
+      Usunięcie punktów praktycznie
+      znajdujących się w tym samym miejscu.
     */
 
     snapPositions =
-      snapPositions.filter(
+      uniquePositions.filter(
         (value, index, array) => {
 
           if (index === 0) {
@@ -1185,6 +1363,13 @@
       );
 
 
+    if (
+      snapPositions.length === 0
+    ) {
+      snapPositions = [0];
+    }
+
+
     renderDots();
 
   }
@@ -1197,6 +1382,7 @@
   function renderDots() {
 
     dotsElement.innerHTML = "";
+
 
     snapPositions.forEach(
       (position, index) => {
@@ -1215,6 +1401,7 @@
           `Przejdź do pozycji ${index + 1}`
         );
 
+
         dot.addEventListener(
           "click",
           () => {
@@ -1227,6 +1414,7 @@
           }
         );
 
+
         dotsElement.appendChild(
           dot
         );
@@ -1235,27 +1423,16 @@
     );
 
 
-    /*
-      Jeżeli wszystko mieści się
-      na ekranie, zostawiamy jedną kropkę.
-    */
-
-    if (
+    dotsElement.style.visibility =
       snapPositions.length <= 1
-    ) {
-      dotsElement.style.opacity =
-        "0";
-    }
-    else {
-      dotsElement.style.opacity =
-        "1";
-    }
+        ? "hidden"
+        : "visible";
 
   }
 
 
   /* ============================================================
-     AKTYWNA POZYCJA
+     AKTUALNA POZYCJA
   ============================================================ */
 
   function getCurrentSnapIndex() {
@@ -1263,8 +1440,8 @@
     const currentScroll =
       viewportElement.scrollLeft;
 
-    let closestIndex =
-      0;
+
+    let closestIndex = 0;
 
     let closestDistance =
       Infinity;
@@ -1278,6 +1455,7 @@
             position -
             currentScroll
           );
+
 
         if (
           distance <
@@ -1302,7 +1480,7 @@
 
 
   /* ============================================================
-     NAVIGATION STATE
+     UPDATE NAVIGATION
   ============================================================ */
 
   function updateNavigation() {
@@ -1329,25 +1507,25 @@
     );
 
 
+    const canScroll =
+      snapPositions.length > 1;
+
+
     prevButton.disabled =
+      !canScroll ||
       currentIndex <= 0;
 
 
     nextButton.disabled =
+      !canScroll ||
       currentIndex >=
       snapPositions.length - 1;
-
-
-    /*
-      Jeżeli nie ma nic do przesuwania,
-      strzałki pozostają subtelnie wyłączone.
-    */
 
   }
 
 
   /* ============================================================
-     ARROWS
+     GO TO SNAP
   ============================================================ */
 
   function goToSnap(index) {
@@ -1378,6 +1556,10 @@
 
   }
 
+
+  /* ============================================================
+     ARROWS
+  ============================================================ */
 
   prevButton.addEventListener(
     "click",
