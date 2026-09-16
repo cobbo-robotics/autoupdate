@@ -354,10 +354,6 @@
       -webkit-tap-highlight-color: transparent;
     }
 
-    .cobbo-card__link.is-disabled {
-      cursor: default;
-    }
-
     /* =========================================================
        OBRAZEK
     ========================================================= */
@@ -401,36 +397,9 @@
       pointer-events: none;
     }
 
-    .cobbo-card__link:not(.is-disabled):hover
+    .cobbo-card__link:hover
     .cobbo-card__image {
       transform: scale(0.96);
-    }
-
-    /* =========================================================
-       BADGE
-    ========================================================= */
-
-    .cobbo-card__badge {
-      position: absolute;
-
-      z-index: 3;
-
-      top: 12px;
-      left: 12px;
-
-      padding: 7px 10px;
-
-      border-radius: 999px;
-
-      background: rgba(17, 17, 17, 0.92);
-      color: #ffffff;
-
-      font-size: 11px;
-      line-height: 1;
-      font-weight: 700;
-
-      letter-spacing: 0.035em;
-      text-transform: uppercase;
     }
 
     /* =========================================================
@@ -461,13 +430,6 @@
       text-underline-offset: 3px;
     }
 
-    .cobbo-card__link.is-disabled
-    .cobbo-card__name {
-      text-decoration: none;
-
-      color: #555555;
-    }
-
     .cobbo-card__arrow {
       flex: 0 0 auto;
 
@@ -481,7 +443,7 @@
       transition: transform 0.2s ease;
     }
 
-    .cobbo-card__link:not(.is-disabled):hover
+    .cobbo-card__link:hover
     .cobbo-card__arrow {
       transform: translateX(4px);
     }
@@ -657,10 +619,6 @@
         line-height: 1.08;
       }
 
-      /* =======================================================
-         TABS MOBILE
-      ======================================================= */
-
       .cobbo-categories__tabs-wrapper {
         margin-top: 10px;
 
@@ -683,10 +641,6 @@
 
         font-size: 14px;
       }
-
-      /* =======================================================
-         SLIDER MOBILE
-      ======================================================= */
 
       .cobbo-categories__stage {
         margin-top: 14px;
@@ -733,10 +687,6 @@
         padding-right: var(--page-padding);
       }
 
-      /*
-        Nieco ponad 2 kafelki widoczne jednocześnie.
-      */
-
       .cobbo-card {
         flex: 0 0 43%;
       }
@@ -749,18 +699,9 @@
         transform: scale(0.95);
       }
 
-      .cobbo-card__link:not(.is-disabled):hover
+      .cobbo-card__link:hover
       .cobbo-card__image {
         transform: scale(0.95);
-      }
-
-      .cobbo-card__badge {
-        top: 7px;
-        left: 5px;
-
-        padding: 6px 8px;
-
-        font-size: 9px;
       }
 
       .cobbo-card__name {
@@ -921,9 +862,6 @@
 <script>
   /* ============================================================
      PLACEHOLDER GRAFIKI
-
-     Na razie wszystkie kafle korzystają z tego samego renderu.
-     Później podmieniamy tylko pole image przy danym kaflu.
   ============================================================ */
 
   const PLACEHOLDER =
@@ -932,11 +870,6 @@
 
   /* ============================================================
      DANE KATEGORII
-
-     URL = "#"
-     oznacza, że docelowy link trzeba jeszcze uzupełnić.
-
-     Kafelek z URL "#" nie będzie klikalny.
   ============================================================ */
 
   const CATEGORY_DATA = [
@@ -956,7 +889,7 @@
 
         {
           name: "Roboty sprzątające",
-          url: "#",
+          url: "https://cobbo.pl/Roboty-c23",
           image: PLACEHOLDER
         },
 
@@ -974,7 +907,7 @@
 
         {
           name: "Akcesoria do sprzątania",
-          url: "#",
+          url: "https://cobbo.pl/Roboty-sprzatajace-c47",
           image: PLACEHOLDER
         }
 
@@ -1009,7 +942,7 @@
 
         {
           name: "Akcesoria kuchenne",
-          url: "#",
+          url: "https://cobbo.pl/Roboty-kuchenne-c44",
           image: PLACEHOLDER
         }
 
@@ -1032,13 +965,13 @@
 
         {
           name: "Prasowalnice parowe",
-          url: "#",
+          url: "https://cobbo.pl/Prasowalnice-parowe-c280",
           image: PLACEHOLDER
         },
 
         {
           name: "Szczotki automatyczne",
-          url: "#",
+          url: "https://cobbo.pl/Urzadzenia-c323",
           image: PLACEHOLDER
         },
 
@@ -1050,7 +983,7 @@
 
         {
           name: "Akcesoria do domu",
-          url: "#",
+          url: "https://cobbo.pl/Srodki-czystosci-c241",
           image: PLACEHOLDER
         }
 
@@ -1081,13 +1014,6 @@
           name: "Akcesoria do kuwet",
           url: "https://cobbo.pl/Kuwety-dla-zwierzat-c289",
           image: PLACEHOLDER
-        },
-
-        {
-          name: "Żwirek dla kotów",
-          url: "#",
-          image: PLACEHOLDER,
-          badge: "Wkrótce"
         }
 
       ]
@@ -1109,21 +1035,14 @@
 
         {
           name: "Uroda i pielęgnacja",
-          url: "#",
+          url: "https://cobbo.pl/Uroda-i-pielegnacja-c293",
           image: PLACEHOLDER
         },
 
         {
           name: "Akcesoria Beauty",
-          url: "#",
+          url: "https://cobbo.pl/Uroda-i-pielegnacja-c293",
           image: PLACEHOLDER
-        },
-
-        {
-          name: "Kosmetyki",
-          url: "#",
-          image: PLACEHOLDER,
-          badge: "Wkrótce"
         }
 
       ]
@@ -1145,7 +1064,7 @@
 
         {
           name: "Outlet COBBO",
-          url: "#",
+          url: "https://cobbo.pl/Outlet-c26",
           image: PLACEHOLDER
         }
 
@@ -1343,37 +1262,8 @@
         item.url;
 
 
-      if (
-        item.url === "#"
-      ) {
-
-        link.classList.add(
-          "is-disabled"
-        );
-
-
-        link.setAttribute(
-          "aria-disabled",
-          "true"
-        );
-
-
-        link.addEventListener(
-          "click",
-          event => {
-
-            event.preventDefault();
-
-          }
-        );
-
-      }
-      else {
-
-        link.target =
-          "_top";
-
-      }
+      link.target =
+        "_top";
 
 
       const imageArea =
@@ -1413,33 +1303,6 @@
       );
 
 
-      /*
-        Opcjonalny badge.
-      */
-
-      if (
-        item.badge
-      ) {
-
-        const badge =
-          document.createElement("span");
-
-
-        badge.className =
-          "cobbo-card__badge";
-
-
-        badge.textContent =
-          item.badge;
-
-
-        imageArea.appendChild(
-          badge
-        );
-
-      }
-
-
       const name =
         document.createElement("div");
 
@@ -1456,43 +1319,32 @@
         item.name;
 
 
+      const arrow =
+        document.createElement("span");
+
+
+      arrow.className =
+        "cobbo-card__arrow";
+
+
+      arrow.setAttribute(
+        "aria-hidden",
+        "true"
+      );
+
+
+      arrow.textContent =
+        "→";
+
+
       name.appendChild(
         nameText
       );
 
 
-      /*
-        Strzałkę pokazujemy tylko,
-        jeśli kafelek prowadzi do strony.
-      */
-
-      if (
-        item.url !== "#"
-      ) {
-
-        const arrow =
-          document.createElement("span");
-
-
-        arrow.className =
-          "cobbo-card__arrow";
-
-
-        arrow.setAttribute(
-          "aria-hidden",
-          "true"
-        );
-
-
-        arrow.textContent =
-          "→";
-
-
-        name.appendChild(
-          arrow
-        );
-
-      }
+      name.appendChild(
+        arrow
+      );
 
 
       link.appendChild(
