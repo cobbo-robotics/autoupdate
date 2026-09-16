@@ -417,21 +417,48 @@
       }
 
       .cobbo-reel-popup {
-        padding: 52px 7px 7px;
+        /*
+          Na telefonie popup jest celowo mniejszy od pełnej
+          wysokości ekranu. Dzięki temu przycisk zamknięcia
+          pozostaje zawsze widoczny i nie trzeba przewijać.
+        */
+        padding:
+          max(58px, env(safe-area-inset-top))
+          14px
+          max(18px, env(safe-area-inset-bottom));
       }
 
       .cobbo-reel-popup__dialog {
-        width: min(410px, calc(100vw - 14px));
-        height: calc(100vh - 62px);
+        width: min(350px, calc(100vw - 40px));
+
+        /*
+          dvh poprawnie reaguje na pasek adresu w mobilnych
+          przeglądarkach. Fallback pozostaje przez max-height.
+        */
+        height: min(78dvh, 700px);
+        max-height: calc(100vh - 105px);
+
         border-radius: 18px;
       }
 
+      .cobbo-reel-popup__footer {
+        padding: 9px;
+      }
+
+      .cobbo-reel-popup__instagram {
+        min-height: 44px;
+        padding: 9px 14px;
+        font-size: 13px;
+      }
+
       .cobbo-reel-popup__close {
-        top: 7px;
-        right: 7px;
-        width: 40px;
-        height: 40px;
-        font-size: 27px;
+        top: max(10px, env(safe-area-inset-top));
+        right: 10px;
+
+        width: 42px;
+        height: 42px;
+
+        font-size: 28px;
       }
 
       .cobbo-reel-popup__nav {
@@ -441,11 +468,11 @@
       }
 
       .cobbo-reel-popup__nav--prev {
-        left: 3px;
+        left: 4px;
       }
 
       .cobbo-reel-popup__nav--next {
-        right: 3px;
+        right: 4px;
       }
     }
   </style>
@@ -527,6 +554,7 @@
         scrolling="no"
         allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
         allowfullscreen
+        playsinline
       ></iframe>
     </div>
 
@@ -624,12 +652,26 @@
     return match ? match[1] : null;
   }
 
-  function getEmbedUrl(url) {
+  function getEmbedUrl(url, autoplay = false) {
     const id = getReelId(url);
 
-    return id
-      ? "https://www.instagram.com/reel/" + id + "/embed/"
-      : "";
+    if (!id) {
+      return "";
+    }
+
+    const baseUrl =
+      "https://www.instagram.com/reel/" +
+      id +
+      "/embed/";
+
+    /*
+      W popupie dodajemy autoplay=1.
+      Ładowanie następuje bezpośrednio po kliknięciu użytkownika,
+      a iframe ma również uprawnienie "autoplay".
+    */
+    return autoplay
+      ? baseUrl + "?autoplay=1"
+      : baseUrl;
   }
 
   /* =========================================================
@@ -699,7 +741,10 @@
       return;
     }
 
-    popupFrame.src = getEmbedUrl(reel);
+    /*
+      Popup ładuje osobny embed z próbą automatycznego startu.
+    */
+    popupFrame.src = getEmbedUrl(reel, true);
     popupInstagram.href = reel;
 
     popupPrev.disabled = activeIndex <= 0;
