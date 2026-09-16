@@ -126,14 +126,34 @@
       nie jest widoczny.
     */
 
-    .cobbo-reel__embed {
+    .cobbo-reel__embed-shell {
       position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: calc(100% + 220px);
-      border: 0;
+      inset: 0;
+      overflow: hidden;
       background: #fff;
+    }
+
+    /*
+      Oficjalny Instagram embed.js tworzy iframe wewnątrz
+      naszego kontenera. Wymuszamy pełną szerokość i zostawiamy
+      zapas wysokości, a dolny interfejs Instagrama przycina karta.
+    */
+    .cobbo-reel__embed-shell .instagram-media,
+    .cobbo-reel__embed-shell iframe.instagram-media-rendered {
+      width: 100% !important;
+      min-width: 0 !important;
+      max-width: none !important;
+      margin: 0 !important;
+      border: 0 !important;
+    }
+
+    .cobbo-reel__embed-shell iframe.instagram-media-rendered {
+      height: calc(100% + 240px) !important;
+      background: #fff !important;
+    }
+
+    .cobbo-reel__embed-shell .instagram-media {
+      background: #fff !important;
     }
 
     /*
@@ -256,13 +276,31 @@
       background: #fff;
     }
 
-    .cobbo-reel-popup__video iframe {
+    .cobbo-reel-popup__embed-host {
       position: absolute;
       inset: 0;
-      width: 100%;
-      height: 100%;
-      border: 0;
+      overflow: auto;
+      overscroll-behavior: contain;
       background: #fff;
+      scrollbar-width: none;
+    }
+
+    .cobbo-reel-popup__embed-host::-webkit-scrollbar {
+      display: none;
+    }
+
+    .cobbo-reel-popup__embed-host .instagram-media,
+    .cobbo-reel-popup__embed-host iframe.instagram-media-rendered {
+      width: 100% !important;
+      min-width: 0 !important;
+      max-width: none !important;
+      margin: 0 !important;
+      border: 0 !important;
+    }
+
+    .cobbo-reel-popup__embed-host iframe.instagram-media-rendered {
+      min-height: 100% !important;
+      background: #fff !important;
     }
 
     .cobbo-reel-popup__footer {
@@ -549,13 +587,10 @@
     aria-label="Instagram Reel"
   >
     <div class="cobbo-reel-popup__video">
-      <iframe
-        title="Instagram Reel"
-        scrolling="no"
-        allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
-        allowfullscreen
-        playsinline
-      ></iframe>
+      <div
+        class="cobbo-reel-popup__embed-host"
+        id="cobboPopupEmbedHost"
+      ></div>
     </div>
 
     <div class="cobbo-reel-popup__footer">
@@ -604,7 +639,7 @@
   const nextButton = document.querySelector(".cobbo-reels__arrow--next");
 
   const popup = document.getElementById("cobboReelPopup");
-  const popupFrame = popup.querySelector(".cobbo-reel-popup__video iframe");
+  const popupHost = document.getElementById("cobboPopupEmbedHost");
   const popupInstagram = popup.querySelector(".cobbo-reel-popup__instagram");
   const popupClose = popup.querySelector(".cobbo-reel-popup__close");
   const popupPrev = popup.querySelector(".cobbo-reel-popup__nav--prev");
@@ -647,31 +682,143 @@
     )
   );
 
-  function getReelId(url) {
-    const match = url.match(/\/reel\/([^/]+)/);
-    return match ? match[1] : null;
-  }
+  /*
+     =========================================================
+     OFICJALNY INSTAGRAM EMBED
+     =========================================================
+     Zamiast ręcznie tworzyć /reel/ID/embed/ korzystamy
+     z instagram.com/embed.js, czyli z oficjalnego renderera.
+  */
 
-  function getEmbedUrl(url, autoplay = false) {
-    const id = getReelId(url);
+  let instagramScriptPromise = null;
 
-    if (!id) {
-      return "";
+  function loadInstagramScript() {
+    if (
+      window.instgrm &&
+      window.instgrm.Embeds
+    ) {
+      return Promise.resolve();
     }
 
-    const baseUrl =
-      "https://www.instagram.com/reel/" +
-      id +
-      "/embed/";
+    if (instagramScriptPromise) {
+      return instagramScriptPromise;
+    }
 
-    /*
-      W popupie dodajemy autoplay=1.
-      Ładowanie następuje bezpośrednio po kliknięciu użytkownika,
-      a iframe ma również uprawnienie "autoplay".
-    */
-    return autoplay
-      ? baseUrl + "?autoplay=1"
-      : baseUrl;
+    instagramScriptPromise = new Promise((resolve, reject) => {
+      const existing = document.querySelector(
+        'script[src*="instagram.com/embed.js"]'
+      );
+
+      if (existing) {
+        const waitForApi = () => {
+          if (
+            window.instgrm &&
+            window.instgrm.Embeds
+          ) {
+            resolve();
+          } else {
+            setTimeout(waitForApi, 80);
+          }
+        };
+
+        waitForApi();
+        return;
+      }
+
+      const script = document.createElement("script");
+      script.src = "https://www.instagram.com/embed.js";
+      script.async = true;
+
+      script.onload = () => resolve();
+      script.onerror = () => reject(
+        new Error("Nie udało się załadować Instagram embed.js")
+      );
+
+      document.body.appendChild(script);
+    });
+
+    return instagramScriptPromise;
+  }
+
+  function createInstagramEmbed(url) {
+    const blockquote = document.createElement("blockquote");
+
+    blockquote.className = "instagram-media";
+    blockquote.setAttribute(
+      "data-instgrm-permalink",
+      url
+    );
+    blockquote.setAttribute(
+      "data-instgrm-version",
+      "14"
+    );
+
+    blockquote.style.background = "#fff";
+    blockquote.style.border = "0";
+    blockquote.style.margin = "0";
+    blockquote.style.maxWidth = "none";
+    blockquote.style.minWidth = "0";
+    blockquote.style.padding = "0";
+    blockquote.style.width = "100%";
+
+    return blockquote;
+  }
+
+  async function processInstagramEmbeds() {
+    try {
+      await loadInstagramScript();
+
+      if (
+        window.instgrm &&
+        window.instgrm.Embeds
+      ) {
+        window.instgrm.Embeds.process();
+      }
+    } catch (error) {
+      console.error(
+        "COBBO Reels: Instagram embed.js",
+        error
+      );
+    }
+  }
+
+  /*
+    Najlepsza możliwa próba autoplay.
+    Instagram ostatecznie decyduje, czy dany embed pozwoli
+    uruchomić materiał automatycznie.
+  */
+  function tryEnablePopupAutoplay() {
+    let attempts = 0;
+
+    const timer = setInterval(() => {
+      attempts++;
+
+      const iframe = popupHost.querySelector(
+        "iframe.instagram-media-rendered, iframe"
+      );
+
+      if (iframe) {
+        iframe.setAttribute(
+          "allow",
+          "autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
+        );
+
+        try {
+          const current = new URL(iframe.src);
+          current.searchParams.set("autoplay", "1");
+
+          if (iframe.src !== current.href) {
+            iframe.src = current.href;
+          }
+        } catch {}
+
+        clearInterval(timer);
+      }
+
+      if (attempts >= 25) {
+        clearInterval(timer);
+      }
+    }, 120);
   }
 
   /* =========================================================
@@ -686,23 +833,16 @@
       const card = document.createElement("article");
       card.className = "cobbo-reel";
 
-      const iframe = document.createElement("iframe");
-      iframe.className = "cobbo-reel__embed";
-      iframe.src = getEmbedUrl(reelUrl);
-      iframe.loading = index < 2 ? "eager" : "lazy";
-      iframe.scrolling = "no";
-      iframe.title = "Instagram Reel " + (index + 1);
-      iframe.setAttribute(
-        "allow",
-        "autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
-      );
+      const embedShell = document.createElement("div");
+      embedShell.className = "cobbo-reel__embed-shell";
+
+      const embed = createInstagramEmbed(reelUrl);
+      embedShell.appendChild(embed);
 
       /*
         Cały obszar VIDEO jest klikalny.
-        Warstwa nie przykrywa górnego paska Instagrama,
-        więc "Wyświetl profil" pozostaje aktywne.
+        Górny nagłówek profilu pozostaje dostępny bez naszej warstwy.
       */
-
       const clickZone = document.createElement("button");
       clickZone.type = "button";
       clickZone.className = "cobbo-reel__video-click";
@@ -719,10 +859,12 @@
         openPopup(index);
       });
 
-      card.appendChild(iframe);
+      card.appendChild(embedShell);
       card.appendChild(clickZone);
       track.appendChild(card);
     });
+
+    processInstagramEmbeds();
 
     requestAnimationFrame(() => {
       updateArrows();
@@ -734,21 +876,25 @@
      POPUP
      ========================================================= */
 
-  function loadPopupReel() {
+  async function loadPopupReel() {
     const reel = reels[activeIndex];
 
     if (!reel) {
       return;
     }
 
-    /*
-      Popup ładuje osobny embed z próbą automatycznego startu.
-    */
-    popupFrame.src = getEmbedUrl(reel, true);
+    popupHost.innerHTML = "";
+    popupHost.appendChild(
+      createInstagramEmbed(reel)
+    );
+
     popupInstagram.href = reel;
 
     popupPrev.disabled = activeIndex <= 0;
     popupNext.disabled = activeIndex >= reels.length - 1;
+
+    await processInstagramEmbeds();
+    tryEnablePopupAutoplay();
   }
 
   async function enterFullscreen() {
@@ -798,7 +944,7 @@
   async function closePopup() {
     popup.classList.remove("is-open");
     popup.setAttribute("aria-hidden", "true");
-    popupFrame.src = "";
+    popupHost.innerHTML = "";
 
     try {
       if (document.fullscreenElement && document.exitFullscreen) {
@@ -867,7 +1013,7 @@
     ) {
       popup.classList.remove("is-open");
       popup.setAttribute("aria-hidden", "true");
-      popupFrame.src = "";
+      popupHost.innerHTML = "";
     }
   });
 
