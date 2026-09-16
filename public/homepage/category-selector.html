@@ -16,7 +16,9 @@
       margin: 0;
       padding: 0;
       width: 100%;
-      background: transparent;
+      min-width: 100%;
+      background: #fff;
+      overflow-x: hidden;
 
       font-family:
         "SF Pro Display",
@@ -34,30 +36,46 @@
       font: inherit;
     }
 
+    button {
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    /* =========================================================
+       GŁÓWNY MODUŁ
+    ========================================================= */
+
     .cobbo-categories {
       --page-padding: 28px;
-      --gap: 28px;
+      --gap: 30px;
 
-      --accent-bg: #fff8e6;
-
-      --text: #111111;
-      --muted: #6d6d6d;
-      --border: #d2d2d2;
+      --container-width: 1500px;
 
       --image-height: 230px;
 
+      --text: #111;
+      --muted: #676767;
+      --border: #d3d3d3;
+
+      position: relative;
+
       width: 100%;
+      min-width: 100%;
+
+      padding: 30px 0 10px;
+
+      background: #fff;
+
       overflow: hidden;
-
-      padding: 34px 0 16px;
-
-      background: #ffffff;
     }
 
     .cobbo-categories__inner {
+      position: relative;
+
       width: 100%;
-      max-width: 1500px;
+      max-width: var(--container-width);
+
       margin: 0 auto;
+      padding: 0 var(--page-padding);
     }
 
     /* =========================================================
@@ -65,7 +83,8 @@
     ========================================================= */
 
     .cobbo-categories__header {
-      padding: 0 var(--page-padding);
+      position: relative;
+      z-index: 5;
     }
 
     .cobbo-categories__eyebrow {
@@ -73,9 +92,9 @@
 
       font-size: 13px;
       line-height: 1.2;
-      font-weight: 700;
+      font-weight: 750;
 
-      letter-spacing: 0.055em;
+      letter-spacing: 0.045em;
       text-transform: uppercase;
 
       color: #111;
@@ -84,13 +103,13 @@
     .cobbo-categories__title {
       margin: 0;
 
-      max-width: 760px;
+      max-width: 820px;
 
-      font-size: clamp(30px, 3vw, 42px);
-      line-height: 1.06;
-      font-weight: 700;
+      font-size: clamp(32px, 2.5vw, 43px);
+      line-height: 1.04;
+      font-weight: 750;
 
-      letter-spacing: -0.035em;
+      letter-spacing: -0.04em;
 
       color: var(--text);
     }
@@ -100,8 +119,10 @@
     ========================================================= */
 
     .cobbo-categories__tabs-wrapper {
+      position: relative;
+      z-index: 5;
+
       margin-top: 18px;
-      padding: 0 var(--page-padding);
 
       overflow: hidden;
     }
@@ -109,7 +130,10 @@
     .cobbo-categories__tabs {
       display: flex;
       align-items: center;
+
       gap: 10px;
+
+      width: 100%;
 
       overflow-x: auto;
       overflow-y: hidden;
@@ -128,41 +152,44 @@
       flex: 0 0 auto;
 
       min-height: 42px;
+
       padding: 0 18px;
 
       border: 1px solid var(--border);
       border-radius: 9px;
 
-      background: #ffffff;
-      color: #666666;
+      background: #fff;
+      color: #666;
 
       font-size: 15px;
+      line-height: 1;
       font-weight: 600;
-
-      cursor: pointer;
 
       white-space: nowrap;
 
+      cursor: pointer;
+
       transition:
-        background 0.2s ease,
-        color 0.2s ease,
-        border-color 0.2s ease,
-        transform 0.2s ease;
+        background-color .2s ease,
+        color .2s ease,
+        border-color .2s ease,
+        transform .15s ease;
     }
 
     .cobbo-tab:hover {
-      border-color: #111;
       color: #111;
+      border-color: #111;
     }
 
     .cobbo-tab:active {
-      transform: scale(0.97);
+      transform: scale(.97);
     }
 
     .cobbo-tab.is-active {
-      background: #111111;
-      border-color: #111111;
-      color: #ffffff;
+      color: #fff;
+
+      background: #111;
+      border-color: #111;
     }
 
     /* =========================================================
@@ -172,20 +199,16 @@
     .cobbo-categories__stage {
       position: relative;
 
-      margin-top: 22px;
-      padding: 0 var(--page-padding);
+      margin-top: 20px;
 
       isolation: isolate;
     }
 
     /*
-      PAS TŁA
+      GŁÓWNY PEŁNOSZEROKOŚCIOWY GRADIENT
 
-      Najważniejsza poprawka:
-      początek tła jest zależny wyłącznie od wysokości zdjęcia,
-      a nie od wysokości całego slidera.
-
-      Dlatego nie zmienia pozycji pomiędzy kategoriami.
+      Element ma 100vw, więc nie kończy się razem
+      z kontenerem produktów.
     */
 
     .cobbo-categories__stage::before {
@@ -194,35 +217,80 @@
       position: absolute;
       z-index: 0;
 
-      left: 0;
-      right: 0;
+      top: calc(var(--image-height) * .50);
 
-      top: calc(var(--image-height) * 0.54);
-      bottom: 0;
+      left: 50%;
 
-      background: var(--accent-bg);
+      width: 100vw;
+      height: calc(100% - (var(--image-height) * .50));
+
+      transform: translateX(-50%);
+
+      background:
+        linear-gradient(
+          90deg,
+          #fffdf9 0%,
+          #fff9ec 16%,
+          #fff3d8 48%,
+          #fff5df 68%,
+          #fffaf0 85%,
+          #fffefa 100%
+        );
+
+      pointer-events: none;
+    }
+
+    /*
+      Miękkie przejście od bieli do gradientu,
+      zamiast ostrej poziomej linii.
+    */
+
+    .cobbo-categories__stage::after {
+      content: "";
+
+      position: absolute;
+      z-index: 0;
+
+      top: calc(var(--image-height) * .50);
+
+      left: 50%;
+
+      width: 100vw;
+      height: 75px;
+
+      transform: translateX(-50%);
+
+      background:
+        linear-gradient(
+          180deg,
+          #fff 0%,
+          rgba(255,255,255,.94) 15%,
+          rgba(255,255,255,.72) 35%,
+          rgba(255,255,255,.36) 63%,
+          rgba(255,255,255,0) 100%
+        );
 
       pointer-events: none;
     }
 
     /* =========================================================
-       VIEWPORT
+       SLIDER
     ========================================================= */
 
     .cobbo-categories__viewport {
       position: relative;
-      z-index: 1;
+      z-index: 2;
 
       width: 100%;
 
       overflow-x: auto;
       overflow-y: hidden;
 
-      scrollbar-width: none;
-      -ms-overflow-style: none;
-
       scroll-behavior: smooth;
       scroll-snap-type: x mandatory;
+
+      scrollbar-width: none;
+      -ms-overflow-style: none;
 
       -webkit-overflow-scrolling: touch;
     }
@@ -241,7 +309,7 @@
     }
 
     /* =========================================================
-       CARD
+       KARTA
     ========================================================= */
 
     .cobbo-card {
@@ -255,6 +323,7 @@
       min-width: 0;
 
       scroll-snap-align: start;
+      scroll-snap-stop: always;
     }
 
     .cobbo-card__link {
@@ -276,9 +345,10 @@
       align-items: flex-end;
       justify-content: center;
 
+      width: 100%;
       height: var(--image-height);
 
-      padding: 8px 12px 0;
+      padding: 6px 10px 0;
 
       overflow: hidden;
     }
@@ -292,38 +362,38 @@
       object-fit: contain;
       object-position: center bottom;
 
-      transform: scale(0.92);
+      transform: scale(.91);
+      transform-origin: center bottom;
 
-      transition:
-        transform 0.3s ease,
-        filter 0.3s ease;
+      transition: transform .28s ease;
     }
 
     .cobbo-card__link:hover .cobbo-card__image {
-      transform: scale(0.97);
+      transform: scale(.96);
     }
 
     .cobbo-card__name {
       display: flex;
       align-items: flex-start;
       justify-content: center;
+
       gap: 7px;
 
-      min-height: 68px;
+      min-height: 72px;
 
-      padding: 17px 8px 13px;
+      padding: 18px 8px 12px;
+
+      color: #111;
 
       text-align: center;
 
       font-size: 15px;
-      line-height: 1.3;
-      font-weight: 500;
+      line-height: 1.28;
+      font-weight: 550;
 
       text-decoration-line: underline;
       text-decoration-thickness: 1px;
       text-underline-offset: 3px;
-
-      color: #111;
     }
 
     .cobbo-card__arrow {
@@ -331,9 +401,12 @@
 
       display: inline-block;
 
+      font-size: 18px;
+      line-height: 1;
+
       text-decoration: none;
 
-      transition: transform 0.2s ease;
+      transition: transform .2s ease;
     }
 
     .cobbo-card__link:hover .cobbo-card__arrow {
@@ -341,12 +414,12 @@
     }
 
     /* =========================================================
-       NAVIGATION
+       DOLNA NAWIGACJA
     ========================================================= */
 
     .cobbo-categories__navigation {
       position: relative;
-      z-index: 2;
+      z-index: 3;
 
       display: flex;
       align-items: center;
@@ -354,7 +427,7 @@
 
       min-height: 62px;
 
-      padding: 8px 0 4px;
+      padding: 5px 0 2px;
     }
 
     .cobbo-categories__dots {
@@ -362,9 +435,11 @@
       align-items: center;
       justify-content: center;
 
-      gap: 9px;
+      gap: 8px;
 
-      min-height: 40px;
+      min-height: 42px;
+
+      transition: opacity .2s ease;
     }
 
     .cobbo-dot {
@@ -374,36 +449,39 @@
       padding: 0;
 
       border: 0;
-      border-radius: 50%;
+      border-radius: 999px;
 
-      background: #9d9d9d;
+      background: #9a9a9a;
 
       cursor: pointer;
 
       transition:
-        width 0.2s ease,
-        height 0.2s ease,
-        background 0.2s ease;
+        width .2s ease,
+        height .2s ease,
+        background .2s ease;
     }
 
     .cobbo-dot.is-active {
       width: 12px;
       height: 12px;
 
-      background: #222222;
+      background: #242424;
     }
 
     .cobbo-categories__arrows {
       position: absolute;
 
-      right: 0;
       top: 50%;
+      right: 0;
 
       display: flex;
       align-items: center;
+
       gap: 8px;
 
       transform: translateY(-50%);
+
+      transition: opacity .2s ease;
     }
 
     .cobbo-arrow {
@@ -419,32 +497,35 @@
       border: 1px solid #161616;
       border-radius: 50%;
 
-      background: #ffffff;
-      color: #111111;
+      background: rgba(255,255,255,.93);
+      color: #111;
 
       font-size: 21px;
+      font-weight: 400;
       line-height: 1;
 
       cursor: pointer;
 
+      backdrop-filter: blur(5px);
+
       transition:
-        background 0.2s ease,
-        color 0.2s ease,
-        opacity 0.2s ease,
-        transform 0.2s ease;
+        color .2s ease,
+        background .2s ease,
+        opacity .2s ease,
+        transform .15s ease;
     }
 
     .cobbo-arrow:hover:not(:disabled) {
-      background: #111111;
-      color: #ffffff;
+      color: #fff;
+      background: #111;
     }
 
     .cobbo-arrow:active:not(:disabled) {
-      transform: scale(0.94);
+      transform: scale(.94);
     }
 
     .cobbo-arrow:disabled {
-      opacity: 0.22;
+      opacity: .25;
       cursor: default;
     }
 
@@ -453,6 +534,9 @@
     ========================================================= */
 
     @media (max-width: 1100px) {
+      .cobbo-categories {
+        --gap: 22px;
+      }
 
       .cobbo-card {
         flex:
@@ -462,7 +546,6 @@
             / 3
           );
       }
-
     }
 
     /* =========================================================
@@ -476,8 +559,13 @@
         --gap: 14px;
         --image-height: 205px;
 
-        padding-top: 22px;
-        padding-bottom: 12px;
+        padding-top: 20px;
+        padding-bottom: 7px;
+      }
+
+      .cobbo-categories__inner {
+        padding-left: var(--page-padding);
+        padding-right: var(--page-padding);
       }
 
       .cobbo-categories__eyebrow {
@@ -487,29 +575,31 @@
       }
 
       /*
-        Stała wysokość obszaru nagłówka.
-        Dzięki temu zmiana kategorii nie przesuwa
-        całego modułu w górę i w dół.
+        Stała przestrzeń na dwie linie nagłówka.
+        Dzięki temu moduł nie skacze po zmianie kategorii.
       */
 
       .cobbo-categories__title {
         display: flex;
         align-items: flex-start;
 
-        min-height: 65px;
-
         max-width: 390px;
+        min-height: 65px;
 
         font-size: 30px;
         line-height: 1.08;
       }
 
       .cobbo-categories__tabs-wrapper {
-        margin-top: 11px;
+        margin-top: 10px;
+
+        margin-right: calc(var(--page-padding) * -1);
       }
 
       .cobbo-categories__tabs {
         gap: 9px;
+
+        padding-right: var(--page-padding);
       }
 
       .cobbo-tab {
@@ -517,40 +607,46 @@
 
         padding: 0 15px;
 
-        border-radius: 9px;
-
         font-size: 14px;
       }
 
       .cobbo-categories__stage {
-        margin-top: 15px;
+        margin-top: 14px;
 
         /*
-          Bez prawego paddingu, żeby było widać
-          fragment kolejnego produktu.
+          Slider może dochodzić aż do prawej krawędzi
+          i pokazywać fragment następnego produktu.
         */
-        padding-right: 0;
+
+        margin-right: calc(var(--page-padding) * -1);
       }
 
-      /*
-        Pas nadal liczony od wysokości grafiki.
-        Nie zmienia pozycji pomiędzy kategoriami.
-      */
-
       .cobbo-categories__stage::before {
-        top: calc(var(--image-height) * 0.53);
+        top: calc(var(--image-height) * .52);
+
+        height:
+          calc(
+            100% -
+            (var(--image-height) * .52)
+          );
+      }
+
+      .cobbo-categories__stage::after {
+        top: calc(var(--image-height) * .52);
+
+        height: 60px;
       }
 
       .cobbo-categories__viewport {
-        padding-right: 18px;
+        padding-right: var(--page-padding);
       }
 
       .cobbo-categories__track {
-        padding-right: 18px;
+        padding-right: var(--page-padding);
       }
 
       /*
-        Około 2,2 kafelka na ekranie.
+        Nieco ponad dwa produkty widoczne jednocześnie.
       */
 
       .cobbo-card {
@@ -559,33 +655,33 @@
 
       .cobbo-card__image-area {
         padding:
-          5px
           4px
+          3px
           0;
       }
 
       .cobbo-card__image {
-        transform: scale(0.95);
+        transform: scale(.95);
       }
 
       .cobbo-card__link:hover .cobbo-card__image {
-        transform: scale(0.95);
+        transform: scale(.95);
       }
 
       .cobbo-card__name {
         justify-content: flex-start;
 
-        min-height: 72px;
+        min-height: 74px;
 
         padding:
           14px
           4px
-          13px;
+          12px;
 
         text-align: left;
 
         font-size: 14px;
-        line-height: 1.27;
+        line-height: 1.28;
       }
 
       .cobbo-categories__navigation {
@@ -593,11 +689,7 @@
 
         min-height: 60px;
 
-        padding:
-          7px
-          18px
-          3px
-          0;
+        padding-right: var(--page-padding);
       }
 
       .cobbo-categories__dots {
@@ -605,26 +697,24 @@
       }
 
       .cobbo-categories__arrows {
-        right: 18px;
+        right: var(--page-padding);
       }
 
       .cobbo-arrow {
         width: 39px;
         height: 39px;
-
-        font-size: 21px;
       }
 
     }
 
     /* =========================================================
-       VERY SMALL MOBILE
+       MAŁE TELEFONY
     ========================================================= */
 
     @media (max-width: 420px) {
 
       .cobbo-categories {
-        --image-height: 190px;
+        --image-height: 188px;
       }
 
       .cobbo-categories__title {
@@ -666,6 +756,7 @@
 
     </header>
 
+
     <div class="cobbo-categories__tabs-wrapper">
 
       <div
@@ -676,6 +767,7 @@
       ></div>
 
     </div>
+
 
     <div class="cobbo-categories__stage">
 
@@ -691,6 +783,7 @@
 
       </div>
 
+
       <div class="cobbo-categories__navigation">
 
         <div
@@ -699,7 +792,11 @@
           aria-label="Nawigacja slidera"
         ></div>
 
-        <div class="cobbo-categories__arrows">
+
+        <div
+          class="cobbo-categories__arrows"
+          id="categoryArrows"
+        >
 
           <button
             class="cobbo-arrow"
@@ -733,9 +830,6 @@
 <script>
   /* ============================================================
      PLACEHOLDER
-
-     Później podmieniasz wyłącznie pole "image"
-     przy konkretnym produkcie.
   ============================================================ */
 
   const PLACEHOLDER =
@@ -748,242 +842,177 @@
 
   const CATEGORY_DATA = [
 
-    /* =========================================================
-       OKNA
-    ========================================================= */
-
     {
       id: "okna",
-
       label: "Okna",
-
       title: "Czyste okna bez wysiłku",
 
       items: [
-
         {
           name: "COBBO Q6 PRO",
           url: "https://cobbo.pl/Robot-do-mycia-okien-COBBO-Q6-PRO-p634",
           image: PLACEHOLDER
         },
-
         {
           name: "COBBO e6 PRO",
           url: "https://cobbo.pl/Robot-do-mycia-okien-COBBO-e6-PRO-p559",
           image: PLACEHOLDER
         },
-
         {
           name: "COBBO Q6",
           url: "https://cobbo.pl/robot-do-mycia-okien-COBBO-Q6",
           image: PLACEHOLDER
         },
-
         {
           name: "COBBO e6 Slim",
           url: "https://cobbo.pl/robot-do-mycia-okien-cobbo-e6-slim",
           image: PLACEHOLDER
         },
-
         {
           name: "Akcesoria",
           url: "https://cobbo.pl/Roboty-do-okien-c45",
           image: PLACEHOLDER
         }
-
       ]
     },
 
 
-    /* =========================================================
-       SPRZĄTANIE
-    ========================================================= */
-
     {
       id: "sprzatanie",
-
       label: "Sprzątanie",
-
       title: "Czysty dom na co dzień",
 
       items: [
-
         {
           name: "COBBO PRO 28 ELITE",
           url: "https://cobbo.pl/Robot-odkurzajaco-mopujacy-COBBO-PRO-28-ELITE",
           image: PLACEHOLDER
         },
-
         {
           name: "COBBO G7 / G7 PRO",
           url: "https://cobbo.pl/odkurzacze-pionowe-odkurzacze",
           image: PLACEHOLDER
         },
-
         {
           name: "COBBO Ultra Steam UV",
           url: "https://cobbo.pl/Odkurzacz-pionowy-mop-parowy-COBBO-ULTRA-STEAM-UV-p482",
           image: PLACEHOLDER
         },
-
         {
           name: "COBBO M5 Vapor+",
           url: "https://cobbo.pl/Odkurzacz-pioracy-z-funkcja-pary-COBBO-M5-VAPOR-p490",
           image: PLACEHOLDER
         },
-
         {
           name: "Akcesoria",
           url: "https://cobbo.pl/Odkurzacze-pionowe-c196",
           image: PLACEHOLDER
         }
-
       ]
     },
 
 
-    /* =========================================================
-       DOM
-    ========================================================= */
-
     {
       id: "dom",
-
       label: "Dom",
-
       title: "Więcej wygody każdego dnia",
 
       items: [
-
         {
           name: 'Prasowalnica COBBO Steam One PRO 40"',
           url: "https://cobbo.pl/Prasowalnica-parowa-COBBO-Steam-One-PRO-40-p546",
           image: PLACEHOLDER
         },
-
         {
           name: 'Prasowalnica COBBO Steam One COMPACT 32"',
           url: "https://cobbo.pl/Prasowalnica-parowa-COBBO-Steam-One-COMPACT-32-p547",
           image: PLACEHOLDER
         },
-
         {
           name: "Środki czystości",
           url: "https://cobbo.pl/Srodki-czystosci-c241",
           image: PLACEHOLDER
         }
-
       ]
     },
 
 
-    /* =========================================================
-       ZWIERZĘTA
-    ========================================================= */
-
     {
       id: "zwierzeta",
-
       label: "Zwierzęta",
-
       title: "Komfort dla Ciebie i Twojego pupila",
 
       items: [
-
         {
           name: "COBBO K1",
           url: "https://cobbo.pl/Inteligentna-kuweta-samoczyszczaca-COBBO-K1-p548",
           image: PLACEHOLDER
         },
-
         {
           name: "COBBO K2",
           url: "https://cobbo.pl/Inteligentna-kuweta-samoczyszczaca-COBBO-K2-p549",
           image: PLACEHOLDER
         },
-
         {
           name: "Akcesoria",
           url: "https://cobbo.pl/Kuwety-dla-zwierzat-c289",
           image: PLACEHOLDER
         }
-
       ]
     },
 
 
-    /* =========================================================
-       BEAUTY
-    ========================================================= */
-
     {
       id: "beauty",
-
       label: "Beauty",
-
       title: "Technologia dla Twojej pielęgnacji",
 
       items: [
-
         {
           name: "Suszarka COBBO H7",
           url: "https://cobbo.pl/Suszarka-z-technologia-plazmy-COBBO-H7-AI-Plasma-Silk-p545",
           image: PLACEHOLDER
         },
-
         {
           name: "Suszarko-lokówka COBBO D9 SUPREME 9w1",
           url: "https://cobbo.pl/Suszarko-lokowka-9w1-COBBO-D9-SUPREME-multistyler-do-wlosow-p553",
           image: PLACEHOLDER
         }
-
       ]
     },
 
 
-    /* =========================================================
-       KUCHNIA
-    ========================================================= */
-
     {
       id: "kuchnia",
-
       label: "Kuchnia",
-
       title: "Gotuj prościej, szybciej, sprytniej",
 
       items: [
-
         {
           name: "COBBO 7 Smart-i",
           url: "https://cobbo.pl/robot-kuchenny-cobbo-7-smarti",
           image: PLACEHOLDER
         },
-
         {
           name: "COBBO 7 Black PRO",
           url: "https://cobbo.pl/Robot-kuchenny-COBBO-7-Black-PRO-p575",
           image: PLACEHOLDER
         },
-
         {
           name: "COBBO 7",
           url: "https://cobbo.pl/robot-kuchenny-cobbo-thermo-plus-przedsprzedaz",
           image: PLACEHOLDER
         },
-
         {
           name: "COBBO Smart Fry 360 AI",
           url: "https://cobbo.pl/Frytkownica-beztluszczowa-COBBO-SMART-FRY-360-AI-p630",
           image: PLACEHOLDER
         },
-
         {
           name: "Akcesoria kuchenne",
           url: "https://cobbo.pl/Roboty-kuchenne-c44",
           image: PLACEHOLDER
         }
-
       ]
     }
 
@@ -1009,6 +1038,9 @@
   const dotsElement =
     document.getElementById("categoryDots");
 
+  const arrowsElement =
+    document.getElementById("categoryArrows");
+
   const prevButton =
     document.getElementById("categoryPrev");
 
@@ -1021,6 +1053,8 @@
   let snapPositions = [];
 
   let scrollTicking = false;
+
+  let resizeTimer;
 
 
   /* ============================================================
@@ -1061,27 +1095,26 @@
           : "false"
       );
 
+
       button.addEventListener(
         "click",
         () => {
 
           if (
-            activeCategoryId === category.id
+            category.id === activeCategoryId
           ) {
             return;
           }
 
+
           activeCategoryId =
             category.id;
+
 
           renderTabs();
 
           renderCards();
 
-          /*
-            Na mobile aktywna zakładka przewija się
-            w widoczne miejsce.
-          */
 
           requestAnimationFrame(() => {
 
@@ -1105,6 +1138,7 @@
         }
       );
 
+
       tabsElement.appendChild(
         button
       );
@@ -1126,14 +1160,11 @@
           item.id === activeCategoryId
       );
 
+
     if (!category) {
       return;
     }
 
-
-    /*
-      Dynamiczny nagłówek.
-    */
 
     titleElement.textContent =
       category.title;
@@ -1159,12 +1190,6 @@
 
       link.href =
         item.url;
-
-      /*
-        Ważne przy iframe:
-        strona produktu/kategorii otwiera się
-        w głównym oknie sklepu.
-      */
 
       link.target =
         "_top";
@@ -1257,11 +1282,6 @@
     });
 
 
-    /*
-      Po zmianie kategorii wracamy
-      na początek slidera.
-    */
-
     viewportElement.scrollTo({
       left: 0,
       behavior: "auto"
@@ -1284,7 +1304,7 @@
 
 
   /* ============================================================
-     SNAP POSITIONS
+     PUNKTY SLIDERA
   ============================================================ */
 
   function buildSnapPositions() {
@@ -1310,14 +1330,11 @@
 
     cards.forEach(card => {
 
-      const position =
+      positions.push(
         Math.min(
           card.offsetLeft,
           maxScroll
-        );
-
-      positions.push(
-        position
+        )
       );
 
     });
@@ -1328,10 +1345,6 @@
     );
 
 
-    /*
-      Usunięcie identycznych wartości.
-    */
-
     const uniquePositions =
       [...new Set(
         positions.map(
@@ -1340,11 +1353,6 @@
         )
       )];
 
-
-    /*
-      Usunięcie punktów praktycznie
-      znajdujących się w tym samym miejscu.
-    */
 
     snapPositions =
       uniquePositions.filter(
@@ -1376,7 +1384,7 @@
 
 
   /* ============================================================
-     DOTS
+     KROPKI
   ============================================================ */
 
   function renderDots() {
@@ -1395,6 +1403,7 @@
 
         dot.className =
           "cobbo-dot";
+
 
         dot.setAttribute(
           "aria-label",
@@ -1423,16 +1432,32 @@
     );
 
 
-    dotsElement.style.visibility =
-      snapPositions.length <= 1
-        ? "hidden"
-        : "visible";
+    const hasScroll =
+      snapPositions.length > 1;
+
+
+    dotsElement.style.opacity =
+      hasScroll
+        ? "1"
+        : "0";
+
+
+    arrowsElement.style.opacity =
+      hasScroll
+        ? "1"
+        : "0";
+
+
+    arrowsElement.style.pointerEvents =
+      hasScroll
+        ? "auto"
+        : "none";
 
   }
 
 
   /* ============================================================
-     AKTUALNA POZYCJA
+     AKTUALNY SNAP
   ============================================================ */
 
   function getCurrentSnapIndex() {
@@ -1441,7 +1466,8 @@
       viewportElement.scrollLeft;
 
 
-    let closestIndex = 0;
+    let closestIndex =
+      0;
 
     let closestDistance =
       Infinity;
@@ -1480,7 +1506,7 @@
 
 
   /* ============================================================
-     UPDATE NAVIGATION
+     NAWIGACJA
   ============================================================ */
 
   function updateNavigation() {
@@ -1507,26 +1533,22 @@
     );
 
 
-    const canScroll =
+    const hasScroll =
       snapPositions.length > 1;
 
 
     prevButton.disabled =
-      !canScroll ||
+      !hasScroll ||
       currentIndex <= 0;
 
 
     nextButton.disabled =
-      !canScroll ||
+      !hasScroll ||
       currentIndex >=
       snapPositions.length - 1;
 
   }
 
-
-  /* ============================================================
-     GO TO SNAP
-  ============================================================ */
 
   function goToSnap(index) {
 
@@ -1550,6 +1572,7 @@
     viewportElement.scrollTo({
       left:
         snapPositions[safeIndex],
+
       behavior:
         "smooth"
     });
@@ -1557,19 +1580,12 @@
   }
 
 
-  /* ============================================================
-     ARROWS
-  ============================================================ */
-
   prevButton.addEventListener(
     "click",
     () => {
 
-      const currentIndex =
-        getCurrentSnapIndex();
-
       goToSnap(
-        currentIndex - 1
+        getCurrentSnapIndex() - 1
       );
 
     }
@@ -1580,11 +1596,8 @@
     "click",
     () => {
 
-      const currentIndex =
-        getCurrentSnapIndex();
-
       goToSnap(
-        currentIndex + 1
+        getCurrentSnapIndex() + 1
       );
 
     }
@@ -1599,9 +1612,7 @@
     "scroll",
     () => {
 
-      if (
-        scrollTicking
-      ) {
+      if (scrollTicking) {
         return;
       }
 
@@ -1630,9 +1641,6 @@
      RESIZE
   ============================================================ */
 
-  let resizeTimer;
-
-
   window.addEventListener(
     "resize",
     () => {
@@ -1651,7 +1659,7 @@
             updateNavigation();
 
           },
-          150
+          120
         );
 
     }
