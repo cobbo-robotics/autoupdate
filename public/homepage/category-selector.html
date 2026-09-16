@@ -1,0 +1,1490 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Odkryj COBBO</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      background: transparent;
+      font-family:
+        "SF Pro Display",
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        Arial,
+        sans-serif;
+      color: #111;
+    }
+
+    button,
+    a {
+      font: inherit;
+    }
+
+    .cobbo-categories {
+      --page-padding: 28px;
+      --gap: 28px;
+      --accent-bg: #fff8e6;
+      --text: #111111;
+      --muted: #707070;
+      --border: #cfcfcf;
+
+      width: 100%;
+      overflow: hidden;
+      padding: 34px 0 18px;
+    }
+
+    .cobbo-categories__inner {
+      width: 100%;
+      max-width: 1500px;
+      margin: 0 auto;
+    }
+
+    /* =========================
+       HEADER
+    ========================= */
+
+    .cobbo-categories__header {
+      padding: 0 var(--page-padding);
+    }
+
+    .cobbo-categories__eyebrow {
+      margin: 0 0 7px;
+      font-size: 13px;
+      line-height: 1.2;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .cobbo-categories__title {
+      margin: 0;
+      font-size: clamp(30px, 3vw, 42px);
+      line-height: 1.05;
+      font-weight: 700;
+      letter-spacing: -0.035em;
+    }
+
+    /* =========================
+       TABS
+    ========================= */
+
+    .cobbo-categories__tabs-wrapper {
+      margin-top: 18px;
+      padding: 0 var(--page-padding);
+      overflow: hidden;
+    }
+
+    .cobbo-categories__tabs {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+
+      overflow-x: auto;
+      overflow-y: hidden;
+
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .cobbo-categories__tabs::-webkit-scrollbar {
+      display: none;
+    }
+
+    .cobbo-tab {
+      flex: 0 0 auto;
+
+      min-height: 42px;
+      padding: 0 18px;
+
+      border: 1px solid var(--border);
+      border-radius: 9px;
+
+      background: #ffffff;
+      color: #666;
+
+      font-size: 15px;
+      font-weight: 500;
+
+      cursor: pointer;
+
+      transition:
+        background 0.2s ease,
+        color 0.2s ease,
+        border-color 0.2s ease,
+        transform 0.2s ease;
+    }
+
+    .cobbo-tab:hover {
+      border-color: #111;
+      color: #111;
+    }
+
+    .cobbo-tab:active {
+      transform: scale(0.97);
+    }
+
+    .cobbo-tab.is-active {
+      background: #111;
+      border-color: #111;
+      color: #fff;
+    }
+
+    /* =========================
+       PRODUCT AREA
+    ========================= */
+
+    .cobbo-categories__stage {
+      position: relative;
+      margin-top: 22px;
+      padding: 0 var(--page-padding) 0;
+    }
+
+    /*
+      Jasny pas w stylu referencji SharkNinja.
+      Zaczyna się mniej więcej w połowie produktów.
+    */
+
+    .cobbo-categories__stage::before {
+      content: "";
+      position: absolute;
+      z-index: 0;
+
+      left: 0;
+      right: 0;
+
+      top: 43%;
+      bottom: 0;
+
+      background: var(--accent-bg);
+
+      pointer-events: none;
+    }
+
+    .cobbo-categories__viewport {
+      position: relative;
+      z-index: 1;
+
+      width: 100%;
+
+      overflow-x: auto;
+      overflow-y: hidden;
+
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+
+      scroll-behavior: smooth;
+      scroll-snap-type: x mandatory;
+
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .cobbo-categories__viewport::-webkit-scrollbar {
+      display: none;
+    }
+
+    .cobbo-categories__track {
+      display: flex;
+      align-items: stretch;
+      gap: var(--gap);
+
+      min-width: 100%;
+    }
+
+    /* =========================
+       CARD
+    ========================= */
+
+    .cobbo-card {
+      flex:
+        0 0
+        calc(
+          (100% - (var(--gap) * 4))
+          / 5
+        );
+
+      min-width: 0;
+
+      scroll-snap-align: start;
+    }
+
+    .cobbo-card__link {
+      display: block;
+      width: 100%;
+
+      color: inherit;
+      text-decoration: none;
+
+      outline: none;
+    }
+
+    .cobbo-card__image-area {
+      position: relative;
+
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+
+      height: 230px;
+
+      padding: 10px 12px 0;
+
+      overflow: hidden;
+    }
+
+    .cobbo-card__image {
+      display: block;
+
+      width: 100%;
+      height: 100%;
+
+      object-fit: contain;
+      object-position: center bottom;
+
+      transform: scale(0.92);
+
+      transition:
+        transform 0.3s ease,
+        filter 0.3s ease;
+    }
+
+    .cobbo-card__link:hover .cobbo-card__image {
+      transform: scale(0.97);
+    }
+
+    .cobbo-card__name {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+
+      min-height: 62px;
+
+      padding: 18px 8px 12px;
+
+      text-align: center;
+
+      font-size: 15px;
+      line-height: 1.3;
+      font-weight: 500;
+
+      text-decoration: underline;
+      text-decoration-thickness: 1px;
+      text-underline-offset: 3px;
+    }
+
+    .cobbo-card__arrow {
+      display: inline-block;
+      text-decoration: none;
+
+      transition: transform 0.2s ease;
+    }
+
+    .cobbo-card__link:hover .cobbo-card__arrow {
+      transform: translateX(4px);
+    }
+
+    /* =========================
+       NAVIGATION
+    ========================= */
+
+    .cobbo-categories__navigation {
+      position: relative;
+      z-index: 2;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      min-height: 58px;
+
+      padding: 7px var(--page-padding) 5px;
+    }
+
+    .cobbo-categories__dots {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      gap: 9px;
+
+      min-height: 40px;
+    }
+
+    .cobbo-dot {
+      width: 5px;
+      height: 5px;
+
+      padding: 0;
+
+      border: 0;
+      border-radius: 50%;
+
+      background: #9d9d9d;
+
+      cursor: pointer;
+
+      transition:
+        width 0.2s ease,
+        height 0.2s ease,
+        background 0.2s ease;
+    }
+
+    .cobbo-dot.is-active {
+      width: 12px;
+      height: 12px;
+
+      background: #222;
+    }
+
+    .cobbo-categories__arrows {
+      position: absolute;
+      right: var(--page-padding);
+      top: 50%;
+
+      display: flex;
+      gap: 8px;
+
+      transform: translateY(-50%);
+    }
+
+    .cobbo-arrow {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      width: 36px;
+      height: 36px;
+
+      padding: 0;
+
+      border: 1px solid #161616;
+      border-radius: 50%;
+
+      background: #fff;
+      color: #111;
+
+      font-size: 21px;
+      line-height: 1;
+
+      cursor: pointer;
+
+      transition:
+        background 0.2s ease,
+        color 0.2s ease,
+        opacity 0.2s ease,
+        transform 0.2s ease;
+    }
+
+    .cobbo-arrow:hover:not(:disabled) {
+      background: #111;
+      color: #fff;
+    }
+
+    .cobbo-arrow:active:not(:disabled) {
+      transform: scale(0.94);
+    }
+
+    .cobbo-arrow:disabled {
+      opacity: 0.25;
+      cursor: default;
+    }
+
+    /* =========================
+       TABLET
+    ========================= */
+
+    @media (max-width: 1100px) {
+      .cobbo-card {
+        flex:
+          0 0
+          calc(
+            (100% - (var(--gap) * 2))
+            / 3
+          );
+      }
+    }
+
+    /* =========================
+       MOBILE
+    ========================= */
+
+    @media (max-width: 700px) {
+      .cobbo-categories {
+        --page-padding: 18px;
+        --gap: 14px;
+
+        padding-top: 24px;
+      }
+
+      .cobbo-categories__eyebrow {
+        font-size: 11px;
+      }
+
+      .cobbo-categories__title {
+        font-size: 30px;
+        line-height: 1.08;
+      }
+
+      .cobbo-categories__tabs-wrapper {
+        margin-top: 15px;
+      }
+
+      .cobbo-tab {
+        min-height: 39px;
+        padding: 0 15px;
+
+        font-size: 14px;
+      }
+
+      .cobbo-categories__stage {
+        margin-top: 16px;
+
+        /*
+          Zerowy prawy padding pozwala zobaczyć
+          fragment następnego produktu.
+        */
+        padding-right: 0;
+      }
+
+      .cobbo-categories__viewport {
+        padding-right: 18px;
+      }
+
+      .cobbo-categories__track {
+        padding-right: 18px;
+      }
+
+      .cobbo-card {
+        /*
+          Około 2,15 produktu na ekranie.
+          Użytkownik od razu widzi, że slider
+          można przesuwać.
+        */
+        flex: 0 0 43%;
+      }
+
+      .cobbo-card__image-area {
+        height: 205px;
+        padding-left: 4px;
+        padding-right: 4px;
+      }
+
+      .cobbo-card__image {
+        transform: scale(0.95);
+      }
+
+      .cobbo-card__link:hover .cobbo-card__image {
+        transform: scale(0.95);
+      }
+
+      .cobbo-card__name {
+        justify-content: flex-start;
+
+        min-height: 64px;
+
+        padding: 14px 4px 12px;
+
+        text-align: left;
+
+        font-size: 14px;
+      }
+
+      .cobbo-categories__navigation {
+        justify-content: flex-start;
+
+        padding-left: 18px;
+        padding-right: 18px;
+      }
+
+      .cobbo-categories__dots {
+        justify-content: flex-start;
+      }
+
+      .cobbo-categories__arrows {
+        right: 18px;
+      }
+
+      .cobbo-arrow {
+        width: 38px;
+        height: 38px;
+      }
+    }
+
+    /* =========================
+       VERY SMALL MOBILE
+    ========================= */
+
+    @media (max-width: 420px) {
+      .cobbo-card {
+        flex: 0 0 45%;
+      }
+
+      .cobbo-card__image-area {
+        height: 185px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<section
+  class="cobbo-categories"
+  id="cobboCategories"
+  aria-label="Kategorie produktów COBBO"
+>
+
+  <div class="cobbo-categories__inner">
+
+    <header class="cobbo-categories__header">
+
+      <p class="cobbo-categories__eyebrow">
+        KUP WEDŁUG KATEGORII
+      </p>
+
+      <h2 class="cobbo-categories__title">
+        Odmień swoją codzienność
+      </h2>
+
+    </header>
+
+    <div class="cobbo-categories__tabs-wrapper">
+
+      <div
+        class="cobbo-categories__tabs"
+        id="categoryTabs"
+        role="tablist"
+        aria-label="Kategorie"
+      ></div>
+
+    </div>
+
+    <div class="cobbo-categories__stage">
+
+      <div
+        class="cobbo-categories__viewport"
+        id="categoryViewport"
+      >
+
+        <div
+          class="cobbo-categories__track"
+          id="categoryTrack"
+        ></div>
+
+      </div>
+
+      <div class="cobbo-categories__navigation">
+
+        <div
+          class="cobbo-categories__dots"
+          id="categoryDots"
+          aria-label="Nawigacja slidera"
+        ></div>
+
+        <div class="cobbo-categories__arrows">
+
+          <button
+            class="cobbo-arrow"
+            id="categoryPrev"
+            type="button"
+            aria-label="Poprzednie produkty"
+          >
+            ←
+          </button>
+
+          <button
+            class="cobbo-arrow"
+            id="categoryNext"
+            type="button"
+            aria-label="Następne produkty"
+          >
+            →
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+<script>
+  /* ============================================================
+     KONFIGURACJA
+     ============================================================
+
+     Na razie każdy kafelek korzysta z jednego placeholdera.
+
+     Później wystarczy w konkretnym produkcie zmienić:
+
+     image: PLACEHOLDER
+
+     na przykład na:
+
+     image: "https://cobbo.pl/upload/cobbo/moje-zdjecie.png"
+
+  ============================================================ */
+
+  const PLACEHOLDER =
+    "https://cobbo.pl/upload/cobbo/q6pro-render-tyl.png";
+
+
+  const CATEGORY_DATA = [
+
+    /* =========================
+       OKNA
+    ========================= */
+
+    {
+      id: "okna",
+      label: "Okna",
+      items: [
+
+        {
+          name: "COBBO Q6 PRO",
+          url: "https://cobbo.pl/Robot-do-mycia-okien-COBBO-Q6-PRO-p634",
+          image: PLACEHOLDER
+        },
+
+        {
+          name: "COBBO e6 PRO",
+          url: "https://cobbo.pl/Robot-do-mycia-okien-COBBO-e6-PRO-p559",
+          image: PLACEHOLDER
+        },
+
+        {
+          name: "COBBO Q6",
+          url: "https://cobbo.pl/robot-do-mycia-okien-COBBO-Q6",
+          image: PLACEHOLDER
+        },
+
+        {
+          name: "COBBO e6 Slim",
+          url: "https://cobbo.pl/robot-do-mycia-okien-cobbo-e6-slim",
+          image: PLACEHOLDER
+        },
+
+        {
+          name: "Akcesoria",
+          url: "https://cobbo.pl/Roboty-do-okien-c45",
+          image: PLACEHOLDER
+        }
+
+      ]
+    },
+
+
+    /* =========================
+       SPRZĄTANIE
+    ========================= */
+
+    {
+      id: "sprzatanie",
+      label: "Sprzątanie",
+      items: [
+
+        {
+          name: "COBBO PRO 28 ELITE",
+          url: "https://cobbo.pl/Robot-odkurzajaco-mopujacy-COBBO-PRO-28-ELITE",
+          image: PLACEHOLDER
+        },
+
+        {
+          name: "COBBO G7 / G7 PRO",
+          url: "https://cobbo.pl/odkurzacze-pionowe-odkurzacze",
+          image: PLACEHOLDER
+        },
+
+        {
+          name: "COBBO Ultra Steam UV",
+          url: "https://cobbo.pl/Odkurzacz-pionowy-mop-parowy-COBBO-ULTRA-STEAM-UV-p482",
+          image: PLACEHOLDER
+        },
+
+        {
+          name: "COBBO M5 Vapor+",
+          url: "https://cobbo.pl/Odkurzacz-pioracy-z-funkcja-pary-COBBO-M5-VAPOR-p490",
+          image: PLACEHOLDER
+        },
+
+        {
+          name: "Akcesoria",
+          url: "https://cobbo.pl/Odkurzacze-pionowe-c196",
+          image: PLACEHOLDER
+        }
+
+      ]
+    },
+
+
+    /* =========================
+       DOM
+    ========================= */
+
+    {
+      id: "dom",
+      label: "Dom",
+      items: [
+
+        {
+          name: 'Prasowalnica COBBO Steam One PRO 40"',
+          url: "https://cobbo.pl/Prasowalnica-parowa-COBBO-Steam-One-PRO-40-p546",
+          image: PLACEHOLDER
+        },
+
+        {
+          name: 'Prasowalnica COBBO Steam One COMPACT 32"',
+          url: "https://cobbo.pl/Prasowalnica-parowa-COBBO-Steam-One-COMPACT-32-p547",
+          image: PLACEHOLDER
+        },
+
+        {
+          name: "Środki czystości",
+          url: "https://cobbo.pl/Srodki-czystosci-c241",
+          image: PLACEHOLDER
+        }
+
+      ]
+    },
+
+
+    /* =========================
+       ZWIERZĘTA
+    ========================= */
+
+    {
+      id: "zwierzeta",
+      label: "Zwierzęta",
+      items: [
+
+        {
+          name: "COBBO K1",
+          url: "https://cobbo.pl/Inteligentna-kuweta-samoczyszczaca-COBBO-K1-p548",
+          image: PLACEHOLDER
+        },
+
+        {
+          name: "COBBO K2",
+          url: "https://cobbo.pl/Inteligentna-kuweta-samoczyszczaca-COBBO-K2-p549",
+          image: PLACEHOLDER
+        },
+
+        {
+          name: "Akcesoria",
+          url: "https://cobbo.pl/Kuwety-dla-zwierzat-c289",
+          image: PLACEHOLDER
+        }
+
+      ]
+    },
+
+
+    /* =========================
+       BEAUTY
+    ========================= */
+
+    {
+      id: "beauty",
+      label: "Beauty",
+      items: [
+
+        {
+          name: "Suszarka COBBO H7",
+          url: "https://cobbo.pl/Suszarka-z-technologia-plazmy-COBBO-H7-AI-Plasma-Silk-p545",
+          image: PLACEHOLDER
+        },
+
+        {
+          name: "Suszarko-lokówka COBBO D9 SUPREME 9w1",
+          url: "https://cobbo.pl/Suszarko-lokowka-9w1-COBBO-D9-SUPREME-multistyler-do-wlosow-p553",
+          image: PLACEHOLDER
+        }
+
+      ]
+    },
+
+
+    /* =========================
+       KUCHNIA
+    ========================= */
+
+    {
+      id: "kuchnia",
+      label: "Kuchnia",
+      items: [
+
+        {
+          name: "COBBO 7 Smart-i",
+          url: "https://cobbo.pl/robot-kuchenny-cobbo-7-smarti",
+          image: PLACEHOLDER
+        },
+
+        {
+          name: "COBBO 7 Black PRO",
+          url: "https://cobbo.pl/Robot-kuchenny-COBBO-7-Black-PRO-p575",
+          image: PLACEHOLDER
+        },
+
+        {
+          name: "COBBO 7",
+          url: "https://cobbo.pl/robot-kuchenny-cobbo-thermo-plus-przedsprzedaz",
+          image: PLACEHOLDER
+        },
+
+        {
+          name: "COBBO Smart Fry 360 AI",
+          url: "https://cobbo.pl/Frytkownica-beztluszczowa-COBBO-SMART-FRY-360-AI-p630",
+          image: PLACEHOLDER
+        },
+
+        {
+          name: "Akcesoria kuchenne",
+          url: "https://cobbo.pl/Roboty-kuchenne-c44",
+          image: PLACEHOLDER
+        }
+
+      ]
+    }
+
+  ];
+
+
+  /* ============================================================
+     ELEMENTY
+  ============================================================ */
+
+  const tabsElement =
+    document.getElementById("categoryTabs");
+
+  const trackElement =
+    document.getElementById("categoryTrack");
+
+  const viewportElement =
+    document.getElementById("categoryViewport");
+
+  const dotsElement =
+    document.getElementById("categoryDots");
+
+  const prevButton =
+    document.getElementById("categoryPrev");
+
+  const nextButton =
+    document.getElementById("categoryNext");
+
+
+  let activeCategoryId = "okna";
+
+  let snapPositions = [];
+
+  let scrollTicking = false;
+
+
+  /* ============================================================
+     TABS
+  ============================================================ */
+
+  function renderTabs() {
+
+    tabsElement.innerHTML = "";
+
+    CATEGORY_DATA.forEach(category => {
+
+      const button =
+        document.createElement("button");
+
+      button.type = "button";
+
+      button.className =
+        "cobbo-tab" +
+        (
+          category.id === activeCategoryId
+            ? " is-active"
+            : ""
+        );
+
+      button.textContent = category.label;
+
+      button.setAttribute(
+        "role",
+        "tab"
+      );
+
+      button.setAttribute(
+        "aria-selected",
+        category.id === activeCategoryId
+          ? "true"
+          : "false"
+      );
+
+      button.addEventListener(
+        "click",
+        () => {
+
+          if (
+            activeCategoryId === category.id
+          ) {
+            return;
+          }
+
+          activeCategoryId =
+            category.id;
+
+          renderTabs();
+
+          renderCards();
+
+        }
+      );
+
+      tabsElement.appendChild(button);
+
+    });
+
+  }
+
+
+  /* ============================================================
+     CARDS
+  ============================================================ */
+
+  function renderCards() {
+
+    const category =
+      CATEGORY_DATA.find(
+        item =>
+          item.id === activeCategoryId
+      );
+
+    if (!category) {
+      return;
+    }
+
+    trackElement.innerHTML = "";
+
+    category.items.forEach(item => {
+
+      const article =
+        document.createElement("article");
+
+      article.className =
+        "cobbo-card";
+
+
+      const link =
+        document.createElement("a");
+
+      link.className =
+        "cobbo-card__link";
+
+      link.href =
+        item.url;
+
+      /*
+        Bardzo ważne przy iframe.
+        Produkt otwiera się w głównej stronie,
+        a nie wewnątrz iframe.
+      */
+
+      link.target =
+        "_top";
+
+
+      const imageArea =
+        document.createElement("div");
+
+      imageArea.className =
+        "cobbo-card__image-area";
+
+
+      const image =
+        document.createElement("img");
+
+      image.className =
+        "cobbo-card__image";
+
+      image.src =
+        item.image;
+
+      image.alt =
+        item.name;
+
+      image.loading =
+        "lazy";
+
+
+      const name =
+        document.createElement("div");
+
+      name.className =
+        "cobbo-card__name";
+
+
+      const nameText =
+        document.createElement("span");
+
+      nameText.textContent =
+        item.name;
+
+
+      const arrow =
+        document.createElement("span");
+
+      arrow.className =
+        "cobbo-card__arrow";
+
+      arrow.setAttribute(
+        "aria-hidden",
+        "true"
+      );
+
+      arrow.textContent =
+        "→";
+
+
+      name.appendChild(
+        nameText
+      );
+
+      name.appendChild(
+        arrow
+      );
+
+      imageArea.appendChild(
+        image
+      );
+
+      link.appendChild(
+        imageArea
+      );
+
+      link.appendChild(
+        name
+      );
+
+      article.appendChild(
+        link
+      );
+
+      trackElement.appendChild(
+        article
+      );
+
+    });
+
+
+    /*
+      Przenosimy slider na początek
+      po zmianie kategorii.
+    */
+
+    viewportElement.scrollTo({
+      left: 0,
+      behavior: "auto"
+    });
+
+
+    requestAnimationFrame(() => {
+
+      buildSnapPositions();
+
+      updateNavigation();
+
+    });
+
+  }
+
+
+  /* ============================================================
+     SNAP POSITIONS
+  ============================================================ */
+
+  function buildSnapPositions() {
+
+    const cards =
+      Array.from(
+        trackElement.querySelectorAll(
+          ".cobbo-card"
+        )
+      );
+
+    const maxScroll =
+      Math.max(
+        0,
+        viewportElement.scrollWidth -
+        viewportElement.clientWidth
+      );
+
+    const positions = [0];
+
+
+    cards.forEach(card => {
+
+      const position =
+        Math.min(
+          card.offsetLeft,
+          maxScroll
+        );
+
+      positions.push(position);
+
+    });
+
+
+    positions.push(maxScroll);
+
+
+    /*
+      Usunięcie duplikatów.
+    */
+
+    snapPositions =
+      [...new Set(
+        positions.map(
+          value =>
+            Math.round(value)
+        )
+      )];
+
+
+    /*
+      Gdy różnice są bardzo małe,
+      traktujemy je jako ten sam punkt.
+    */
+
+    snapPositions =
+      snapPositions.filter(
+        (value, index, array) => {
+
+          if (index === 0) {
+            return true;
+          }
+
+          return (
+            value -
+            array[index - 1]
+          ) > 10;
+
+        }
+      );
+
+
+    renderDots();
+
+  }
+
+
+  /* ============================================================
+     DOTS
+  ============================================================ */
+
+  function renderDots() {
+
+    dotsElement.innerHTML = "";
+
+    snapPositions.forEach(
+      (position, index) => {
+
+        const dot =
+          document.createElement("button");
+
+        dot.type =
+          "button";
+
+        dot.className =
+          "cobbo-dot";
+
+        dot.setAttribute(
+          "aria-label",
+          `Przejdź do pozycji ${index + 1}`
+        );
+
+        dot.addEventListener(
+          "click",
+          () => {
+
+            viewportElement.scrollTo({
+              left: position,
+              behavior: "smooth"
+            });
+
+          }
+        );
+
+        dotsElement.appendChild(
+          dot
+        );
+
+      }
+    );
+
+
+    /*
+      Jeżeli wszystko mieści się
+      na ekranie, zostawiamy jedną kropkę.
+    */
+
+    if (
+      snapPositions.length <= 1
+    ) {
+      dotsElement.style.opacity =
+        "0";
+    }
+    else {
+      dotsElement.style.opacity =
+        "1";
+    }
+
+  }
+
+
+  /* ============================================================
+     AKTYWNA POZYCJA
+  ============================================================ */
+
+  function getCurrentSnapIndex() {
+
+    const currentScroll =
+      viewportElement.scrollLeft;
+
+    let closestIndex =
+      0;
+
+    let closestDistance =
+      Infinity;
+
+
+    snapPositions.forEach(
+      (position, index) => {
+
+        const distance =
+          Math.abs(
+            position -
+            currentScroll
+          );
+
+        if (
+          distance <
+          closestDistance
+        ) {
+
+          closestDistance =
+            distance;
+
+          closestIndex =
+            index;
+
+        }
+
+      }
+    );
+
+
+    return closestIndex;
+
+  }
+
+
+  /* ============================================================
+     NAVIGATION STATE
+  ============================================================ */
+
+  function updateNavigation() {
+
+    const currentIndex =
+      getCurrentSnapIndex();
+
+
+    const dots =
+      dotsElement.querySelectorAll(
+        ".cobbo-dot"
+      );
+
+
+    dots.forEach(
+      (dot, index) => {
+
+        dot.classList.toggle(
+          "is-active",
+          index === currentIndex
+        );
+
+      }
+    );
+
+
+    prevButton.disabled =
+      currentIndex <= 0;
+
+
+    nextButton.disabled =
+      currentIndex >=
+      snapPositions.length - 1;
+
+
+    /*
+      Jeżeli nie ma nic do przesuwania,
+      strzałki pozostają subtelnie wyłączone.
+    */
+
+  }
+
+
+  /* ============================================================
+     ARROWS
+  ============================================================ */
+
+  function goToSnap(index) {
+
+    if (
+      !snapPositions.length
+    ) {
+      return;
+    }
+
+
+    const safeIndex =
+      Math.max(
+        0,
+        Math.min(
+          index,
+          snapPositions.length - 1
+        )
+      );
+
+
+    viewportElement.scrollTo({
+      left:
+        snapPositions[safeIndex],
+      behavior:
+        "smooth"
+    });
+
+  }
+
+
+  prevButton.addEventListener(
+    "click",
+    () => {
+
+      const currentIndex =
+        getCurrentSnapIndex();
+
+      goToSnap(
+        currentIndex - 1
+      );
+
+    }
+  );
+
+
+  nextButton.addEventListener(
+    "click",
+    () => {
+
+      const currentIndex =
+        getCurrentSnapIndex();
+
+      goToSnap(
+        currentIndex + 1
+      );
+
+    }
+  );
+
+
+  /* ============================================================
+     SCROLL
+  ============================================================ */
+
+  viewportElement.addEventListener(
+    "scroll",
+    () => {
+
+      if (
+        scrollTicking
+      ) {
+        return;
+      }
+
+
+      scrollTicking =
+        true;
+
+
+      requestAnimationFrame(() => {
+
+        updateNavigation();
+
+        scrollTicking =
+          false;
+
+      });
+
+    },
+    {
+      passive: true
+    }
+  );
+
+
+  /* ============================================================
+     RESIZE
+  ============================================================ */
+
+  let resizeTimer;
+
+
+  window.addEventListener(
+    "resize",
+    () => {
+
+      clearTimeout(
+        resizeTimer
+      );
+
+
+      resizeTimer =
+        setTimeout(
+          () => {
+
+            buildSnapPositions();
+
+            updateNavigation();
+
+          },
+          150
+        );
+
+    }
+  );
+
+
+  /* ============================================================
+     INIT
+  ============================================================ */
+
+  renderTabs();
+
+  renderCards();
+
+</script>
+
+</body>
+</html>
