@@ -103,6 +103,7 @@
 
     .cobbo-reel {
       position: relative;
+      z-index: 0;
       flex: 0 0 calc((100% - 48px) / 3.45);
       aspect-ratio: 9 / 17.6;
       overflow: hidden;
@@ -129,6 +130,16 @@
     .cobbo-reel__embed-shell {
       position: absolute;
       inset: 0;
+
+      /*
+        Osobny, niski stacking context. Instagram potrafi
+        nadać swojemu iframe własne z-indexy. Dzięki temu
+        żaden element embedu nie może wejść nad naszą
+        strefę kliknięcia filmu.
+      */
+      z-index: 1;
+      isolation: isolate;
+
       overflow: hidden;
       background: #fff;
     }
@@ -164,16 +175,36 @@
 
     .cobbo-reel__video-click {
       position: absolute;
-      z-index: 8;
+
+      /*
+        Musi być wyżej niż cały renderer Instagrama,
+        także gdy Instagram pokazuje fallback
+        "Obejrzyj na Instagramie".
+      */
+      z-index: 100;
+
       top: 58px;
       left: 0;
       right: 0;
       bottom: 0;
+
+      display: block;
+
       padding: 0;
       margin: 0;
       border: 0;
-      background: transparent;
+
+      /*
+        Minimalnie nieprzezroczyste tło poprawia obsługę
+        tapnięć nad cross-origin iframe w mobilnym Safari,
+        wizualnie pozostając niewidoczne.
+      */
+      background: rgba(0, 0, 0, 0.001);
+
       cursor: pointer;
+      pointer-events: auto;
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
     }
 
     .cobbo-reel__video-click:focus-visible {
@@ -621,7 +652,7 @@
   /* =========================================================
      ULTRA STEAM UV
      Przy zmianie materiałów edytujemy tylko tę listę.
-     Duplikaty są usuwane automatycznie.
+     Każda pozycja z listy jest wyświetlana, także jeśli link się powtarza.
      ========================================================= */
 
   const REELS = [
@@ -674,13 +705,14 @@
     }
   }
 
-  const reels = Array.from(
-    new Set(
-      REELS
-        .map(normalizeInstagramUrl)
-        .filter(Boolean)
-    )
-  );
+  /*
+    Zachowujemy dokładnie kolejność i liczbę pozycji z REELS.
+    Nie używamy Set(), ponieważ w module może celowo wystąpić
+    ta sama rolka więcej niż jeden raz.
+  */
+  const reels = REELS
+    .map(normalizeInstagramUrl)
+    .filter(Boolean);
 
   /*
      =========================================================
@@ -851,7 +883,10 @@
         "Otwórz film na pełnym ekranie"
       );
 
-      clickZone.addEventListener("click", () => {
+      clickZone.addEventListener("click", event => {
+        event.preventDefault();
+        event.stopPropagation();
+
         if (dragMoved) {
           return;
         }
