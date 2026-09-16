@@ -1,3 +1,4 @@
+
 <!doctype html>
 <html lang="pl">
 <head>
@@ -30,19 +31,20 @@
       width: 100%;
       max-width: 1400px;
       margin: 0 auto;
-      padding: 34px 52px 38px;
+      padding: 34px 48px 38px;
       background: #fff;
       color: #000;
     }
 
-    /* HEADER */
+    /* =========================
+       HEADER
+       ========================= */
 
     .cobbo-reels__header {
       width: 100%;
       max-width: 760px;
       margin: 0 auto 28px;
       text-align: center;
-      color: #000;
     }
 
     .cobbo-reels__title {
@@ -62,7 +64,9 @@
       opacity: .72;
     }
 
-    /* SLIDER */
+    /* =========================
+       SLIDER
+       ========================= */
 
     .cobbo-reels__slider {
       position: relative;
@@ -71,9 +75,9 @@
 
     .cobbo-reels__track {
       display: flex;
-      gap: 16px;
+      gap: 18px;
       width: 100%;
-      padding: 5px 2px 18px;
+      padding: 5px 0 18px;
       overflow-x: auto;
       overflow-y: hidden;
       scroll-behavior: smooth;
@@ -97,90 +101,82 @@
       scroll-snap-type: none;
     }
 
-    /* CARD
-       Wysokość obejmuje nagłówek Instagrama + pionowy film.
-       Dolna część embedu jest celowo przycinana. */
+    /* =========================
+       CARD
+       4 pełne karty na desktopie
+       ========================= */
 
     .cobbo-reel {
       position: relative;
       z-index: 0;
-      flex: 0 0 calc((100% - 48px) / 3.45);
-      aspect-ratio: 9 / 17.6;
+
+      flex: 0 0 calc((100% - 54px) / 4);
+
+      /*
+        Miejsce na górny pasek profilu + pionowy film.
+        Dolny interfejs Instagrama jest schowany przez overflow.
+      */
+      aspect-ratio: 9 / 17.55;
+
       overflow: hidden;
       scroll-snap-align: start;
+
       border-radius: 22px;
       background: #fff;
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.09);
-      transition: transform 180ms ease, box-shadow 180ms ease;
+
+      box-shadow: 0 8px 24px rgba(0, 0, 0, .09);
+
+      transition:
+        transform 180ms ease,
+        box-shadow 180ms ease;
+
       isolation: isolate;
     }
 
     .cobbo-reel:hover {
       transform: translateY(-4px);
-      box-shadow: 0 14px 35px rgba(0, 0, 0, 0.14);
+      box-shadow: 0 14px 35px rgba(0, 0, 0, .14);
     }
 
-    /*
-      Instagram dostaje dodatkową wysokość, żeby nie ściskał
-      pionowego filmu w celu zmieszczenia dolnego interfejsu.
-      Sama karta ma overflow:hidden, więc footer Instagrama
-      nie jest widoczny.
-    */
+    /* =========================
+       INSTAGRAM EMBED
+       ========================= */
 
     .cobbo-reel__embed-shell {
       position: absolute;
       inset: 0;
+      z-index: 1;
+      overflow: hidden;
+      background: #fff;
+      isolation: isolate;
+    }
+
+    .cobbo-reel__embed {
+      position: absolute;
+      top: 0;
+      left: 0;
+
+      width: 100%;
 
       /*
-        Osobny, niski stacking context. Instagram potrafi
-        nadać swojemu iframe własne z-indexy. Dzięki temu
-        żaden element embedu nie może wejść nad naszą
-        strefę kliknięcia filmu.
+        Dajemy iframe więcej wysokości niż karta.
+        Dzięki temu Instagram renderuje normalny film,
+        a karta ucina tylko dolne reakcje/opis.
       */
-      z-index: 1;
-      isolation: isolate;
+      height: calc(100% + 225px);
 
-      overflow: hidden;
+      border: 0;
       background: #fff;
     }
 
-    /*
-      Oficjalny Instagram embed.js tworzy iframe wewnątrz
-      naszego kontenera. Wymuszamy pełną szerokość i zostawiamy
-      zapas wysokości, a dolny interfejs Instagrama przycina karta.
-    */
-    .cobbo-reel__embed-shell .instagram-media,
-    .cobbo-reel__embed-shell iframe.instagram-media-rendered {
-      width: 100% !important;
-      min-width: 0 !important;
-      max-width: none !important;
-      margin: 0 !important;
-      border: 0 !important;
-    }
-
-    .cobbo-reel__embed-shell iframe.instagram-media-rendered {
-      height: calc(100% + 240px) !important;
-      background: #fff !important;
-    }
-
-    .cobbo-reel__embed-shell .instagram-media {
-      background: #fff !important;
-    }
-
-    /*
-      Niewidoczna warstwa zaczyna się POD nagłówkiem profilu.
-      Nagłówek Instagrama pozostaje interaktywny, więc można
-      kliknąć profil / "Wyświetl profil".
-    */
+    /* =========================
+       CLICK ZONE
+       Górne 58px pozostaje dla profilu Instagram.
+       Reszta karty otwiera popup.
+       ========================= */
 
     .cobbo-reel__video-click {
       position: absolute;
-
-      /*
-        Musi być wyżej niż cały renderer Instagrama,
-        także gdy Instagram pokazuje fallback
-        "Obejrzyj na Instagramie".
-      */
       z-index: 100;
 
       top: 58px;
@@ -190,20 +186,17 @@
 
       display: block;
 
-      padding: 0;
       margin: 0;
+      padding: 0;
+
       border: 0;
 
-      /*
-        Minimalnie nieprzezroczyste tło poprawia obsługę
-        tapnięć nad cross-origin iframe w mobilnym Safari,
-        wizualnie pozostając niewidoczne.
-      */
-      background: rgba(0, 0, 0, 0.001);
+      background: rgba(0, 0, 0, .001);
 
       cursor: pointer;
       pointer-events: auto;
       touch-action: manipulation;
+
       -webkit-tap-highlight-color: transparent;
     }
 
@@ -212,61 +205,79 @@
       outline-offset: -5px;
     }
 
-    /* SLIDER ARROWS */
+    /* =========================
+       ARROWS
+       ========================= */
 
     .cobbo-reels__arrow {
       position: absolute;
       top: 50%;
-      z-index: 20;
-      width: 47px;
-      height: 47px;
+      z-index: 200;
+
+      width: 46px;
+      height: 46px;
+
       transform: translateY(-50%);
+
       padding: 0;
       border: 0;
       border-radius: 50%;
+
       display: flex;
       align-items: center;
       justify-content: center;
+
       background: #fff;
       color: #000;
+
       font-size: 32px;
       line-height: 1;
+
       cursor: pointer;
-      box-shadow: 0 7px 24px rgba(0, 0, 0, 0.17);
-      transition: transform 160ms ease, opacity 160ms ease;
+
+      box-shadow: 0 7px 24px rgba(0, 0, 0, .17);
+
+      transition:
+        transform 160ms ease,
+        opacity 160ms ease;
     }
 
     .cobbo-reels__arrow:hover {
       transform: translateY(-50%) scale(1.06);
     }
 
+    /*
+      Strzałki są wewnątrz obszaru modułu,
+      więc nic nie jest ucinane przez iframe.
+    */
     .cobbo-reels__arrow--prev {
-      left: -23px;
+      left: 8px;
     }
 
     .cobbo-reels__arrow--next {
-      right: -23px;
+      right: 8px;
     }
 
     .cobbo-reels__arrow:disabled {
-      opacity: .25;
+      opacity: .22;
       pointer-events: none;
     }
 
-    /* ==============================================
+    /* =========================
        FULLSCREEN POPUP
-       Popup znajduje się w tym samym pliku.
-       Po kliknięciu moduł korzysta z Fullscreen API.
-       ============================================== */
+       ========================= */
 
     .cobbo-reel-popup {
       position: fixed;
       inset: 0;
       z-index: 999999999;
+
       display: none;
       align-items: center;
       justify-content: center;
+
       padding: 18px;
+
       background: rgba(0, 0, 0, .92);
     }
 
@@ -274,13 +285,7 @@
       display: flex;
     }
 
-    .cobbo-reel-popup:fullscreen {
-      display: flex;
-      width: 100vw;
-      height: 100vh;
-      background: rgba(0, 0, 0, .94);
-    }
-
+    .cobbo-reel-popup:fullscreen,
     .cobbo-reel-popup:-webkit-full-screen {
       display: flex;
       width: 100vw;
@@ -290,13 +295,18 @@
 
     .cobbo-reel-popup__dialog {
       position: relative;
+
       width: min(440px, calc(100vw - 28px));
       height: min(92vh, 860px);
+
       display: flex;
       flex-direction: column;
+
       overflow: hidden;
+
       border-radius: 22px;
       background: #fff;
+
       box-shadow: 0 30px 100px rgba(0, 0, 0, .48);
     }
 
@@ -307,31 +317,15 @@
       background: #fff;
     }
 
-    .cobbo-reel-popup__embed-host {
+    .cobbo-reel-popup__video iframe {
       position: absolute;
       inset: 0;
-      overflow: auto;
-      overscroll-behavior: contain;
+
+      width: 100%;
+      height: 100%;
+
+      border: 0;
       background: #fff;
-      scrollbar-width: none;
-    }
-
-    .cobbo-reel-popup__embed-host::-webkit-scrollbar {
-      display: none;
-    }
-
-    .cobbo-reel-popup__embed-host .instagram-media,
-    .cobbo-reel-popup__embed-host iframe.instagram-media-rendered {
-      width: 100% !important;
-      min-width: 0 !important;
-      max-width: none !important;
-      margin: 0 !important;
-      border: 0 !important;
-    }
-
-    .cobbo-reel-popup__embed-host iframe.instagram-media-rendered {
-      min-height: 100% !important;
-      background: #fff !important;
     }
 
     .cobbo-reel-popup__footer {
@@ -344,13 +338,19 @@
       display: flex;
       align-items: center;
       justify-content: center;
+
       width: 100%;
       min-height: 48px;
+
       padding: 11px 18px;
+
       border-radius: 14px;
+
       background: #000;
       color: #fff !important;
+
       text-decoration: none !important;
+
       font-size: 14px;
       line-height: 1.2;
       font-weight: 700;
@@ -360,33 +360,45 @@
     .cobbo-reel-popup__nav {
       position: fixed;
       z-index: 1000000001;
+
       border: 0;
       border-radius: 50%;
+
       display: flex;
       align-items: center;
       justify-content: center;
+
       background: #fff;
       color: #000;
+
       box-shadow: 0 7px 25px rgba(0, 0, 0, .28);
+
       cursor: pointer;
     }
 
     .cobbo-reel-popup__close {
       top: 18px;
       right: 18px;
+
       width: 46px;
       height: 46px;
+
       padding: 0;
+
       font-size: 30px;
       line-height: 1;
     }
 
     .cobbo-reel-popup__nav {
       top: 50%;
+
       width: 50px;
       height: 50px;
+
       transform: translateY(-50%);
+
       padding: 0;
+
       font-size: 34px;
       line-height: 1;
     }
@@ -404,20 +416,25 @@
       pointer-events: none;
     }
 
-    /* TABLET */
+    /* =========================
+       TABLET
+       ========================= */
 
     @media (max-width: 1050px) {
       .cobbo-reels {
-        padding-left: 46px;
-        padding-right: 46px;
+        padding-left: 42px;
+        padding-right: 42px;
       }
 
       .cobbo-reel {
-        flex-basis: calc((100% - 32px) / 2.45);
+        flex: 0 0 calc((100% - 18px) / 2.15);
       }
     }
 
-    /* MOBILE */
+    /* =========================
+       MOBILE
+       Pierwsza karta wyśrodkowana.
+       ========================= */
 
     @media (max-width: 700px) {
       .cobbo-reels {
@@ -442,9 +459,8 @@
         gap: 13px;
 
         /*
-          Karta ma 76vw szerokości.
-          Połowa pozostałej przestrzeni po bokach = 12vw,
-          dzięki czemu pierwszy film od razu startuje na środku.
+          76vw karta + po 12vw wolnej przestrzeni
+          po obu stronach = pierwsza karta centralnie.
         */
         padding:
           4px
@@ -460,10 +476,6 @@
 
         border-radius: 19px;
 
-        /*
-          Każda kolejna rolka po przesunięciu
-          zatrzymuje się centralnie.
-        */
         scroll-snap-align: center;
       }
 
@@ -485,12 +497,11 @@
         right: 5px;
       }
 
+      /*
+        Mniejszy popup na telefonie.
+        Przycisk X zawsze zostaje widoczny.
+      */
       .cobbo-reel-popup {
-        /*
-          Na telefonie popup jest celowo mniejszy od pełnej
-          wysokości ekranu. Dzięki temu przycisk zamknięcia
-          pozostaje zawsze widoczny i nie trzeba przewijać.
-        */
         padding:
           max(58px, env(safe-area-inset-top))
           14px
@@ -499,11 +510,6 @@
 
       .cobbo-reel-popup__dialog {
         width: min(350px, calc(100vw - 40px));
-
-        /*
-          dvh poprawnie reaguje na pasek adresu w mobilnych
-          przeglądarkach. Fallback pozostaje przez max-height.
-        */
         height: min(78dvh, 700px);
         max-height: calc(100vh - 105px);
 
@@ -533,6 +539,7 @@
       .cobbo-reel-popup__nav {
         width: 40px;
         height: 40px;
+
         font-size: 28px;
       }
 
@@ -549,7 +556,7 @@
 
 <body>
 
-<section class="cobbo-reels" id="cobboReels">
+<section class="cobbo-reels">
 
   <div class="cobbo-reels__header">
     <h2 class="cobbo-reels__title">
@@ -618,10 +625,13 @@
     aria-label="Instagram Reel"
   >
     <div class="cobbo-reel-popup__video">
-      <div
-        class="cobbo-reel-popup__embed-host"
-        id="cobboPopupEmbedHost"
-      ></div>
+      <iframe
+        title="Instagram Reel"
+        scrolling="no"
+        allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
+        allowfullscreen
+        playsinline
+      ></iframe>
     </div>
 
     <div class="cobbo-reel-popup__footer">
@@ -650,9 +660,9 @@
 (() => {
 
   /* =========================================================
-     ULTRA STEAM UV
-     Przy zmianie materiałów edytujemy tylko tę listę.
-     Każda pozycja z listy jest wyświetlana, także jeśli link się powtarza.
+     COBBO ULTRA STEAM UV
+     Każda pozycja jest wyświetlana.
+     Nie usuwamy duplikatów.
      ========================================================= */
 
   const REELS = [
@@ -660,299 +670,367 @@
     "https://www.instagram.com/reels/DcxjoioNhFK/",
     "https://www.instagram.com/reels/DcdwVWgCnBc/",
     "https://www.instagram.com/reel/DVOU6VxAnuP/?utm_source=ig_web_copy_link&stkn=MzRlODBiNWFlZA==",
-    "https://www.instagram.com/reel/DTFw-h8glAB/?utm_source=ig_web_copy_link&stkn=MzRlODBiNWFlZA=="
+    "https://www.instagram.com/reels/DUIP1orgvCl/"
   ];
 
-  /* ========================================================= */
+  const track =
+    document.getElementById(
+      "cobboReelsTrack"
+    );
 
-  const track = document.getElementById("cobboReelsTrack");
-  const prevButton = document.querySelector(".cobbo-reels__arrow--prev");
-  const nextButton = document.querySelector(".cobbo-reels__arrow--next");
+  const sliderPrev =
+    document.querySelector(
+      ".cobbo-reels__arrow--prev"
+    );
 
-  const popup = document.getElementById("cobboReelPopup");
-  const popupHost = document.getElementById("cobboPopupEmbedHost");
-  const popupInstagram = popup.querySelector(".cobbo-reel-popup__instagram");
-  const popupClose = popup.querySelector(".cobbo-reel-popup__close");
-  const popupPrev = popup.querySelector(".cobbo-reel-popup__nav--prev");
-  const popupNext = popup.querySelector(".cobbo-reel-popup__nav--next");
+  const sliderNext =
+    document.querySelector(
+      ".cobbo-reels__arrow--next"
+    );
+
+  const popup =
+    document.getElementById(
+      "cobboReelPopup"
+    );
+
+  const popupFrame =
+    popup.querySelector(
+      ".cobbo-reel-popup__video iframe"
+    );
+
+  const popupInstagram =
+    popup.querySelector(
+      ".cobbo-reel-popup__instagram"
+    );
+
+  const popupClose =
+    popup.querySelector(
+      ".cobbo-reel-popup__close"
+    );
+
+  const popupPrev =
+    popup.querySelector(
+      ".cobbo-reel-popup__nav--prev"
+    );
+
+  const popupNext =
+    popup.querySelector(
+      ".cobbo-reel-popup__nav--next"
+    );
 
   let activeIndex = 0;
+
   let dragging = false;
   let dragMoved = false;
+
   let startX = 0;
   let startScroll = 0;
 
+
+  /* =========================
+     URL
+     ========================= */
+
   function normalizeInstagramUrl(url) {
     try {
-      const parsed = new URL(url);
+      const parsed =
+        new URL(url);
 
       if (
-        parsed.hostname !== "www.instagram.com" &&
-        parsed.hostname !== "instagram.com"
+        parsed.hostname !==
+          "www.instagram.com" &&
+        parsed.hostname !==
+          "instagram.com"
       ) {
         return null;
       }
 
-      const match = parsed.pathname.match(/\/reels?\/([^/]+)/);
+      const match =
+        parsed.pathname.match(
+          /\/reels?\/([^/]+)/
+        );
 
       if (!match) {
         return null;
       }
 
-      return "https://www.instagram.com/reel/" + match[1] + "/";
-    } catch {
+      /*
+        Parametry udostępniania nie są potrzebne do embedu.
+        Zachowujemy tylko ID rolki.
+      */
+      return (
+        "https://www.instagram.com/reel/" +
+        match[1] +
+        "/"
+      );
+    }
+
+    catch {
       return null;
     }
   }
 
-  /*
-    Zachowujemy dokładnie kolejność i liczbę pozycji z REELS.
-    Nie używamy Set(), ponieważ w module może celowo wystąpić
-    ta sama rolka więcej niż jeden raz.
-  */
-  const reels = REELS
-    .map(normalizeInstagramUrl)
-    .filter(Boolean);
 
   /*
-     =========================================================
-     OFICJALNY INSTAGRAM EMBED
-     =========================================================
-     Zamiast ręcznie tworzyć /reel/ID/embed/ korzystamy
-     z instagram.com/embed.js, czyli z oficjalnego renderera.
+    Ważne: NIE używamy Set().
+    Jest dokładnie 5 kart, zgodnie z listą.
   */
+  const reels =
+    REELS
+      .map(normalizeInstagramUrl)
+      .filter(Boolean);
 
-  let instagramScriptPromise = null;
 
-  function loadInstagramScript() {
-    if (
-      window.instgrm &&
-      window.instgrm.Embeds
-    ) {
-      return Promise.resolve();
+  function getReelId(url) {
+    const match =
+      url.match(
+        /\/reel\/([^/]+)/
+      );
+
+    return match
+      ? match[1]
+      : null;
+  }
+
+
+  function getEmbedUrl(
+    url,
+    autoplay = false
+  ) {
+
+    const id =
+      getReelId(url);
+
+    if (!id) {
+      return "";
     }
 
-    if (instagramScriptPromise) {
-      return instagramScriptPromise;
-    }
+    const base =
+      "https://www.instagram.com/reel/" +
+      id +
+      "/embed/";
 
-    instagramScriptPromise = new Promise((resolve, reject) => {
-      const existing = document.querySelector(
-        'script[src*="instagram.com/embed.js"]'
-      );
-
-      if (existing) {
-        const waitForApi = () => {
-          if (
-            window.instgrm &&
-            window.instgrm.Embeds
-          ) {
-            resolve();
-          } else {
-            setTimeout(waitForApi, 80);
-          }
-        };
-
-        waitForApi();
-        return;
-      }
-
-      const script = document.createElement("script");
-      script.src = "https://www.instagram.com/embed.js";
-      script.async = true;
-
-      script.onload = () => resolve();
-      script.onerror = () => reject(
-        new Error("Nie udało się załadować Instagram embed.js")
-      );
-
-      document.body.appendChild(script);
-    });
-
-    return instagramScriptPromise;
+    return autoplay
+      ? base + "?autoplay=1"
+      : base;
   }
 
-  function createInstagramEmbed(url) {
-    const blockquote = document.createElement("blockquote");
 
-    blockquote.className = "instagram-media";
-    blockquote.setAttribute(
-      "data-instgrm-permalink",
-      url
-    );
-    blockquote.setAttribute(
-      "data-instgrm-version",
-      "14"
-    );
-
-    blockquote.style.background = "#fff";
-    blockquote.style.border = "0";
-    blockquote.style.margin = "0";
-    blockquote.style.maxWidth = "none";
-    blockquote.style.minWidth = "0";
-    blockquote.style.padding = "0";
-    blockquote.style.width = "100%";
-
-    return blockquote;
-  }
-
-  async function processInstagramEmbeds() {
-    try {
-      await loadInstagramScript();
-
-      if (
-        window.instgrm &&
-        window.instgrm.Embeds
-      ) {
-        window.instgrm.Embeds.process();
-      }
-    } catch (error) {
-      console.error(
-        "COBBO Reels: Instagram embed.js",
-        error
-      );
-    }
-  }
-
-  /*
-    Najlepsza możliwa próba autoplay.
-    Instagram ostatecznie decyduje, czy dany embed pozwoli
-    uruchomić materiał automatycznie.
-  */
-  function tryEnablePopupAutoplay() {
-    let attempts = 0;
-
-    const timer = setInterval(() => {
-      attempts++;
-
-      const iframe = popupHost.querySelector(
-        "iframe.instagram-media-rendered, iframe"
-      );
-
-      if (iframe) {
-        iframe.setAttribute(
-          "allow",
-          "autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
-        );
-
-        try {
-          const current = new URL(iframe.src);
-          current.searchParams.set("autoplay", "1");
-
-          if (iframe.src !== current.href) {
-            iframe.src = current.href;
-          }
-        } catch {}
-
-        clearInterval(timer);
-      }
-
-      if (attempts >= 25) {
-        clearInterval(timer);
-      }
-    }, 120);
-  }
-
-  /* =========================================================
-     RENDER PREVIEWS
-     ========================================================= */
+  /* =========================
+     CARDS
+     ========================= */
 
   function renderCards() {
+
     track.innerHTML = "";
 
-    reels.forEach((reelUrl, index) => {
+    reels.forEach(
+      (
+        reelUrl,
+        index
+      ) => {
 
-      const card = document.createElement("article");
-      card.className = "cobbo-reel";
+        const card =
+          document.createElement(
+            "article"
+          );
 
-      const embedShell = document.createElement("div");
-      embedShell.className = "cobbo-reel__embed-shell";
+        card.className =
+          "cobbo-reel";
 
-      const embed = createInstagramEmbed(reelUrl);
-      embedShell.appendChild(embed);
 
-      /*
-        Cały obszar VIDEO jest klikalny.
-        Górny nagłówek profilu pozostaje dostępny bez naszej warstwy.
-      */
-      const clickZone = document.createElement("button");
-      clickZone.type = "button";
-      clickZone.className = "cobbo-reel__video-click";
-      clickZone.setAttribute(
-        "aria-label",
-        "Otwórz film na pełnym ekranie"
-      );
+        const embedShell =
+          document.createElement(
+            "div"
+          );
 
-      clickZone.addEventListener("click", event => {
-        event.preventDefault();
-        event.stopPropagation();
+        embedShell.className =
+          "cobbo-reel__embed-shell";
 
-        if (dragMoved) {
-          return;
-        }
 
-        openPopup(index);
-      });
+        const iframe =
+          document.createElement(
+            "iframe"
+          );
 
-      card.appendChild(embedShell);
-      card.appendChild(clickZone);
-      track.appendChild(card);
-    });
+        iframe.className =
+          "cobbo-reel__embed";
 
-    processInstagramEmbeds();
+        iframe.src =
+          getEmbedUrl(
+            reelUrl
+          );
 
-    requestAnimationFrame(() => {
-      updateArrows();
-      sendHeight();
-    });
+        iframe.loading =
+          index < 2
+            ? "eager"
+            : "lazy";
+
+        iframe.scrolling =
+          "no";
+
+        iframe.title =
+          "Instagram Reel " +
+          (index + 1);
+
+        iframe.setAttribute(
+          "allow",
+          "autoplay; " +
+          "clipboard-write; " +
+          "encrypted-media; " +
+          "picture-in-picture; " +
+          "web-share"
+        );
+
+
+        const clickZone =
+          document.createElement(
+            "button"
+          );
+
+        clickZone.type =
+          "button";
+
+        clickZone.className =
+          "cobbo-reel__video-click";
+
+        clickZone.setAttribute(
+          "aria-label",
+          "Otwórz film na pełnym ekranie"
+        );
+
+
+        clickZone.addEventListener(
+          "click",
+          event => {
+
+            event.preventDefault();
+            event.stopPropagation();
+
+            if (dragMoved) {
+              return;
+            }
+
+            openPopup(
+              index
+            );
+          }
+        );
+
+
+        embedShell.appendChild(
+          iframe
+        );
+
+        card.appendChild(
+          embedShell
+        );
+
+        card.appendChild(
+          clickZone
+        );
+
+        track.appendChild(
+          card
+        );
+      }
+    );
+
+
+    /*
+      Zawsze startujemy dokładnie od pierwszej karty.
+      Zapobiega zachowaniu poprzedniej pozycji scrolla
+      przez przeglądarkę po przeładowaniu modułu.
+    */
+    track.scrollLeft = 0;
+
+    requestAnimationFrame(
+      () => {
+
+        track.scrollTo({
+          left: 0,
+          behavior: "auto"
+        });
+
+        updateArrows();
+        sendHeight();
+      }
+    );
   }
 
-  /* =========================================================
-     POPUP
-     ========================================================= */
 
-  async function loadPopupReel() {
-    const reel = reels[activeIndex];
+  /* =========================
+     POPUP
+     ========================= */
+
+  function loadPopupReel() {
+
+    const reel =
+      reels[
+        activeIndex
+      ];
 
     if (!reel) {
       return;
     }
 
-    popupHost.innerHTML = "";
-    popupHost.appendChild(
-      createInstagramEmbed(reel)
-    );
 
-    popupInstagram.href = reel;
+    /*
+      Autoplay jest inicjowany bezpośrednio
+      po kliknięciu użytkownika.
+    */
+    popupFrame.src =
+      getEmbedUrl(
+        reel,
+        true
+      );
 
-    popupPrev.disabled = activeIndex <= 0;
-    popupNext.disabled = activeIndex >= reels.length - 1;
 
-    await processInstagramEmbeds();
-    tryEnablePopupAutoplay();
+    popupInstagram.href =
+      reel;
+
+
+    popupPrev.disabled =
+      activeIndex <= 0;
+
+
+    popupNext.disabled =
+      activeIndex >=
+      reels.length - 1;
   }
 
+
   async function enterFullscreen() {
-    /*
-      Najpierw próbujemy pełnego ekranu na samym popupie.
-      Obsługujemy również starszy webkit.
-    */
 
     try {
-      if (popup.requestFullscreen) {
+
+      if (
+        popup.requestFullscreen
+      ) {
+
         await popup.requestFullscreen({
           navigationUI: "hide"
         });
+
         return;
       }
 
-      if (popup.webkitRequestFullscreen) {
+
+      if (
+        popup.webkitRequestFullscreen
+      ) {
+
         popup.webkitRequestFullscreen();
+
       }
-    } catch (error) {
+
+    }
+
+    catch (error) {
+
       /*
-        Jeśli przeglądarka nie pozwoli na Fullscreen API,
-        popup nadal pozostanie otwarty wewnątrz modułu.
+        Jeśli Fullscreen API zostanie zablokowane,
+        modal nadal otworzy się w obszarze iframe.
       */
       console.info(
         "COBBO Reels: fullscreen niedostępny.",
@@ -961,234 +1039,412 @@
     }
   }
 
+
   function openPopup(index) {
-    activeIndex = index;
+
+    activeIndex =
+      index;
 
     loadPopupReel();
 
-    popup.classList.add("is-open");
-    popup.setAttribute("aria-hidden", "false");
+    popup.classList.add(
+      "is-open"
+    );
 
-    /*
-      requestFullscreen wywoływany bezpośrednio z kliknięcia,
-      żeby zachować user activation.
-    */
+    popup.setAttribute(
+      "aria-hidden",
+      "false"
+    );
+
     enterFullscreen();
   }
 
+
   async function closePopup() {
-    popup.classList.remove("is-open");
-    popup.setAttribute("aria-hidden", "true");
-    popupHost.innerHTML = "";
+
+    popup.classList.remove(
+      "is-open"
+    );
+
+    popup.setAttribute(
+      "aria-hidden",
+      "true"
+    );
+
+    popupFrame.src =
+      "";
 
     try {
-      if (document.fullscreenElement && document.exitFullscreen) {
+
+      if (
+        document.fullscreenElement &&
+        document.exitFullscreen
+      ) {
+
         await document.exitFullscreen();
-      } else if (document.webkitFullscreenElement && document.webkitExitFullscreen) {
-        document.webkitExitFullscreen();
+
       }
-    } catch {}
+
+      else if (
+        document.webkitFullscreenElement &&
+        document.webkitExitFullscreen
+      ) {
+
+        document.webkitExitFullscreen();
+
+      }
+
+    }
+
+    catch {}
   }
 
+
   function previousPopupReel() {
-    if (activeIndex <= 0) {
+
+    if (
+      activeIndex <= 0
+    ) {
       return;
     }
 
     activeIndex--;
+
     loadPopupReel();
   }
 
+
   function nextPopupReel() {
-    if (activeIndex >= reels.length - 1) {
+
+    if (
+      activeIndex >=
+      reels.length - 1
+    ) {
       return;
     }
 
     activeIndex++;
+
     loadPopupReel();
   }
 
-  popupClose.addEventListener("click", closePopup);
-  popupPrev.addEventListener("click", previousPopupReel);
-  popupNext.addEventListener("click", nextPopupReel);
 
-  popup.addEventListener("click", event => {
-    if (event.target === popup) {
-      closePopup();
+  popupClose.addEventListener(
+    "click",
+    closePopup
+  );
+
+
+  popupPrev.addEventListener(
+    "click",
+    previousPopupReel
+  );
+
+
+  popupNext.addEventListener(
+    "click",
+    nextPopupReel
+  );
+
+
+  popup.addEventListener(
+    "click",
+    event => {
+
+      if (
+        event.target === popup
+      ) {
+
+        closePopup();
+
+      }
     }
-  });
+  );
 
-  document.addEventListener("keydown", event => {
-    if (!popup.classList.contains("is-open")) {
-      return;
+
+  document.addEventListener(
+    "keydown",
+    event => {
+
+      if (
+        !popup.classList.contains(
+          "is-open"
+        )
+      ) {
+        return;
+      }
+
+      if (
+        event.key === "Escape"
+      ) {
+        closePopup();
+      }
+
+      if (
+        event.key === "ArrowLeft"
+      ) {
+        previousPopupReel();
+      }
+
+      if (
+        event.key === "ArrowRight"
+      ) {
+        nextPopupReel();
+      }
     }
+  );
 
-    if (event.key === "Escape") {
-      closePopup();
+
+  document.addEventListener(
+    "fullscreenchange",
+    () => {
+
+      if (
+        !document.fullscreenElement &&
+        popup.classList.contains(
+          "is-open"
+        )
+      ) {
+
+        popup.classList.remove(
+          "is-open"
+        );
+
+        popup.setAttribute(
+          "aria-hidden",
+          "true"
+        );
+
+        popupFrame.src =
+          "";
+      }
     }
+  );
 
-    if (event.key === "ArrowLeft") {
-      previousPopupReel();
-    }
 
-    if (event.key === "ArrowRight") {
-      nextPopupReel();
-    }
-  });
-
-  /*
-    Jeżeli użytkownik wyjdzie z trybu fullscreen systemowym ESC,
-    zamykamy również modal.
-  */
-
-  document.addEventListener("fullscreenchange", () => {
-    if (
-      !document.fullscreenElement &&
-      popup.classList.contains("is-open")
-    ) {
-      popup.classList.remove("is-open");
-      popup.setAttribute("aria-hidden", "true");
-      popupHost.innerHTML = "";
-    }
-  });
-
-  /* =========================================================
+  /* =========================
      SLIDER
-     ========================================================= */
+     ========================= */
 
   function getScrollDistance() {
-    const card = track.querySelector(".cobbo-reel");
+
+    const card =
+      track.querySelector(
+        ".cobbo-reel"
+      );
 
     if (!card) {
       return 300;
     }
 
-    const styles = window.getComputedStyle(track);
-    const gap = parseFloat(styles.gap || 0);
+    const styles =
+      window.getComputedStyle(
+        track
+      );
 
-    return card.offsetWidth + gap;
+    const gap =
+      parseFloat(
+        styles.gap || 0
+      );
+
+    return (
+      card.offsetWidth +
+      gap
+    );
   }
 
-  prevButton.addEventListener("click", () => {
-    track.scrollBy({
-      left: -getScrollDistance(),
-      behavior: "smooth"
-    });
-  });
 
-  nextButton.addEventListener("click", () => {
-    track.scrollBy({
-      left: getScrollDistance(),
-      behavior: "smooth"
-    });
-  });
+  sliderPrev.addEventListener(
+    "click",
+    () => {
+
+      track.scrollBy({
+        left:
+          -getScrollDistance(),
+
+        behavior:
+          "smooth"
+      });
+    }
+  );
+
+
+  sliderNext.addEventListener(
+    "click",
+    () => {
+
+      track.scrollBy({
+        left:
+          getScrollDistance(),
+
+        behavior:
+          "smooth"
+      });
+    }
+  );
+
 
   function updateArrows() {
+
     const maxScroll =
       track.scrollWidth -
       track.clientWidth;
 
-    prevButton.disabled =
+    sliderPrev.disabled =
       track.scrollLeft <= 5;
 
-    nextButton.disabled =
-      track.scrollLeft >= maxScroll - 5;
+    sliderNext.disabled =
+      track.scrollLeft >=
+      maxScroll - 5;
   }
+
 
   track.addEventListener(
     "scroll",
     updateArrows,
-    { passive: true }
+    {
+      passive: true
+    }
   );
 
-  /* =========================================================
-     DRAG DESKTOP
-     ========================================================= */
 
-  track.addEventListener("pointerdown", event => {
-    if (event.pointerType === "touch") {
-      return;
+  /* =========================
+     DESKTOP DRAG
+     ========================= */
+
+  track.addEventListener(
+    "pointerdown",
+    event => {
+
+      if (
+        event.pointerType ===
+        "touch"
+      ) {
+        return;
+      }
+
+      dragging = true;
+      dragMoved = false;
+
+      startX =
+        event.clientX;
+
+      startScroll =
+        track.scrollLeft;
+
+      track.classList.add(
+        "is-dragging"
+      );
     }
+  );
 
-    dragging = true;
-    dragMoved = false;
-    startX = event.clientX;
-    startScroll = track.scrollLeft;
 
-    track.classList.add("is-dragging");
-  });
+  track.addEventListener(
+    "pointermove",
+    event => {
 
-  track.addEventListener("pointermove", event => {
-    if (!dragging) {
-      return;
+      if (!dragging) {
+        return;
+      }
+
+      const movement =
+        event.clientX -
+        startX;
+
+      if (
+        Math.abs(
+          movement
+        ) > 6
+      ) {
+
+        dragMoved =
+          true;
+      }
+
+      track.scrollLeft =
+        startScroll -
+        movement;
     }
+  );
 
-    const movement =
-      event.clientX -
-      startX;
-
-    if (Math.abs(movement) > 6) {
-      dragMoved = true;
-    }
-
-    track.scrollLeft =
-      startScroll -
-      movement;
-  });
 
   function finishDrag() {
+
     if (!dragging) {
       return;
     }
 
     dragging = false;
-    track.classList.remove("is-dragging");
 
-    setTimeout(() => {
-      dragMoved = false;
-    }, 80);
+    track.classList.remove(
+      "is-dragging"
+    );
+
+    setTimeout(
+      () => {
+        dragMoved = false;
+      },
+      80
+    );
   }
 
-  track.addEventListener("pointerup", finishDrag);
-  track.addEventListener("pointercancel", finishDrag);
-  track.addEventListener("pointerleave", finishDrag);
 
-  /* =========================================================
-     IFRAME AUTO HEIGHT MESSAGE
-     ========================================================= */
+  track.addEventListener(
+    "pointerup",
+    finishDrag
+  );
+
+  track.addEventListener(
+    "pointercancel",
+    finishDrag
+  );
+
+  track.addEventListener(
+    "pointerleave",
+    finishDrag
+  );
+
+
+  /* =========================
+     HEIGHT
+     ========================= */
 
   function sendHeight() {
+
     const height =
       Math.ceil(
-        document.documentElement.scrollHeight
+        document.documentElement
+          .scrollHeight
       );
 
     window.parent.postMessage(
       {
-        type: "COBBO_REELS_HEIGHT",
-        height: height
+        type:
+          "COBBO_REELS_HEIGHT",
+
+        height:
+          height
       },
       "*"
     );
   }
 
-  if ("ResizeObserver" in window) {
-    const observer =
-      new ResizeObserver(sendHeight);
 
-    observer.observe(
-      document.querySelector(
-        ".cobbo-reels"
-      )
-    );
-  }
+  window.addEventListener(
+    "load",
+    sendHeight
+  );
 
-  window.addEventListener("load", sendHeight);
 
-  window.addEventListener("resize", () => {
-    updateArrows();
-    sendHeight();
-  });
+  window.addEventListener(
+    "resize",
+    () => {
+
+      updateArrows();
+      sendHeight();
+    }
+  );
+
 
   renderCards();
 
