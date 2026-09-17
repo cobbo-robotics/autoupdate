@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="pl">
+
+<head>
+
+<meta charset="utf-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<style>
+
+html,
+body {
+
+    width:100%;
+    height:100%;
+
+    margin:0;
+    padding:0;
+
+    overflow:hidden;
+
+    background:#050505;
+
+}
+
+
+* {
+
+    box-sizing:border-box;
+
+}
+
+
+#e6pro-hero-video-wrap {
+
+    position:relative;
+
+    width:100%;
+    height:100%;
+
+    overflow:hidden;
+
+    background:
+    radial-gradient(
+        circle at 50% 45%,
+        rgba(104,182,239,0.11),
+        transparent 42%
+    ),
+    #050505;
+
+}
+
+
+#e6pro-hero-video {
+
+    position:absolute;
+
+    top:0;
+    left:0;
+
+    width:100%;
+    height:100%;
+
+    display:block;
+
+    object-fit:cover;
+
+    object-position:center;
+
+    background:#050505;
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<div id="e6pro-hero-video-wrap">
+
+
+    <video
+        id="e6pro-hero-video"
+        autoplay
+        muted
+        loop
+        playsinline
+        webkit-playsinline
+        preload="auto">
+
+
+        <source 
+            src="e6pro-hero.mov"
+            type="video/quicktime">
+
+
+    </video>
+
+
+</div>
+
+
+</body>
+
+</html>
