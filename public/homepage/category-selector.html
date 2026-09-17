@@ -1151,25 +1151,40 @@
           renderCards();
 
 
-          requestAnimationFrame(() => {
+requestAnimationFrame(() => {
 
-            const activeButton =
-              tabsElement.querySelector(
-                ".cobbo-tab.is-active"
-              );
+  const activeButton =
+    tabsElement.querySelector(
+      ".cobbo-tab.is-active"
+    );
 
 
-            if (activeButton) {
+  if (activeButton) {
 
-              activeButton.scrollIntoView({
-                behavior: "smooth",
-                block: "nearest",
-                inline: "center"
-              });
+    const tabsRect =
+      tabsElement.getBoundingClientRect();
 
-            }
+    const buttonRect =
+      activeButton.getBoundingClientRect();
 
-          });
+
+    const offset =
+      buttonRect.left -
+      tabsRect.left -
+      (
+        tabsRect.width / 2 -
+        buttonRect.width / 2
+      );
+
+
+    tabsElement.scrollBy({
+      left: offset,
+      behavior: "smooth"
+    });
+
+  }
+
+});
 
         }
       );
