@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>COBBO Q6 PRO - Edge Rotation System</title>
+
+
+<style>
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: transparent;
+}
+
+#q6pro-vid {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+
+  /* Zostaw 1, jesli film ma byc widoczny w calosci.
+     Podnies (np. 1.1), jesli w samym pliku mp4 jest duzo pustego
+     marginesu wokol kadru - powiekszy obraz wzgledem srodka,
+     ale zacznie przycinac krawedzie. */
+  transform: scale(1);
+}
+</style>
+</head>
+
+<body>
+
+<video
+  id="q6pro-vid"
+  src="https://cobbo.pl/upload/cobbo/niebieskie-nakladki.mp4"
+  autoplay
+  muted
+  loop
+  playsinline
+  preload="auto"
+  disablepictureinpicture></video>
+
+</body>
+</html>
