@@ -1,0 +1,543 @@
+<!doctype html>
+<html lang="pl">
+
+<head>
+
+<meta charset="utf-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<style>
+
+html,
+body {
+    width:100%;
+    height:100%;
+    margin:0;
+    padding:0;
+
+    background:#000000;
+
+    overflow:hidden;
+
+    font-family:SF Pro Display,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif !important;
+}
+
+
+* {
+    box-sizing:border-box;
+    font-family:SF Pro Display,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif !important;
+}
+
+
+/* =========================================================
+KARTY
+========================================================= */
+
+
+#e6pro-cw-track {
+
+    width:100%;
+
+    display:grid;
+
+    grid-template-columns:1fr 1fr;
+
+    gap:18px;
+
+}
+
+
+/* =========================================================
+POJEDYNCZA KARTA
+========================================================= */
+
+
+#e6pro-cw-card-1,
+#e6pro-cw-card-2,
+#e6pro-cw-card-3,
+#e6pro-cw-card-4 {
+
+    position:relative;
+
+    min-height:520px;
+
+    overflow:hidden;
+
+    border-radius:30px;
+
+    background:#080808;
+
+    border:1px solid rgba(255,255,255,0.09);
+
+}
+
+
+
+/* =========================================================
+VIDEO
+========================================================= */
+
+
+#e6pro-cw-video-1,
+#e6pro-cw-video-2,
+#e6pro-cw-video-3,
+#e6pro-cw-video-4 {
+
+    position:absolute;
+
+    inset:0;
+
+    width:100%;
+    height:100%;
+
+    display:block;
+
+    object-fit:cover;
+
+}
+
+
+
+/* =========================================================
+CIEMNE TŁO POD TEKST
+========================================================= */
+
+
+#e6pro-cw-card-1:after,
+#e6pro-cw-card-2:after,
+#e6pro-cw-card-3:after,
+#e6pro-cw-card-4:after {
+
+    content:"";
+
+    position:absolute;
+
+    inset:0;
+
+    z-index:1;
+
+    background:
+    linear-gradient(
+        180deg,
+        rgba(0,0,0,0.92) 0%,
+        rgba(0,0,0,0.68) 27%,
+        rgba(0,0,0,0.12) 58%,
+        rgba(0,0,0,0.05) 100%
+    );
+
+}
+
+
+
+/* =========================================================
+TEKST
+========================================================= */
+
+
+#e6pro-cw-text-1,
+#e6pro-cw-text-2,
+#e6pro-cw-text-3,
+#e6pro-cw-text-4 {
+
+    position:absolute;
+
+    top:30px;
+
+    left:30px;
+
+    right:30px;
+
+    z-index:2;
+
+    text-align:center;
+
+}
+
+
+
+#e6pro-cw-tag-1,
+#e6pro-cw-tag-2,
+#e6pro-cw-tag-3,
+#e6pro-cw-tag-4 {
+
+    margin-bottom:10px;
+
+    color:#79d2ac;
+
+    font-size:10.5px;
+
+    font-weight:800;
+
+    letter-spacing:1.6px;
+
+    text-transform:uppercase;
+
+}
+
+
+
+#e6pro-cw-head-1,
+#e6pro-cw-head-2,
+#e6pro-cw-head-3,
+#e6pro-cw-head-4 {
+
+    margin:0 auto 10px;
+
+    color:#ffffff;
+
+    font-size:clamp(25px,2.5vw,38px);
+
+    line-height:1.05;
+
+    font-weight:850;
+
+    letter-spacing:-1px;
+
+}
+
+
+
+#e6pro-cw-sub-1,
+#e6pro-cw-sub-2,
+#e6pro-cw-sub-3,
+#e6pro-cw-sub-4 {
+
+    max-width:540px;
+
+    margin:0 auto;
+
+    color:rgba(255,255,255,0.78);
+
+    font-size:15px;
+
+    line-height:1.45;
+
+}
+
+
+
+#e6pro-cw-sub-1 strong,
+#e6pro-cw-sub-2 strong,
+#e6pro-cw-sub-3 strong,
+#e6pro-cw-sub-4 strong {
+
+    color:#ffffff;
+
+}
+
+
+/* =========================================================
+LEGAL
+========================================================= */
+
+
+#e6pro-cw-legal {
+
+    position:absolute;
+
+    bottom:18px;
+
+    left:20px;
+
+    right:20px;
+
+    z-index:2;
+
+    text-align:center;
+
+    color:rgba(255,255,255,0.55);
+
+    font-size:11px;
+
+    line-height:1.35;
+
+}
+
+
+
+/* =========================================================
+MOBILE SLIDER
+========================================================= */
+
+
+@media(max-width:767px) {
+
+
+#e6pro-cw-track {
+
+    display:flex;
+
+    gap:14px;
+
+    overflow-x:auto;
+
+    overflow-y:hidden;
+
+    scroll-snap-type:x mandatory;
+
+    -webkit-overflow-scrolling:touch;
+
+    scrollbar-width:none;
+
+    padding:0 20px 8px;
+
+}
+
+
+
+#e6pro-cw-track::-webkit-scrollbar {
+
+    display:none;
+
+}
+
+
+#e6pro-cw-card-1,
+#e6pro-cw-card-2,
+#e6pro-cw-card-3,
+#e6pro-cw-card-4 {
+
+    flex:0 0 86%;
+
+    min-height:460px;
+
+    scroll-snap-align:center;
+
+    border-radius:24px;
+
+}
+
+
+#e6pro-cw-text-1,
+#e6pro-cw-text-2,
+#e6pro-cw-text-3,
+#e6pro-cw-text-4 {
+
+    top:24px;
+
+    left:18px;
+
+    right:18px;
+
+}
+
+
+
+}
+
+
+
+</style>
+
+
+<div id="e6pro-cw-track">
+
+
+
+<!-- =========================================================
+01 GWARANCJA
+========================================================= -->
+
+
+<div id="e6pro-cw-card-1">
+
+
+<video
+id="e6pro-cw-video-1"
+autoplay
+muted
+loop
+playsinline>
+
+<source src="e6pro-gwarancja-3-lata.mp4" type="video/mp4">
+
+</video>
+
+
+<div id="e6pro-cw-text-1">
+
+<div id="e6pro-cw-tag-1">
+STANDARD SERII PRO
+</div>
+
+<div id="e6pro-cw-head-1">
+3 lata gwarancji.
+</div>
+
+<div id="e6pro-cw-sub-1">
+
+Na całe urządzenie,
+<strong>bez obowiązkowych przeglądów.</strong>
+Możliwość przedłużenia ochrony do 5 lat.
+
+</div>
+
+</div>
+
+</div>
+
+
+
+
+<!-- =========================================================
+02 BLDC
+========================================================= -->
+
+
+<div id="e6pro-cw-card-2">
+
+
+<video
+id="e6pro-cw-video-2"
+autoplay
+muted
+loop
+playsinline>
+
+<source src="e6pro-bldc.mp4" type="video/mp4">
+
+</video>
+
+
+<div id="e6pro-cw-text-2">
+
+
+<div id="e6pro-cw-tag-2">
+SILNIKI BEZSZCZOTKOWE
+</div>
+
+
+<div id="e6pro-cw-head-2">
+Silniki BLDC.
+</div>
+
+
+<div id="e6pro-cw-sub-2">
+
+<strong>Cichsza i płynniejsza praca.</strong>
+Większa trwałość dzięki ograniczeniu elementów mechanicznych podatnych na zużycie.
+
+</div>
+
+
+</div>
+
+
+</div>
+
+
+
+
+
+<!-- =========================================================
+03 0-180
+========================================================= -->
+
+
+<div id="e6pro-cw-card-3">
+
+
+<video
+id="e6pro-cw-video-3"
+autoplay
+muted
+loop
+playsinline>
+
+<source src="e6pro-0-180-new.mp4" type="video/mp4">
+
+</video>
+
+
+<div id="e6pro-cw-text-3">
+
+
+<div id="e6pro-cw-tag-3">
+PRZEŁOMOWA SWOBODA PRACY
+</div>
+
+
+<div id="e6pro-cw-head-3">
+Jedyny taki robot na świecie.*
+</div>
+
+
+<div id="e6pro-cw-sub-3">
+
+<strong>Od 0° do 180°.</strong>
+Myje nie tylko pionowo, ale również całkowicie poziome powierzchnie.
+
+</div>
+
+
+</div>
+
+
+<div id="e6pro-cw-legal">
+
+*Według naszej wiedzy, stan na 18.09.2026.
+
+</div>
+
+
+</div>
+
+
+
+
+
+<!-- =========================================================
+04 BAROMETR
+========================================================= -->
+
+
+<div id="e6pro-cw-card-4">
+
+
+<video
+id="e6pro-cw-video-4"
+autoplay
+muted
+loop
+playsinline>
+
+<source src="e6pro-barometr-new.mp4" type="video/mp4">
+
+</video>
+
+
+<div id="e6pro-cw-text-4">
+
+
+<div id="e6pro-cw-tag-4">
+INTELIGENTNY BAROMETR
+</div>
+
+
+<div id="e6pro-cw-head-4">
+Bezpieczna praca bez obaw.
+</div>
+
+
+<div id="e6pro-cw-sub-4">
+
+Barometr stale monitoruje warunki pracy i
+<strong>automatycznie reguluje ciśnienie</strong>,
+aby robot stabilnie utrzymywał kontakt z powierzchnią.
+
+</div>
+
+
+</div>
+
+
+</div>
+
+
+
+</div>
+
+
+</body>
+</html>
