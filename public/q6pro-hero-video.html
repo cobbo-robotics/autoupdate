@@ -2,25 +2,47 @@
 <html lang="pl">
 <head>
 <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>COBBO Q6 PRO - obrot</title>
+
+<!-- ##################################################################
+     PLIK DO WRZUCENIA NA WORKERA (q6pro-hero-video.html)
+
+     CO BYLO NIE TAK:
+     video mialo width/height 130% i margin -15%, a ramka na stronie
+     miala staly wzrost 420 px przy pelnej szerokosci. Film jest
+     kwadratowy (1920x1920), wiec w prostokatnej ramce 1200x420
+     "contain" dopasowywal go do wysokosci - a powiekszenie do 130%
+     robilo z niego kwadrat 546x546 w oknie wysokim na 420 px.
+     Stad obciecie gory i dolu.
+
+     TERAZ: video zajmuje doklanie 100% ramki, bez powiekszen
+     i bez przesuniec. Za proporcje odpowiada ramka na stronie -
+     jest kwadratowa, wiec film miesci sie w niej w calosci.
+     ################################################################## -->
 
 <style>
-html,
-body {
-  margin:0;
-  padding:0;
-  width:100%;
-  height:100%;
-  overflow:hidden;
-  background:transparent;
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: transparent;
 }
 
-video {
-  width:130%;
-  height:130%;
-  object-fit:contain;
-  display:block;
-  margin-left:-15%;
-  margin-top:-15%;
+#q6pro-vid {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+
+  /* JEDYNE POKRETLO POWIEKSZENIA.
+     Zostaw 1, jesli film ma byc w calosci.
+     Jesli w samym pliku mp4 jest duzo pustego marginesu wokol
+     robota, podnies delikatnie (np. 1.08) - powiekszy obraz
+     wzgledem srodka, ale zacznie przycinac krawedzie. */
+  transform: scale(1);
 }
 </style>
 </head>
@@ -28,12 +50,14 @@ video {
 <body>
 
 <video
-src="https://cobbo.pl/upload/cobbo/opisy-produktow/q6pro/obrot-bez-animacji.mp4"
-autoplay
-muted
-loop
-playsinline>
-</video>
+  id="q6pro-vid"
+  src="https://cobbo.pl/upload/cobbo/opisy-produktow/q6pro/obrot-bez-animacji.mp4"
+  autoplay
+  muted
+  loop
+  playsinline
+  preload="auto"
+  disablepictureinpicture></video>
 
 </body>
 </html>
