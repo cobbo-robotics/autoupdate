@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="pl">
+
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<title>COBBO e6 PRO - inteligentny barometr</title>
+
+<style>
+html,
+body {
+ width:100%;
+ height:100%;
+ margin:0;
+ padding:0;
+ overflow:hidden;
+ background:#ece8e2;
+}
+
+#e6pro-video {
+ position:absolute;
+ inset:0;
+
+ width:100%;
+ height:100%;
+
+ display:block;
+
+ object-fit:cover;
+ object-position:center;
+
+ background:#ece8e2;
+}
+</style>
+</head>
+
+<body>
+
+<video
+ id="e6pro-video"
+ autoplay
+ muted
+ loop
+ playsinline
+ preload="auto">
+
+ <source
+  src="./e6pro-barometr.mp4"
+  type="video/mp4">
+
+</video>
+
+<script>
+(function() {
+ var video = document.getElementById("e6pro-video");
+
+ video.muted = true;
+ video.defaultMuted = true;
+
+ function startVideo() {
+  var playPromise = video.play();
+
+  if (playPromise !== undefined) {
+   playPromise.catch(function() {});
+  }
+ }
+
+ if (video.readyState >= 2) {
+  startVideo();
+ } else {
+  video.addEventListener("canplay", startVideo, { once:true });
+ }
+
+ document.addEventListener("visibilitychange", function() {
+  if (!document.hidden) {
+   startVideo();
+  }
+ });
+})();
+</script>
+
+</body>
+</html>
