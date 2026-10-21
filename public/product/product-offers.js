@@ -79,6 +79,8 @@
 
       419:
         "https://cobbo.pl/Roboty-do-okien-c298",
+      628:
+        "https://cobbo.pl/Roboty-do-okien-c298",
 
       634:
         "https://cobbo.pl/Roboty-do-okien-c298",
