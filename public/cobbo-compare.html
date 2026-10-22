@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Porównywarka COBBO</title>
+<style>
+html, body { margin: 0; padding: 0; background: transparent; }
+
+#cc-root { font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; color: #000; max-width: 1140px; margin: 0 auto; padding: 8px 16px 24px; box-sizing: border-box; line-height: 1.5; }
+#cc-root * { box-sizing: border-box; }
+
+/* ===== ZAKŁADKI KATEGORII ===== */
+#cc-tabs { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin: 0 0 32px; }
+#cc-tabs button { appearance: none; border: 1px solid #0c1618; background: #fff; color: #0c1618; padding: 12px 24px; border-radius: 30px; font: inherit; font-weight: 700; font-size: 10pt; letter-spacing: 0.5px; text-transform: uppercase; cursor: pointer; transition: background 0.2s, color 0.2s; }
+#cc-tabs button:hover { background: #f7f5f2; }
+#cc-tabs button[aria-selected="true"] { background: #0c1618; color: #fff; box-shadow: inset 0 -3px 0 #F0D381; }
+
+/* ===== KROK 1: WYBÓR MODELI ===== */
+#cc-step { display: flex; align-items: baseline; justify-content: space-between; flex-wrap: wrap; gap: 6px 16px; margin-bottom: 14px; }
+#cc-step-title { margin: 0; font-size: 18pt; font-weight: 800; }
+#cc-step-hint { margin: 0; font-size: 10.5pt; color: #888; transition: color 0.2s; }
+#cc-step-hint[data-warn] { color: #c0392b; font-weight: 700; }
+
+#cc-picker { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 12px; margin-bottom: 18px; }
+#cc-picker button { position: relative; display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 14px 10px 12px; background: #fff; border: 1px solid #e6e3dc; border-radius: 18px; cursor: pointer; font: inherit; color: #000; text-align: center; transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s; }
+#cc-picker button:hover { border-color: #0c1618; transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,0.06); }
+#cc-picker button[aria-pressed="true"] { border: 2px solid #0c1618; padding: 13px 9px 11px; background: #fcfbf8; }
+#cc-picker button[aria-disabled="true"] { opacity: 0.45; cursor: not-allowed; }
+#cc-picker button[aria-disabled="true"]:hover { transform: none; box-shadow: none; border-color: #e6e3dc; }
+#cc-picker img { display: block; width: 100%; height: 92px; object-fit: contain; margin-bottom: 4px; }
+#cc-picker b { font-size: 11pt; font-weight: 800; line-height: 1.25; }
+#cc-picker span[data-price] { font-size: 10pt; color: #444; }
+#cc-picker span[data-badge] { position: absolute; top: 9px; left: 9px; background: #F0D381; color: #0c1618; font-size: 7.5pt; font-weight: 800; letter-spacing: 0.5px; text-transform: uppercase; padding: 2px 8px; border-radius: 20px; }
+#cc-picker span[data-action] { margin-top: 6px; font-size: 9pt; font-weight: 700; padding: 5px 12px; border-radius: 20px; background: #f7f5f2; color: #0c1618; }
+#cc-picker button[aria-pressed="true"] span[data-action] { background: #0c1618; color: #fff; }
+
+/* ===== PASEK OPCJI ===== */
+#cc-bar { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px 20px; padding: 14px 20px; background: #f7f5f2; border-radius: 16px; margin-bottom: 20px; font-size: 10.5pt; }
+#cc-count { font-weight: 700; }
+#cc-bar-actions { display: flex; align-items: center; flex-wrap: wrap; gap: 10px 22px; }
+#cc-diff-label { display: inline-flex; align-items: center; gap: 8px; cursor: pointer; font-weight: 600; }
+#cc-diff { width: 18px; height: 18px; margin: 0; accent-color: #0c1618; cursor: pointer; }
+#cc-clear { appearance: none; background: none; border: 0; padding: 0; font: inherit; font-weight: 600; color: #888; text-decoration: underline; cursor: pointer; }
+
+/* ===== TABELA ===== */
+#cc-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; border-radius: 20px; border: 1px solid #eee; box-shadow: 0 10px 30px rgba(0,0,0,0.05); background: #fff; }
+#cc-table { width: 100%; border-collapse: collapse; table-layout: fixed; background: #fff; }
+#cc-table thead th { background: #0c1618; color: #fff; padding: 22px 14px 18px; text-align: center; vertical-align: top; border-bottom: 3px solid #F0D381; position: relative; font-weight: 400; }
+#cc-table thead th[data-corner] { text-align: left; vertical-align: bottom; width: 26%; font-size: 11pt; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; }
+#cc-table thead th[data-corner] span { display: block; margin-top: 4px; font-size: 9pt; font-weight: 400; letter-spacing: 0; text-transform: none; color: #aaa; }
+#cc-table thead span[data-photo] { display: block; background: #fff; border-radius: 14px; padding: 8px; margin: 0 auto 12px; max-width: 170px; }
+#cc-table thead img { display: block; width: 100%; height: 104px; object-fit: contain; }
+#cc-table thead strong { display: block; font-size: 13pt; font-weight: 800; line-height: 1.25; }
+#cc-table thead span[data-price] { display: block; margin-top: 2px; color: #F0D381; font-weight: 700; }
+#cc-table thead a { display: inline-block; margin-top: 12px; background: #F0D381; color: #0c1618; text-decoration: none; font-weight: 800; font-size: 9pt; padding: 8px 16px; border-radius: 30px; }
+#cc-table thead a:hover { background: #fff; }
+#cc-table thead button[data-remove] { position: absolute; top: 8px; right: 8px; width: 26px; height: 26px; border-radius: 50%; border: 0; background: rgba(255,255,255,0.12); color: #fff; font-size: 16px; line-height: 26px; padding: 0; cursor: pointer; }
+#cc-table thead button[data-remove]:hover { background: rgba(255,255,255,0.25); }
+
+#cc-table tr[data-group] th { background: #f7f5f2; padding: 12px 14px; text-align: left; border-bottom: 1px solid #eee; }
+#cc-table tr[data-group] th[data-mname] { text-align: center; font-size: 8.5pt; font-weight: 600; color: #999; }
+#cc-table tr[data-group] button { appearance: none; background: none; border: 0; padding: 0; font: inherit; font-size: 10pt; font-weight: 800; letter-spacing: 0.8px; text-transform: uppercase; color: #0c1618; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; text-align: left; }
+#cc-table tr[data-group] button svg { transition: transform 0.2s; }
+#cc-table tr[data-group] button[aria-expanded="false"] svg { transform: rotate(-90deg); }
+#cc-table tr[data-group] span[data-gcount] { font-size: 8.5pt; font-weight: 600; letter-spacing: 0; color: #999; background: #fff; border-radius: 10px; padding: 0 7px; }
+#cc-table tbody[data-collapsed] tr:not([data-group]) { display: none; }
+
+#cc-table tr[data-row] th { padding: 13px 14px; border-bottom: 1px solid #eee; text-align: left; font-size: 10.5pt; font-weight: 700; color: #000; }
+#cc-table tr[data-row] td { padding: 13px 14px; border-bottom: 1px solid #eee; text-align: center; vertical-align: middle; font-size: 10.5pt; color: #333; }
+#cc-table tr[data-row]:hover td, #cc-table tr[data-row]:hover th { background: #fcfbf8; }
+#cc-table tr[data-row] td[data-best] { background: #fbf3d9; color: #000; font-weight: 800; }
+#cc-table tr[data-row]:hover td[data-best] { background: #f8ecc6; }
+#cc-table span[data-v] { display: inline-flex; align-items: center; gap: 8px; text-align: left; }
+#cc-table span[data-v] svg { flex: 0 0 auto; }
+#cc-table span[data-empty] { color: #bbb; }
+#cc-table span[data-sr], #cc-root span[data-sr] { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+#cc-table button[data-hint] { appearance: none; width: 18px; height: 18px; margin-left: 6px; border-radius: 50%; border: 1px solid #ccc; background: #fff; color: #888; font: inherit; font-size: 9pt; font-weight: 700; line-height: 16px; padding: 0; cursor: pointer; vertical-align: 1px; }
+#cc-table span[data-hint-text][hidden] { display: none; }
+#cc-table span[data-hint-text] { display: block; margin-top: 4px; font-size: 9pt; font-weight: 400; color: #666; }
+
+#cc-empty, #cc-loading { text-align: center; padding: 50px 20px; color: #888; background: #fcfbf8; border: 1px dashed #e6e3dc; border-radius: 20px; font-size: 11pt; }
+#cc-single { margin: 0 0 12px; padding: 12px 18px; border-left: 4px solid #F0D381; background: #fcfbf8; border-radius: 0 12px 12px 0; font-size: 10.5pt; }
+#cc-note { margin: 14px 4px 0; font-size: 9pt; color: #888; }
+
+/* ===== MOBILE ===== */
+@media (max-width: 640px) {
+  #cc-root { padding: 6px 12px 20px; }
+  #cc-tabs { flex-wrap: nowrap; justify-content: flex-start; overflow-x: auto; margin-bottom: 22px; padding-bottom: 4px; }
+  #cc-tabs button { flex: 0 0 auto; padding: 10px 16px; font-size: 9pt; }
+  #cc-step-title { font-size: 15pt; }
+  #cc-picker { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 6px; }
+  #cc-picker button { flex: 0 0 132px; scroll-snap-align: start; }
+  #cc-picker img { height: 72px; }
+  #cc-bar { padding: 12px 14px; }
+  #cc-table thead th { padding: 16px 8px 14px; }
+  #cc-table thead span[data-photo] { padding: 6px; border-radius: 10px; margin-bottom: 8px; }
+  #cc-table thead img { height: 70px; }
+  #cc-table thead strong { font-size: 11pt; }
+  #cc-table thead a { font-size: 8.5pt; padding: 7px 12px; }
+  #cc-table tr[data-mlabel] th { padding: 12px 12px 2px; text-align: left; font-size: 9.5pt; font-weight: 700; color: #000; background: #fff; }
+  #cc-table tr[data-row] td { padding: 4px 10px 12px; font-size: 10pt; border-left: 1px solid #f3f3f3; }
+  #cc-table tr[data-row] td:first-child { border-left: 0; }
+}
+</style>
+</head>
+<body>
+
+<div id="cc-root">
+  <div id="cc-tabs" role="tablist" aria-label="Kategoria urządzeń"></div>
+
+  <div id="cc-step">
+    <p id="cc-step-title">Wybierz modele do porównania</p>
+    <p id="cc-step-hint"></p>
+  </div>
+  <div id="cc-picker"></div>
+
+  <div id="cc-bar">
+    <span id="cc-count"></span>
+    <div id="cc-bar-actions">
+      <label id="cc-diff-label"><input type="checkbox" id="cc-diff"> Pokaż tylko różnice</label>
+      <button type="button" id="cc-clear">Wyczyść wybór</button>
+    </div>
+  </div>
+
+  <div id="cc-content"><div id="cc-loading">Wczytywanie porównania…</div></div>
+  <p id="cc-note"></p>
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  /* =====================================================================
+     KONFIGURACJA
+     csv: link do zakładki arkusza opublikowanej jako CSV
+          (Plik → Udostępnij → Opublikuj w internecie → zakładka → CSV).
+     Puste csv = widget używa kopii zapasowej danych zapisanej niżej.
+     ===================================================================== */
+  var CONFIG = {
+    categories: [
+      { id: 'okna',       label: 'Roboty do okien',     csv: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSzZRcmvgI1GVAXdBNN2gFXlu8I5EHyhaFZG5yw_GJ69h_IWVE7RwTKkWUEfDppseDeOWama01vFCma/pub?gid=2146277558&single=true&output=csv' },
+      { id: 'kuchnia',    label: 'Roboty kuchenne',     csv: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSzZRcmvgI1GVAXdBNN2gFXlu8I5EHyhaFZG5yw_GJ69h_IWVE7RwTKkWUEfDppseDeOWama01vFCma/pub?gid=1550973450&single=true&output=csv' },
+      { id: 'odkurzacze', label: 'Odkurzacze pionowe',  csv: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSzZRcmvgI1GVAXdBNN2gFXlu8I5EHyhaFZG5yw_GJ69h_IWVE7RwTKkWUEfDppseDeOWama01vFCma/pub?gid=742237889&single=true&output=csv' },
+      { id: 'kuwety',     label: 'Inteligentne kuwety', csv: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSzZRcmvgI1GVAXdBNN2gFXlu8I5EHyhaFZG5yw_GJ69h_IWVE7RwTKkWUEfDppseDeOWama01vFCma/pub?gid=1443477022&single=true&output=csv' }
+    ],
+    maxDesktop: 3,
+    maxMobile: 2,
+    mobileBreakpoint: 640,
+    fallbackImage: 'https://cobbo.pl/upload/cobbo/logos/logo-na-strone.webp',
+    note: 'Dane techniczne według producenta. Aktualna cena i dostępność – na karcie produktu.'
+  };
+
+  /* Stare kotwice z podstrony (#roboty-okienne itd.) dalej działają */
+  var HASH_MAP = { 'roboty-okienne': 'okna', 'roboty-kuchenne': 'kuchnia', 'odkurzacze-pionowe': 'odkurzacze', 'kuwety': 'kuwety' };
+
+  /* Kopia zapasowa danych (generowana z arkusza) – używana, gdy arkusz jest niedostępny */
+  var FALLBACK = {
+"okna": "grupa,parametr,lepsze,podpowiedz,i5,e5,e6slim,e6pro,i6,q6,q6pro\n#,nazwa,,,COBBO i5,COBBO e5,COBBO e6 slim,COBBO e6 PRO,COBBO i6,COBBO Q6,COBBO Q6 PRO\n#,zdjecie,,,https://cobbo.pl/upload/cobbo/opisy-produktow/q6pro/linia-czasu/i5.png,https://cobbo.pl/upload/cobbo/opisy-produktow/q6pro/linia-czasu/e5.png,https://cobbo.pl/upload/cobbo/opisy-produktow/q6pro/linia-czasu/e6.png,https://cobbo.pl/upload/cobbo/opisy-produktow/q6pro/linia-czasu/e6-pro.png,https://cobbo.pl/upload/cobbo/opisy-produktow/i6/i6-transp.png,https://cobbo.pl/upload/cobbo/opisy-produktow/q6pro/linia-czasu/q6.png,https://cobbo.pl/upload/cobbo/opisy-produktow/q6pro/linia-czasu/q6-pro.png\n#,link,,,https://cobbo.pl/COBBOi5,https://cobbo.pl/Robot-do-mycia-okien-COBBO-e5,https://cobbo.pl/robot-do-mycia-okien-cobbo-e6-slim,https://cobbo.pl/Robot-do-mycia-okien-COBBO-E6-PRO-p559,https://cobbo.pl/Robot-do-mycia-okien-COBBO-i6-p628,https://cobbo.pl/robot-do-mycia-okien-COBBO-Q6,https://cobbo.pl/Robot-do-mycia-okien-COBBO-Q6-PRO-p634\n#,cena,,,949,699,999,1390,1590,1490,1890\n#,etykieta,,,,,Bestseller,Nowość,Nowość,,Nowość\n#,domyslny,,,,,,tak,tak,,tak\n#,ukryj,,,,,,,,,\nKonstrukcja,Kształt,,,2 okrągłe tarcze,2 okrągłe tarcze,2 okrągłe tarcze,2 okrągłe tarcze,2 okrągłe tarcze,kwadratowy,kwadratowy\nKonstrukcja,Wymiary robota,,,290 × 145 × 108 mm,295 × 145 × 100 mm,295 × 145 × 74 mm,295 × 145 × 74 mm,295 × 145 × 65 mm,245 × 245 × 82 mm,265 × 265 × 80 mm\nKonstrukcja,Wysokość robota,mniej,Niższy robot łatwiej mieści się przy ramie i jest wygodniejszy do przykładania.,108 mm,100 mm,74 mm,74 mm,65 mm,82 mm,80 mm\nKonstrukcja,Waga robota,mniej,,\"0,9 kg\",\"1,07 kg\",\"1,1 kg\",\"1,1 kg\",\"1,1 kg\",\"1,58 kg\",\"1,8 kg\"\nKonstrukcja,Silniki napędu,,,,,szczotkowe,bezszczotkowe BLDC,,,\nMycie,Szybkość mycia,mniej,Ile minut robot potrzebuje na 1 m² szyby.,\"2,5 min/m²\",\"2,5 min/m²\",\"2,5 min/m²\",\"2,0 min/m²\",,\"2,0 min/m²\",\nMycie,Tryby pracy,więcej,,4 automatyczne + ręczny,3 automatyczne,4 automatyczne + ręczny,4 automatyczne + ręczny,\"3 (automatyczny, głęboki, punktowy)\",7,\nMycie,Planowanie trasy,,,algorytm ścieżki,algorytm AI,AI Cleaning Path™,AI Cleaning Path 3.0,AI Cleaning Path 2.0,AI Cleaning Path 2.0™,AI Cleaning Path 4.0™\nMycie,Praca na płaskich taflach (0–180°),,\"Mycie także szyb leżących poziomo: świetliki, szklane dachy, oranżerie.\",,,nie,tak,,nie,tak\nMycie,Mycie przy ramie (FullEdge Clean™),,Powiększona nakładka i obrotowe tarcze krawędziowe domywają pas przy ramie i uszczelce.,,,nie,,,tak,tak\nMycie,Wykrywanie krawędzi szyb bez ramy,,,,,,tak – barometr,tak – Edge Detection,,\nMycie,Ruch oscylacyjny ściereczki,,Ściereczka drga wzdłuż kierunku jazdy jak ręka – mniej smug.,nie,nie,nie,nie,nie,nie,tak – Active Dynamic Glide™\nSpryskiwanie,System spryskiwania,,,\"soniczny, jednostronny\",\"przepływowy, jednostronny\",\"Dual Perfect Spray™, dwustronny\",Anti-Wind Spray System 2.0,Logic Spray System™ (3 tryby),Hypersonic Spraying System™,Spray Pulse 8™\nSpryskiwanie,Liczba dysz,więcej,,1,1,2,,2,2,8\nSpryskiwanie,Odporność natrysku na wiatr,,,,,tak – Anti-Wind Spray,tak – Anti-Wind 2.0,tak – Anti-Wind 3.0,tak – do 20 km/h,tak – Anti-Wind 3.0\nSpryskiwanie,Pojemność zbiornika,więcej,,50 ml,50 ml,50 ml,50 ml,60 ml,110 ml (2 zbiorniki),120 ml\nSpryskiwanie,Wydajność na jednym zbiorniku,więcej,,,,do 40 m²,do 40 m²,,,\nPrzyczepność,Siła ssania,więcej,,,2800 Pa,,,,,10 000 Pa\nPrzyczepność,Barometr – automatyczna regulacja ssania,,Robot sam dopasowuje docisk do szyby: pewniejsze trzymanie i mniej smug.,nie,nie,nie,tak,,tak,tak\nPrzyczepność,Gumki przeciwpoślizgowe (Double Anti-Slip),,,nie,nie,nie,nie,nie,tak,tak – ustawione pod kątem\nZasilanie i bezpieczeństwo,Praca bez gniazdka,,\"Stacja z akumulatorem zasila robota tam, gdzie nie ma prądu.\",nie,nie,nie,nie,tak – do 110 min (stacja 5200 mAh),nie,nie\nZasilanie i bezpieczeństwo,Długość przewodu,więcej,,5 m,5 m,5 m,,\"ok. 6 m, zwijany automatycznie\",5 m,\nZasilanie i bezpieczeństwo,Utrzymanie na szybie po zaniku prądu (UPS),więcej,Tyle czasu robot trzyma się szyby po odcięciu zasilania.,20 min,20 min,25 min,20 min,do 90 min,25 min,25 min\nZasilanie i bezpieczeństwo,Moc znamionowa,,,80 W,80 W,72 W,72 W,65 W (maks. 72 W),72 W,72 W\nZasilanie i bezpieczeństwo,Linka bezpieczeństwa,,,tak,tak,tak,tak,tak,tak,tak\nSterowanie,Aplikacja,,,Tuya Smart,Tuya Smart,Tuya Smart,Tuya Smart,Tuya Smart,Tuya Smart,Tuya Smart\nSterowanie,Pilot w zestawie,,,tak,tak,tak,tak,tak,tak,tak\nSterowanie,Komunikaty głosowe po polsku,,,,,tak,tak,tak,tak,tak\nSterowanie,Powiadomienia PUSH,,,,,tak,,,tak,tak\nKomfort i zestaw,Głośność pracy,mniej,,≤ 70 dB,≤ 70 dB,≤ 62 dB,\"66,3 dB\",,≤ 62 dB,\nKomfort i zestaw,Ściereczki / nakładki w zestawie,więcej,,,10 szt.,14 szt.,12 szt.,14 szt.,10 szt.,10 szt.\nKomfort i zestaw,Dwa rodzaje nakładek,,,nie,nie,nie,tak – myjąca i polerująca,nie,tak,tak – NanoTex CR™ i Edge Pro™\nKomfort i zestaw,Walizka / stacja do przechowywania,,,nie,,tak,,tak – stacja pełni funkcję walizki,tak,tak\nKomfort i zestaw,Gwarancja w cenie,więcej,,2 lata,2 lata,2 lata,3 lata,2 lata,2 lata,3 lata\n",
+"kuchnia": "grupa,parametr,lepsze,podpowiedz,cobbo7,smarti,blackpro\n#,nazwa,,,COBBO 7,COBBO 7 Smart-i,COBBO 7 Black PRO\n#,zdjecie,,,https://cobbo.pl/images/cobbo/6000-7000/Robot-kuchenny-COBBO-7_%5B6852%5D_260.jpg,https://cobbo.pl/images/cobbo/6000-7000/Robot-kuchenny-COBBO-7-Smart-i_%5B6459%5D_260.jpg,https://cobbo.pl/images/cobbo/6000-7000/Robot-kuchenny-COBBO-7-Black-PRO_%5B6829%5D_260.jpg\n#,link,,,https://cobbo.pl/robot-kuchenny-cobbo-thermo-plus-przedsprzedaz,https://cobbo.pl/robot-kuchenny-cobbo-7-smarti,https://cobbo.pl/Robot-kuchenny-COBBO-7-Black-PRO-p575\n#,cena,,,,,\n#,etykieta,,,,,\n#,domyslny,,,tak,tak,tak\n#,ukryj,,,,,\nSilnik i moc,Typ silnika,,,\"bezszczotkowy, reluktancyjny\",szczotkowy (wysokoobrotowy),\"bezszczotkowy, reluktancyjny\"\nSilnik i moc,Moc miksowania,więcej,,500 W,800 W,500 W\nSilnik i moc,Moc grzania,więcej,,1000 W,1000 W,1000 W\nSilnik i moc,Zakres obrotów,,,46 – 11 000 obr./min,72 – 5 500 obr./min,46 – 11 000 obr./min\nGotowanie,Zakres temperatur,,,37 – 160 °C,30 – 140 °C,37 – 160 °C\nGotowanie,Pojemność rzeczywista misy,więcej,,\"2,2 l\",\"3,2 l\",\"2,2 l\"\nGotowanie,Zakres wbudowanej wagi,,,1 – 3000 g,1 – 5000 g,1 – 3000 g\nPrzepisy i ekran,Przepisy w urządzeniu,więcej,Stan na 21.04.2026 – codziennie dochodzi nowy przepis.,1750,1750,1750\nPrzepisy i ekran,Przepisy w aplikacji (+ społeczność),więcej,Stan na 21.04.2026.,2670,1750,2670\nPrzepisy i ekran,Przekątna ekranu,więcej,,7 cali,\"10,1 cala\",7 cali\nZestaw,Nakładka do jajek,,,tak,tak,tak\nZestaw,Malakser,,,tak,nie,tak\n",
+"odkurzacze": "grupa,parametr,lepsze,podpowiedz,g7,g7pro,ultrasteam\n#,nazwa,,,COBBO G7,COBBO G7 PRO,COBBO ULTRA STEAM UV\n#,zdjecie,,,,https://cobbo.pl/images/cobbo/6000-7000/Odkurzacz-pionowy-bezprzewodowy-COBBO-G7-PRO_%5B6854%5D_260.jpg,https://cobbo.pl/images/cobbo/6000-7000/Odkurzacz-pionowy-mop-parowy-COBBO-ULTRA-STEAM-UV_%5B6740%5D_260.jpg\n#,link,,,https://cobbo.pl/odkurzacze-pionowe,https://cobbo.pl/Odkurzacz-pionowy-bezprzewodowy-COBBO-G7-PRO,https://cobbo.pl/Odkurzacz-pionowy-mop-parowy-COBBO-ULTRA-STEAM-UV-p482\n#,cena,,,,,\n#,etykieta,,,,,\n#,domyslny,,,tak,tak,tak\n#,ukryj,,,,,\nMoc i bateria,Moc ssania,więcej,,36 000 Pa,36 000 Pa,31 000 Pa\nMoc i bateria,Czas pracy baterii,więcej,,do 77 min,do 77 min,do 120 min\nMoc i bateria,Typ silnika,,,bezszczotkowy,bezszczotkowy,bezszczotkowy\nMoc i bateria,Tryby pracy,,,\"Eco, Średni, Max\",\"Eco, Średni, Max\",\"Auto, Średni, Max\"\nFunkcje,Systemy inteligentne,,,\"Optirey™, Pet Assistant\",\"Optirey™, Pet Assistant\",\"Optirey™, TrueVisual Clean™, E-DETECT POWER SYSTEM™\"\nFunkcje,Stacja,,,uchwyt ścienny,stacja ładująco-opróżniająca,stacja ładująco-opróżniająca\nFunkcje,Automatyczne opróżnianie,,,nie,tak,tak\nFunkcje,Mopowanie,,,tak – mop pasywny (akcesorium dodatkowe),tak – mop pasywny (akcesorium dodatkowe),tak – mopowanie parowe\nFunkcje,Filtracja i higiena,,,3-stopniowa HEPA,3-stopniowa HEPA,4-stopniowa HEPA + para + UV\nZestaw,Akcesoria w zestawie,,,\"elektroszczotka, końcówka szczelinowa długa, końcówka z włosiem krótka, szczotka Groom&Vac, mini turbo szczotka\",\"elektroszczotka, końcówka szczelinowa długa, końcówka z włosiem krótka, szczotka Groom&Vac, mini turbo szczotka\",\"mop parowy UV, szczotka główna, końcówka szczelinowa, końcówka do materacy/tapicerki, końcówka 2w1 z włosiem\"\n",
+"kuwety": "grupa,parametr,lepsze,podpowiedz,k1,k2\n#,nazwa,,,COBBO K1,COBBO K2\n#,zdjecie,,,,\n#,link,,,https://cobbo.pl/Kuwety-dla-zwierzat-c285,https://cobbo.pl/Kuwety-dla-zwierzat-c285\n#,cena,,,,\n#,etykieta,,,,\n#,domyslny,,,tak,tak\n#,ukryj,,,,\nWymiary,Wymiary kuwety,,,\"53 × 50,8 × 58 cm\",\"53 × 51,6 × 58 cm\"\nWymiary,Średnica otworu wejściowego,,,\"23,5 cm\",\"23,5 cm\"\nWymiary,Wysokość podstawy,,,\"10,7 cm\",\"16,5 cm\"\nWymiary,Waga kota,,,1 – 12 kg,1 – 12 kg\nFunkcje,Sterowanie,,,manualne,\"dotykowe, ekran\"\nFunkcje,Liczba funkcji,więcej,,12,14\nFunkcje,Oczyszczanie światłem UV,,,tak,tak\nFunkcje,Sterylizacja,,,tak,tak\nFunkcje,Kamera z podglądem na żywo,,,nie,tak\nFunkcje,Głośnik z mikrofonem,,,nie,tak\nFunkcje,Radar mikrofalowy (wykrywanie kota),,,,tak\nFunkcje,Aplikacja mobilna,,,tak,tak\n"
+};
+
+  var ICON_YES = '<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#0c1618"/><path d="M7 12.5l3.2 3.2L17 9" fill="none" stroke="#F0D381" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  var ICON_NO = '<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#eeeeee"/><path d="M8.5 8.5l7 7M15.5 8.5l-7 7" stroke="#999" stroke-width="2.2" stroke-linecap="round"/></svg>';
+  var ICON_CHEVRON = '<svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+
+  var cache = {};
+  var state = { cat: null, sel: [], diff: false, collapsed: {} };
+  var mq = window.matchMedia('(max-width: ' + CONFIG.mobileBreakpoint + 'px)');
+
+  function $(id) { return document.getElementById(id); }
+  function norm(s) { return (s === null || s === undefined) ? '' : String(s).trim(); }
+  function low(s) { return norm(s).toLowerCase(); }
+  function esc(s) { return norm(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+  function escA(s) { return esc(s).replace(/"/g, '&quot;'); }
+  function maxSel() { return mq.matches ? CONFIG.maxMobile : CONFIG.maxDesktop; }
+  function catById(id) { for (var i = 0; i < CONFIG.categories.length; i++) { if (CONFIG.categories[i].id === id) return CONFIG.categories[i]; } return null; }
+
+  /* ---------- CSV ---------- */
+  function parseCSV(text) {
+    var rows = [], row = [], f = '', q = false, i, c;
+    text = String(text).replace(/^\uFEFF/, '');
+    for (i = 0; i < text.length; i++) {
+      c = text[i];
+      if (q) {
+        if (c === '"') { if (text[i + 1] === '"') { f += '"'; i++; } else { q = false; } }
+        else { f += c; }
+      } else if (c === '"') { q = true; }
+      else if (c === ',') { row.push(f); f = ''; }
+      else if (c === '\n') { row.push(f); rows.push(row); row = []; f = ''; }
+      else if (c !== '\r') { f += c; }
+    }
+    if (f !== '' || row.length) { row.push(f); rows.push(row); }
+    return rows;
+  }
+
+  var FIXED_COLS = { grupa: 1, parametr: 1, lepsze: 1, podpowiedz: 1, 'podpowiedź': 1 };
+
+  function buildCategory(rows) {
+    if (!rows.length) return null;
+    var head = rows[0].map(norm);
+    var idx = { grupa: -1, parametr: -1, lepsze: -1, podpowiedz: -1 };
+    var models = [];
+    head.forEach(function (h, i) {
+      var k = low(h).replace('podpowiedź', 'podpowiedz');
+      if (Object.prototype.hasOwnProperty.call(idx, k)) { idx[k] = i; }
+      else if (h && !FIXED_COLS[low(h)]) {
+        models.push({ key: h, col: i, name: h, img: '', link: '', price: '', badge: '', def: false, hidden: false });
+      }
+    });
+    if (idx.parametr < 0) return null;
+
+    var params = [];
+    for (var r = 1; r < rows.length; r++) {
+      var row = rows[r];
+      var g = idx.grupa > -1 ? norm(row[idx.grupa]) : '';
+      var p = norm(row[idx.parametr]);
+      if (!p) continue;
+      if (g === '#') {
+        var k = low(p).replace('ę', 'e').replace('ś', 's');
+        models.forEach(function (m) {
+          var v = norm(row[m.col]);
+          if (k === 'nazwa') { if (v) m.name = v; }
+          else if (k === 'zdjecie') { m.img = v; }
+          else if (k === 'link') { m.link = v; }
+          else if (k === 'cena') { m.price = v; }
+          else if (k === 'etykieta') { m.badge = v; }
+          else if (k === 'domyslny') { m.def = low(v) === 'tak'; }
+          else if (k === 'ukryj') { m.hidden = low(v) === 'tak'; }
+        });
+        continue;
+      }
+      var vals = {};
+      models.forEach(function (m) { vals[m.key] = norm(row[m.col]); });
+      params.push({
+        group: g || 'Inne',
+        name: p,
+        better: idx.lepsze > -1 ? low(row[idx.lepsze]).replace('ę', 'e') : '',
+        hint: idx.podpowiedz > -1 ? norm(row[idx.podpowiedz]) : '',
+        values: vals
+      });
+    }
+    models = models.filter(function (m) { return !m.hidden; });
+    return models.length ? { models: models, params: params } : null;
+  }
+
+  function loadCategory(cat) {
+    if (cache[cat.id]) return Promise.resolve(cache[cat.id]);
+    function fromFallback() { return FALLBACK[cat.id] ? buildCategory(parseCSV(FALLBACK[cat.id])) : null; }
+    var p;
+    if (cat.csv) {
+      p = fetch(cat.csv, { cache: 'no-cache' })
+        .then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.text(); })
+        .then(function (t) {
+          if (/^\s*</.test(t)) throw new Error('Arkusz nie jest opublikowany jako CSV');
+          var d = buildCategory(parseCSV(t));
+          if (!d) throw new Error('Pusty arkusz');
+          return d;
+        })
+        .catch(function (e) { console.warn('[COBBO] Arkusz niedostępny, używam kopii zapasowej:', e); return fromFallback(); });
+    } else {
+      p = Promise.resolve(fromFallback());
+    }
+    return p.then(function (d) { if (d) cache[cat.id] = d; return d; });
+  }
+
+  /* ---------- PORÓWNYWANIE WARTOŚCI ---------- */
+  function num(v) {
+    var s = norm(v).replace(/(\d)[\s\u00a0](?=\d{3}(\D|$))/g, '$1').replace(',', '.');
+    var m = s.match(/\d+(\.\d+)?/);
+    return m ? parseFloat(m[0]) : null;
+  }
+  function yesNo(v) {
+    var l = low(v);
+    if (/^tak(\b|$)/.test(l)) return 1;
+    if (/^nie(\b|$)/.test(l)) return 0;
+    return null;
+  }
+  function bestKeys(param, keys) {
+    if (keys.length < 2) return [];
+    var vals = keys.map(function (k) { return param.values[k] || ''; });
+    var yn = vals.map(yesNo);
+    var defined = yn.filter(function (x) { return x !== null; });
+    if (defined.length >= 2 && defined.indexOf(1) > -1 && defined.indexOf(0) > -1) {
+      return keys.filter(function (k, i) { return yn[i] === 1; });
+    }
+    if (param.better !== 'wiecej' && param.better !== 'mniej') return [];
+    var ns = vals.map(function (v) { return v ? num(v) : null; });
+    var valid = ns.filter(function (n) { return n !== null; });
+    if (valid.length < 2) return [];
+    var target = param.better === 'mniej' ? Math.min.apply(null, valid) : Math.max.apply(null, valid);
+    if (valid.every(function (n) { return n === target; })) return [];
+    return keys.filter(function (k, i) { return ns[i] === target; });
+  }
+
+  /* ---------- RENDER ---------- */
+  function fmtPrice(p) {
+    var v = norm(p);
+    if (/^\d+([.,]\d+)?$/.test(v)) {
+      var n = Math.round(parseFloat(v.replace(',', '.')));
+      return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, '\u00a0') + '\u00a0zł';
+    }
+    return v;
+  }
+  function imgTag(m, extra) {
+    return '<img src="' + escA(m.img || CONFIG.fallbackImage) + '" alt="' + escA(m.name) + '"' + (extra || '') +
+      ' onerror="this.onerror=null;this.src=\'' + CONFIG.fallbackImage + '\'">';
+  }
+  function renderValue(v) {
+    if (!v) return '<span data-empty>—</span>';
+    var yn = yesNo(v);
+    if (yn === null) return esc(v);
+    var rest = norm(v).replace(/^(tak|nie)\s*[–—\-:,]?\s*/i, '');
+    return '<span data-v>' + (yn ? ICON_YES : ICON_NO) +
+      (rest ? '<span>' + esc(rest) + '</span>' : '<span data-sr>' + (yn ? 'Tak' : 'Nie') + '</span>') + '</span>';
+  }
+
+  function renderTabs() {
+    $('cc-tabs').innerHTML = CONFIG.categories.map(function (c) {
+      var on = c.id === state.cat;
+      return '<button type="button" role="tab" data-cat="' + escA(c.id) + '" aria-selected="' + on + '">' + esc(c.label) + '</button>';
+    }).join('');
+  }
+
+  function renderPicker(d) {
+    var max = maxSel();
+    $('cc-picker').innerHTML = d.models.map(function (m) {
+      var on = state.sel.indexOf(m.key) > -1;
+      var dis = !on && state.sel.length >= max;
+      return '<button type="button" data-key="' + escA(m.key) + '" aria-pressed="' + on + '"' + (dis ? ' aria-disabled="true"' : '') + '>' +
+        (m.badge ? '<span data-badge>' + esc(m.badge) + '</span>' : '') +
+        imgTag(m, ' loading="lazy"') +
+        '<b>' + esc(m.name) + '</b>' +
+        (m.price ? '<span data-price>' + esc(fmtPrice(m.price)) + '</span>' : '') +
+        '<span data-action>' + (on ? '✓ W porównaniu' : '+ Porównaj') + '</span></button>';
+    }).join('');
+    var hint = $('cc-step-hint');
+    hint.removeAttribute('data-warn');
+    hint.textContent = mq.matches ? 'Wybierz 2 urządzenia' : 'Wybierz od 2 do ' + max + ' urządzeń';
+    $('cc-count').textContent = 'Wybrane: ' + state.sel.length + ' z ' + max;
+  }
+
+  function renderTable(d) {
+    var c = $('cc-content');
+    var models = state.sel.map(function (k) {
+      for (var i = 0; i < d.models.length; i++) { if (d.models[i].key === k) return d.models[i]; }
+      return null;
+    }).filter(Boolean);
+    var keys = models.map(function (m) { return m.key; });
+    var n = models.length;
+    if (!n) { c.innerHTML = '<div id="cc-empty">Wybierz modele powyżej, aby zobaczyć porównanie.</div>'; return; }
+
+    var mobile = mq.matches;
+    var groups = [], gmap = {};
+    d.params.forEach(function (p) {
+      if (!gmap[p.group]) { gmap[p.group] = { name: p.group, rows: [] }; groups.push(gmap[p.group]); }
+      gmap[p.group].rows.push(p);
+    });
+
+    var bodies = '', shown = 0;
+    groups.forEach(function (g) {
+      var rowsHtml = '', cnt = 0;
+      g.rows.forEach(function (p) {
+        var vals = keys.map(function (k) { return p.values[k] || ''; });
+        if (vals.every(function (v) { return !v; })) return;
+        if (state.diff && n > 1) {
+          var l = vals.map(low);
+          if (l.every(function (v) { return v === l[0]; })) return;
+        }
+        cnt++;
+        var best = bestKeys(p, keys);
+        var cells = keys.map(function (k, i) {
+          return '<td' + (best.indexOf(k) > -1 ? ' data-best' : '') + '>' + renderValue(vals[i]) + '</td>';
+        }).join('');
+        var label = esc(p.name) + (p.hint ? '<button type="button" data-hint aria-label="Co to znaczy?" aria-expanded="false">i</button><span data-hint-text hidden>' + esc(p.hint) + '</span>' : '');
+        if (mobile) {
+          rowsHtml += '<tr data-mlabel><th colspan="' + n + '" scope="colgroup">' + label + '</th></tr><tr data-row>' + cells + '</tr>';
+        } else {
+          rowsHtml += '<tr data-row><th scope="row">' + label + '</th>' + cells + '</tr>';
+        }
+      });
+      if (!cnt) return;
+      shown += cnt;
+      var col = !!state.collapsed[g.name];
+      var head = '<tr data-group><th colspan="' + (mobile ? n : 1) + '"><button type="button" data-toggle="' + escA(g.name) + '" aria-expanded="' + !col + '">' +
+        ICON_CHEVRON + esc(g.name) + '<span data-gcount>' + cnt + '</span></button></th>' +
+        (mobile ? '' : models.map(function (m) { return '<th data-mname>' + esc(m.name) + '</th>'; }).join('')) + '</tr>';
+      bodies += '<tbody' + (col ? ' data-collapsed' : '') + '>' + head + rowsHtml + '</tbody>';
+    });
+
+    var thead = '<thead><tr>' +
+      (mobile ? '' : '<th data-corner scope="col">Parametr<span>' + (state.diff ? 'Pokazuję tylko różnice' : 'Wszystkie parametry') + '</span></th>') +
+      models.map(function (m) {
+        return '<th scope="col"><button type="button" data-remove="' + escA(m.key) + '" aria-label="Usuń ' + escA(m.name) + ' z porównania">×</button>' +
+          '<span data-photo>' + imgTag(m) + '</span>' +
+          '<strong>' + esc(m.name) + '</strong>' +
+          (m.price ? '<span data-price>' + esc(fmtPrice(m.price)) + '</span>' : '') +
+          (m.link ? '<a href="' + escA(m.link) + '" target="_top">Zobacz produkt</a>' : '') +
+          '</th>';
+      }).join('') + '</tr></thead>';
+
+    var minW = mobile ? 0 : (220 + n * 200);
+    c.innerHTML =
+      (n === 1 ? '<p id="cc-single">Dodaj drugi model, aby zobaczyć różnice.</p>' : '') +
+      '<div id="cc-wrap"><table id="cc-table" style="min-width:' + minW + 'px">' + thead +
+      (shown ? bodies : '<tbody><tr data-row><td colspan="' + (n + 1) + '">Wybrane modele nie różnią się w żadnym parametrze.</td></tr></tbody>') +
+      '</table></div>';
+  }
+
+  function render() {
+    var d = cache[state.cat];
+    if (!d) return;
+    renderPicker(d);
+    renderTable(d);
+    $('cc-diff').checked = state.diff;
+    $('cc-note').textContent = CONFIG.note;
+    reportHeight();
+  }
+
+  /* ---------- STAN / URL ---------- */
+  function post(msg) { if (window.parent !== window) { try { window.parent.postMessage(msg, '*'); } catch (e) {} } }
+  function syncUrl() {
+    var q = '?kat=' + encodeURIComponent(state.cat) + (state.sel.length ? '&m=' + state.sel.map(encodeURIComponent).join(',') : '');
+    try { history.replaceState(null, '', q + location.hash); } catch (e) {}
+    post({ type: 'cobbo-compare-state', search: q });
+  }
+
+  function selectCat(id, preset) {
+    if (!catById(id)) id = CONFIG.categories[0].id;
+    state.cat = id;
+    state.collapsed = {};
+    renderTabs();
+    $('cc-picker').innerHTML = '';
+    $('cc-content').innerHTML = '<div id="cc-loading">Wczytywanie porównania…</div>';
+    loadCategory(catById(id)).then(function (d) {
+      if (state.cat !== id) return;
+      if (!d) {
+        $('cc-content').innerHTML = '<div id="cc-empty">Brak danych dla tej kategorii.</div>';
+        reportHeight();
+        return;
+      }
+      var lowKeys = d.models.map(function (m) { return low(m.key); });
+      var sel = (preset || []).map(function (k) { var i = lowKeys.indexOf(low(k)); return i > -1 ? d.models[i].key : null; }).filter(Boolean);
+      if (!sel.length) sel = d.models.filter(function (m) { return m.def; }).map(function (m) { return m.key; });
+      if (!sel.length) sel = d.models.slice(0, 2).map(function (m) { return m.key; });
+      state.sel = sel.filter(function (k, i) { return sel.indexOf(k) === i; }).slice(0, maxSel());
+      render();
+      syncUrl();
+    });
+  }
+
+  function toggleModel(key) {
+    var i = state.sel.indexOf(key);
+    if (i > -1) { state.sel.splice(i, 1); }
+    else if (state.sel.length >= maxSel()) {
+      var hint = $('cc-step-hint');
+      hint.textContent = 'Możesz porównać maksymalnie ' + maxSel() + ' modele – usuń jeden z wybranych.';
+      hint.setAttribute('data-warn', '');
+      return;
+    } else { state.sel.push(key); }
+    render();
+    syncUrl();
+  }
+
+  /* ---------- ZDARZENIA ---------- */
+  $('cc-tabs').addEventListener('click', function (e) {
+    var b = e.target.closest('button[data-cat]');
+    if (b && b.getAttribute('data-cat') !== state.cat) selectCat(b.getAttribute('data-cat'));
+  });
+  $('cc-picker').addEventListener('click', function (e) {
+    var b = e.target.closest('button[data-key]');
+    if (b) toggleModel(b.getAttribute('data-key'));
+  });
+  $('cc-content').addEventListener('click', function (e) {
+    var b = e.target.closest('button');
+    if (!b) return;
+    if (b.hasAttribute('data-remove')) { toggleModel(b.getAttribute('data-remove')); return; }
+    if (b.hasAttribute('data-toggle')) {
+      var g = b.getAttribute('data-toggle');
+      state.collapsed[g] = !state.collapsed[g];
+      var tb = b.closest('tbody');
+      if (state.collapsed[g]) tb.setAttribute('data-collapsed', ''); else tb.removeAttribute('data-collapsed');
+      b.setAttribute('aria-expanded', String(!state.collapsed[g]));
+      reportHeight();
+      return;
+    }
+    if (b.hasAttribute('data-hint')) {
+      var t = b.nextElementSibling;
+      var open = t.hasAttribute('hidden');
+      if (open) t.removeAttribute('hidden'); else t.setAttribute('hidden', '');
+      b.setAttribute('aria-expanded', String(open));
+      reportHeight();
+    }
+  });
+  $('cc-diff').addEventListener('change', function () { state.diff = this.checked; render(); });
+  $('cc-clear').addEventListener('click', function () { state.sel = []; render(); syncUrl(); });
+
+  function onViewportChange() {
+    if (!state.cat || !cache[state.cat]) return;
+    render();
+  }
+  if (mq.addEventListener) mq.addEventListener('change', onViewportChange); else if (mq.addListener) mq.addListener(onViewportChange);
+
+  /* ---------- AUTOMATYCZNA WYSOKOŚĆ IFRAME ---------- */
+  function reportHeight() {
+    var h = Math.ceil($('cc-root').getBoundingClientRect().height) + 4;
+    post({ type: 'cobbo-compare-height', height: h });
+  }
+  if (window.ResizeObserver) new ResizeObserver(reportHeight).observe($('cc-root'));
+  window.addEventListener('load', reportHeight);
+
+  /* ---------- START ---------- */
+  var params = new URLSearchParams(location.search);
+  var startCat = params.get('kat') || HASH_MAP[location.hash.replace('#', '')] || CONFIG.categories[0].id;
+  var startSel = (params.get('m') || '').split(',').filter(Boolean);
+  selectCat(startCat, startSel);
+})();
+</script>
+</body>
+</html>
