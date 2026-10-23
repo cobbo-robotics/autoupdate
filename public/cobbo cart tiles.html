@@ -1,0 +1,269 @@
+<!doctype html>
+<html lang="pl">
+<head><script>(function(w,i,g){w[g]=w[g]||[];if(typeof w[g].push=='function')w[g].push(i)})
+(window,'G-E00SB0EDS7','google_tags_first_party');</script><script async src="/ms/"></script>
+			<script>
+				window.dataLayer = window.dataLayer || [];
+				function gtag(){dataLayer.push(arguments);}
+				gtag('js', new Date());
+				gtag('set', 'developer_id.dY2E1Nz', true);
+				
+			</script>
+			
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<style>
+html,
+body {
+  margin: 0 !important;
+  padding: 0 !important;
+  background: transparent !important;
+  overflow: hidden !important;
+  height: auto !important;
+}
+
+.cobbo-cart-tiles-wrap {
+  width: 100% !important;
+  max-width: 1140px !important;
+  margin: 0 auto !important;
+  /* góra/dół: miejsce na cień i efekt hover, żeby nie były ucinane */
+  padding: 4px 8px 16px !important;
+  box-sizing: border-box !important;
+  display: grid !important;
+  grid-template-columns: repeat(4, 1fr) !important;
+  gap: 12px !important;
+  font-family: "SF Pro Display", -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif !important;
+}
+
+.cobbo-cart-tile {
+  position: relative !important;
+  overflow: hidden !important;
+  min-height: 86px !important;
+  height: 86px !important;
+  border-radius: 16px !important;
+  padding: 14px 18px !important;
+  box-sizing: border-box !important;
+  text-decoration: none !important;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.10) !important;
+  display: block !important;
+  transition: transform .2s ease, box-shadow .2s ease !important;
+}
+
+.cobbo-cart-tile:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 10px 22px rgba(0,0,0,0.14) !important;
+}
+
+.cobbo-cart-tile-bar {
+  display: block !important;
+  width: 42px !important;
+  height: 4px !important;
+  border-radius: 999px !important;
+  margin-bottom: 9px !important;
+  position: relative !important;
+  z-index: 2 !important;
+}
+
+.cobbo-cart-tile-small {
+  display: block !important;
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  line-height: 1.1 !important;
+  margin-bottom: 3px !important;
+  position: relative !important;
+  z-index: 2 !important;
+  white-space: nowrap !important;
+}
+
+.cobbo-cart-tile-main {
+  display: block !important;
+  font-size: 24px !important;
+  font-weight: 900 !important;
+  line-height: 1 !important;
+  position: relative !important;
+  z-index: 2 !important;
+  letter-spacing: -0.4px !important;
+  white-space: nowrap !important;
+}
+
+.cobbo-cart-tile-bg {
+  position: absolute !important;
+  right: -8px !important;
+  bottom: -26px !important;
+  font-size: 94px !important;
+  font-weight: 900 !important;
+  line-height: 1 !important;
+  z-index: 1 !important;
+  pointer-events: none !important;
+  letter-spacing: -4px !important;
+}
+
+/* ZIELONY – raty */
+.cobbo-cart-tile-green {
+  background: linear-gradient(135deg, #0f5e35 0%, #0a3d22 100%) !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(255,255,255,0.12) !important;
+}
+.cobbo-cart-tile-green .cobbo-cart-tile-bar { background: #f0c94d !important; }
+.cobbo-cart-tile-green .cobbo-cart-tile-bg {
+  color: rgba(255,255,255,0.12) !important;
+  font-size: 122px !important;
+  right: -2px !important;
+  bottom: -28px !important;
+}
+
+/* NIEBIESKI – gwarancja */
+.cobbo-cart-tile-blue {
+  background: linear-gradient(135deg, #1a2a6c 0%, #101835 100%) !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(255,255,255,0.12) !important;
+}
+.cobbo-cart-tile-blue .cobbo-cart-tile-bar { background: #f0c94d !important; }
+.cobbo-cart-tile-blue .cobbo-cart-tile-bg {
+  color: rgba(255,255,255,0.12) !important;
+  font-size: 150px !important;
+  right: -4px !important;
+  bottom: -44px !important;
+}
+
+/* CZERWONY – 1+1 */
+.cobbo-cart-tile-red {
+  background: linear-gradient(135deg, #e30613 0%, #b8000b 100%) !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(255,255,255,0.24) !important;
+  box-shadow: 0 8px 22px rgba(227,6,19,0.30) !important;
+}
+.cobbo-cart-tile-red .cobbo-cart-tile-bar { background: #f0c94d !important; }
+.cobbo-cart-tile-red .cobbo-cart-tile-bg { color: rgba(255,255,255,0.16) !important; }
+.cobbo-cart-tile-red:hover { box-shadow: 0 10px 26px rgba(227,6,19,0.38) !important; }
+
+/* ŻÓŁTY – DUET -15% (NOWY) */
+.cobbo-cart-tile-yellow {
+  background: linear-gradient(135deg, #f6d24f 0%, #e8b31e 100%) !important;
+  color: #1a1a1a !important;
+  border: 1px solid rgba(0,0,0,0.06) !important;
+  box-shadow: 0 8px 22px rgba(232,179,30,0.32) !important;
+}
+.cobbo-cart-tile-yellow .cobbo-cart-tile-bar { background: #e30613 !important; }
+.cobbo-cart-tile-yellow .cobbo-cart-tile-bg {
+  color: rgba(0,0,0,0.09) !important;
+  font-size: 100px !important;
+  right: -6px !important;
+  bottom: -28px !important;
+}
+.cobbo-cart-tile-yellow:hover { box-shadow: 0 10px 26px rgba(232,179,30,0.42) !important; }
+
+/* TABLET – 2 x 2 */
+@media (max-width: 991px) {
+  .cobbo-cart-tiles-wrap {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+}
+
+/* TELEFON – 2 x 2, mniejsze kafelki */
+@media (max-width: 767px) {
+  .cobbo-cart-tiles-wrap {
+    gap: 8px !important;
+    padding: 4px 12px 14px !important;
+  }
+
+  .cobbo-cart-tile {
+    height: 70px !important;
+    min-height: 70px !important;
+    padding: 10px 12px !important;
+    border-radius: 14px !important;
+  }
+
+  .cobbo-cart-tile-bar {
+    width: 30px !important;
+    height: 3px !important;
+    margin-bottom: 7px !important;
+  }
+
+  .cobbo-cart-tile-small { font-size: 11px !important; }
+  .cobbo-cart-tile-main  { font-size: 17px !important; letter-spacing: -0.3px !important; }
+
+  .cobbo-cart-tile-bg { font-size: 70px !important; bottom: -20px !important; }
+  .cobbo-cart-tile-green .cobbo-cart-tile-bg  { font-size: 86px !important; bottom: -22px !important; }
+  .cobbo-cart-tile-blue .cobbo-cart-tile-bg   { font-size: 104px !important; bottom: -32px !important; }
+  .cobbo-cart-tile-yellow .cobbo-cart-tile-bg { font-size: 74px !important; bottom: -21px !important; }
+}
+
+/* BARDZO WĄSKIE EKRANY – jedna kolumna */
+@media (max-width: 359px) {
+  .cobbo-cart-tiles-wrap { grid-template-columns: 1fr !important; }
+}
+</style>
+</head>
+
+<body>
+
+<div class="cobbo-cart-tiles-wrap" id="cobbo-cart-tiles-wrap">
+
+  <a class="cobbo-cart-tile cobbo-cart-tile-green" href="https://cobbo.pl/news/n/734/Raty-PayU-Przeczytaj-przed-zakupem" target="_top">
+    <span class="cobbo-cart-tile-bg">0%</span>
+    <span class="cobbo-cart-tile-bar"></span>
+    <span class="cobbo-cart-tile-small">Kup wygodnie</span>
+    <span class="cobbo-cart-tile-main">Raty 0%</span>
+  </a>
+
+  <a class="cobbo-cart-tile cobbo-cart-tile-blue" href="https://cobbo.pl/Gwarancje-c297" target="_top">
+    <span class="cobbo-cart-tile-bg">+</span>
+    <span class="cobbo-cart-tile-bar"></span>
+    <span class="cobbo-cart-tile-small">Dodatkowa ochrona</span>
+    <span class="cobbo-cart-tile-main">Dokup gwarancję</span>
+  </a>
+
+  <a class="cobbo-cart-tile cobbo-cart-tile-red" href="https://cobbo.pl/news/n/1527/Regulamin-promocji-1-1-20" target="_top">
+    <span class="cobbo-cart-tile-bg">1+1</span>
+    <span class="cobbo-cart-tile-bar"></span>
+    <span class="cobbo-cart-tile-small">Wybierz dwa produkty</span>
+    <span class="cobbo-cart-tile-main">Zyskaj 10%</span>
+  </a>
+
+  <!-- NOWY KAFELEK: podmień href na link do regulaminu DUET15 -->
+  <a class="cobbo-cart-tile cobbo-cart-tile-yellow" href="https://cobbo.pl/REGULAMIN-DUET15" target="_top">
+    <span class="cobbo-cart-tile-bg">-15%</span>
+    <span class="cobbo-cart-tile-bar"></span>
+    <span class="cobbo-cart-tile-small">Na pierwszy produkt w koszyku</span>
+    <span class="cobbo-cart-tile-main">Rabat -15%</span>
+  </a>  
+
+</div>
+
+<script>
+(function(){
+  var wrap = document.getElementById('cobbo-cart-tiles-wrap');
+  var last = 0;
+
+  // Mierzymy sam kontener kafelków, NIE scrollHeight dokumentu.
+  // scrollHeight nigdy nie jest mniejszy od wysokości iframe'a,
+  // więc stary kod nie potrafił iframe'a zmniejszyć.
+  function sendHeight(){
+    if (!wrap || !window.parent || window.parent === window) return;
+    var h = Math.ceil(wrap.getBoundingClientRect().height);
+    if (h === last) return;
+    last = h;
+    window.parent.postMessage({ cobboWidget: 'cartTiles', height: h }, '*');
+  }
+
+  window.addEventListener('load', sendHeight);
+  window.addEventListener('resize', sendHeight);
+
+  if ('ResizeObserver' in window) {
+    new ResizeObserver(sendHeight).observe(wrap);
+  }
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(sendHeight);
+  }
+
+  sendHeight();
+  setTimeout(sendHeight, 100);
+  setTimeout(sendHeight, 500);
+  setTimeout(sendHeight, 1200);
+})();
+</script>
+
+</body>
+</html>
