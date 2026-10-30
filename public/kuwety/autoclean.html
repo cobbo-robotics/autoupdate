@@ -1,0 +1,814 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>COBBO K2 - Automatyczne czyszczenie</title>
+
+  <style>
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      background: #ffffff;
+      font-family: SF Pro Display, -apple-system, sans-serif !important;
+    }
+
+    #cobboK2AutoClean,
+    #cobboK2AutoClean * {
+      box-sizing: border-box;
+      font-family: SF Pro Display, -apple-system, sans-serif !important;
+    }
+
+    #cobboK2AutoClean {
+      width: 100%;
+      padding: 28px 12px;
+      background: #ffffff;
+      color: #ffffff;
+    }
+
+    #cobboK2AutoCleanInner {
+      max-width: 1240px;
+      margin: 0 auto;
+      background: #050505;
+      border-radius: 30px;
+      overflow: hidden;
+      border: 1px solid rgba(32, 154, 167, 0.34);
+      box-shadow: 0 22px 62px rgba(0, 0, 0, 0.18);
+    }
+
+    #cobboK2AutoCleanGrid {
+      display: grid;
+      grid-template-columns: 1.02fr 0.98fr;
+      min-height: 760px;
+      background: #050505;
+    }
+
+    #cobboK2AutoCleanVisual {
+      position: relative;
+      padding: 36px 34px 30px 34px;
+      background:
+        radial-gradient(circle at 50% 52%, rgba(32, 154, 167, 0.26) 0%, rgba(32, 154, 167, 0.08) 30%, rgba(32, 154, 167, 0) 62%),
+        radial-gradient(circle at 20% 18%, rgba(32, 154, 167, 0.16) 0%, rgba(32, 154, 167, 0) 32%),
+        linear-gradient(180deg, #090909 0%, #000000 100%);
+      overflow: hidden;
+    }
+
+    #cobboK2AutoCleanVisual:before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      opacity: 0.15;
+      background-image:
+        linear-gradient(rgba(32, 154, 167, 0.24) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(32, 154, 167, 0.24) 1px, transparent 1px);
+      background-size: 44px 44px;
+      pointer-events: none;
+    }
+
+    #cobboK2AutoCleanVisualHeader {
+      position: relative;
+      z-index: 3;
+      margin-bottom: 14px;
+    }
+
+    #cobboK2AutoCleanEyebrowMobile {
+      display: inline-block;
+      margin-bottom: 10px;
+      color: #209AA7;
+      font-size: 12px;
+      line-height: 1.2;
+      font-weight: 950;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+    }
+
+    #cobboK2AutoCleanTitleMobile {
+      margin: 0;
+      color: #ffffff;
+      font-size: clamp(30px, 3.4vw, 48px);
+      line-height: 1;
+      letter-spacing: -1.3px;
+      font-weight: 950;
+      max-width: 560px;
+    }
+
+    #cobboK2AutoCleanTitleMobile span {
+      color: #209AA7;
+    }
+
+    #cobboK2AutoCleanImageArea {
+      position: relative;
+      z-index: 3;
+      width: 100%;
+      min-height: 500px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #cobboK2AutoCleanGlow {
+      position: absolute;
+      left: 50%;
+      bottom: 68px;
+      transform: translateX(-50%);
+      width: 74%;
+      height: 110px;
+      border-radius: 999px;
+      background: radial-gradient(circle, rgba(32, 154, 167, 0.38) 0%, rgba(32, 154, 167, 0.12) 48%, rgba(32, 154, 167, 0) 76%);
+      filter: blur(24px);
+      pointer-events: none;
+    }
+
+    #cobboK2AutoCleanImage {
+      position: relative;
+      z-index: 4;
+      width: 100%;
+      max-width: 560px;
+      max-height: 500px;
+      height: auto;
+      display: block;
+      object-fit: contain;
+      filter: drop-shadow(0 26px 54px rgba(0, 0, 0, 0.42));
+    }
+
+    #cobboK2AutoCleanBadges {
+      position: relative;
+      z-index: 4;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 4px;
+    }
+
+    #cobboK2AutoCleanBadge1,
+    #cobboK2AutoCleanBadge2,
+    #cobboK2AutoCleanBadge3 {
+      flex: 1 1 160px;
+      min-width: 150px;
+      padding: 12px 13px;
+      border-radius: 16px;
+      background: rgba(8, 8, 8, 0.62);
+      border: 1px solid rgba(32, 154, 167, 0.32);
+      color: #dcecf2;
+      font-size: 13px;
+      line-height: 1.4;
+      font-weight: 600;
+    }
+
+    #cobboK2AutoCleanBadge1 strong,
+    #cobboK2AutoCleanBadge2 strong,
+    #cobboK2AutoCleanBadge3 strong {
+      display: block;
+      color: #209AA7;
+      font-size: 11px;
+      line-height: 1.2;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      font-weight: 950;
+      margin-bottom: 5px;
+    }
+
+    #cobboK2AutoCleanContent {
+      padding: 42px 38px 38px 28px;
+      background:
+        radial-gradient(circle at 100% 0%, rgba(32, 154, 167, 0.16) 0%, rgba(32, 154, 167, 0) 34%),
+        linear-gradient(180deg, #070707 0%, #06191d 100%);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    #cobboK2AutoCleanEyebrow {
+      display: inline-block;
+      margin-bottom: 13px;
+      color: #209AA7;
+      font-size: 12px;
+      line-height: 1.2;
+      font-weight: 950;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+    }
+
+    #cobboK2AutoCleanHeading {
+      margin: 0 0 16px 0;
+      color: #ffffff;
+      font-size: clamp(30px, 3.4vw, 48px);
+      line-height: 1;
+      letter-spacing: -1.4px;
+      font-weight: 950;
+    }
+
+    #cobboK2AutoCleanHeading span {
+      color: #209AA7;
+    }
+
+    #cobboK2AutoCleanLead {
+      margin: 0 0 24px 0;
+      color: #dcecf2;
+      font-size: 15px;
+      line-height: 1.65;
+      font-weight: 520;
+      max-width: 610px;
+    }
+
+    #cobboK2AutoCleanAccordion {
+      width: 100%;
+    }
+
+    #cobboK2AutoCleanItem1,
+    #cobboK2AutoCleanItem2,
+    #cobboK2AutoCleanItem3,
+    #cobboK2AutoCleanItem4,
+    #cobboK2AutoCleanItem5 {
+      margin-bottom: 11px;
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.045);
+      border: 1px solid rgba(32, 154, 167, 0.20);
+      overflow: hidden;
+      transition: border-color 0.25s ease, background 0.25s ease, box-shadow 0.25s ease;
+    }
+
+    #cobboK2AutoCleanItem1[data-open="true"],
+    #cobboK2AutoCleanItem2[data-open="true"],
+    #cobboK2AutoCleanItem3[data-open="true"],
+    #cobboK2AutoCleanItem4[data-open="true"],
+    #cobboK2AutoCleanItem5[data-open="true"] {
+      background: rgba(32, 154, 167, 0.10);
+      border-color: rgba(32, 154, 167, 0.48);
+      box-shadow: 0 16px 34px rgba(0, 0, 0, 0.24);
+    }
+
+    #cobboK2AutoCleanBtn1,
+    #cobboK2AutoCleanBtn2,
+    #cobboK2AutoCleanBtn3,
+    #cobboK2AutoCleanBtn4,
+    #cobboK2AutoCleanBtn5 {
+      width: 100%;
+      border: 0;
+      background: transparent;
+      padding: 17px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      cursor: pointer;
+      text-align: left;
+      color: #ffffff;
+    }
+
+    #cobboK2AutoCleanBtnMain1,
+    #cobboK2AutoCleanBtnMain2,
+    #cobboK2AutoCleanBtnMain3,
+    #cobboK2AutoCleanBtnMain4,
+    #cobboK2AutoCleanBtnMain5 {
+      display: flex;
+      align-items: center;
+      gap: 13px;
+      flex: 1 1 auto;
+      min-width: 0;
+    }
+
+    #cobboK2AutoCleanSvgWrap1,
+    #cobboK2AutoCleanSvgWrap2,
+    #cobboK2AutoCleanSvgWrap3,
+    #cobboK2AutoCleanSvgWrap4,
+    #cobboK2AutoCleanSvgWrap5 {
+      flex: 0 0 auto;
+      width: 44px;
+      height: 44px;
+      border-radius: 15px;
+      background: rgba(32, 154, 167, 0.14);
+      border: 1px solid rgba(32, 154, 167, 0.32);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #209AA7;
+    }
+
+    #cobboK2AutoCleanSvgWrap1 svg,
+    #cobboK2AutoCleanSvgWrap2 svg,
+    #cobboK2AutoCleanSvgWrap3 svg,
+    #cobboK2AutoCleanSvgWrap4 svg,
+    #cobboK2AutoCleanSvgWrap5 svg {
+      width: 24px;
+      height: 24px;
+      stroke: currentColor;
+    }
+
+    #cobboK2AutoCleanBtnText1,
+    #cobboK2AutoCleanBtnText2,
+    #cobboK2AutoCleanBtnText3,
+    #cobboK2AutoCleanBtnText4,
+    #cobboK2AutoCleanBtnText5 {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      min-width: 0;
+    }
+
+    #cobboK2AutoCleanBtnTop1,
+    #cobboK2AutoCleanBtnTop2,
+    #cobboK2AutoCleanBtnTop3,
+    #cobboK2AutoCleanBtnTop4,
+    #cobboK2AutoCleanBtnTop5 {
+      color: #ffffff;
+      font-size: 18px;
+      line-height: 1.16;
+      font-weight: 900;
+      letter-spacing: -0.3px;
+    }
+
+    #cobboK2AutoCleanBtnSub1,
+    #cobboK2AutoCleanBtnSub2,
+    #cobboK2AutoCleanBtnSub3,
+    #cobboK2AutoCleanBtnSub4,
+    #cobboK2AutoCleanBtnSub5 {
+      color: #dcecf2;
+      font-size: 13px;
+      line-height: 1.42;
+      font-weight: 520;
+    }
+
+    #cobboK2AutoCleanIcon1,
+    #cobboK2AutoCleanIcon2,
+    #cobboK2AutoCleanIcon3,
+    #cobboK2AutoCleanIcon4,
+    #cobboK2AutoCleanIcon5 {
+      flex: 0 0 auto;
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: rgba(32, 154, 167, 0.14);
+      border: 1px solid rgba(32, 154, 167, 0.32);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #209AA7;
+      font-size: 22px;
+      line-height: 1;
+      font-weight: 400;
+    }
+
+    #cobboK2AutoCleanPanel1,
+    #cobboK2AutoCleanPanel2,
+    #cobboK2AutoCleanPanel3,
+    #cobboK2AutoCleanPanel4,
+    #cobboK2AutoCleanPanel5 {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.25s ease;
+    }
+
+    #cobboK2AutoCleanPanelInner1,
+    #cobboK2AutoCleanPanelInner2,
+    #cobboK2AutoCleanPanelInner3,
+    #cobboK2AutoCleanPanelInner4,
+    #cobboK2AutoCleanPanelInner5 {
+      padding: 0 18px 18px 75px;
+      color: #eefbff;
+      font-size: 14px;
+      line-height: 1.62;
+      font-weight: 520;
+    }
+
+    #cobboK2AutoCleanPanelInner1 p,
+    #cobboK2AutoCleanPanelInner2 p,
+    #cobboK2AutoCleanPanelInner3 p,
+    #cobboK2AutoCleanPanelInner4 p,
+    #cobboK2AutoCleanPanelInner5 p {
+      margin: 0;
+    }
+
+    @media (max-width: 1024px) {
+      #cobboK2AutoCleanGrid {
+        grid-template-columns: 1fr;
+        min-height: auto;
+      }
+
+      #cobboK2AutoCleanVisual {
+        padding: 30px 22px 20px 22px;
+      }
+
+      #cobboK2AutoCleanContent {
+        padding: 22px 22px 30px 22px;
+      }
+
+      #cobboK2AutoCleanImageArea {
+        min-height: 430px;
+      }
+
+      #cobboK2AutoCleanImage {
+        max-height: 430px;
+      }
+
+      #cobboK2AutoCleanEyebrow,
+      #cobboK2AutoCleanHeading,
+      #cobboK2AutoCleanLead {
+        display: none;
+      }
+    }
+
+    @media (max-width: 767px) {
+      #cobboK2AutoClean {
+        padding: 20px 10px;
+      }
+
+      #cobboK2AutoCleanInner {
+        border-radius: 24px;
+      }
+
+      #cobboK2AutoCleanVisual {
+        padding: 20px 14px 14px 14px;
+      }
+
+      #cobboK2AutoCleanVisualHeader {
+        margin-bottom: 6px;
+      }
+
+      #cobboK2AutoCleanEyebrowMobile {
+        font-size: 10px;
+        letter-spacing: 1.2px;
+        margin-bottom: 7px;
+      }
+
+      #cobboK2AutoCleanTitleMobile {
+        font-size: 26px;
+        line-height: 1.03;
+        letter-spacing: -0.7px;
+      }
+
+      #cobboK2AutoCleanImageArea {
+        min-height: 330px;
+        padding: 4px 0;
+      }
+
+      #cobboK2AutoCleanImage {
+        max-width: 100%;
+        max-height: 330px;
+      }
+
+      #cobboK2AutoCleanBadges {
+        display: none;
+      }
+
+      #cobboK2AutoCleanContent {
+        padding: 4px 14px 20px 14px;
+      }
+
+      #cobboK2AutoCleanItem1,
+      #cobboK2AutoCleanItem2,
+      #cobboK2AutoCleanItem3,
+      #cobboK2AutoCleanItem4,
+      #cobboK2AutoCleanItem5 {
+        margin-bottom: 9px;
+        border-radius: 16px;
+      }
+
+      #cobboK2AutoCleanBtn1,
+      #cobboK2AutoCleanBtn2,
+      #cobboK2AutoCleanBtn3,
+      #cobboK2AutoCleanBtn4,
+      #cobboK2AutoCleanBtn5 {
+        padding: 14px 13px;
+        gap: 9px;
+      }
+
+      #cobboK2AutoCleanBtnMain1,
+      #cobboK2AutoCleanBtnMain2,
+      #cobboK2AutoCleanBtnMain3,
+      #cobboK2AutoCleanBtnMain4,
+      #cobboK2AutoCleanBtnMain5 {
+        gap: 10px;
+      }
+
+      #cobboK2AutoCleanSvgWrap1,
+      #cobboK2AutoCleanSvgWrap2,
+      #cobboK2AutoCleanSvgWrap3,
+      #cobboK2AutoCleanSvgWrap4,
+      #cobboK2AutoCleanSvgWrap5 {
+        width: 38px;
+        height: 38px;
+        border-radius: 13px;
+      }
+
+      #cobboK2AutoCleanSvgWrap1 svg,
+      #cobboK2AutoCleanSvgWrap2 svg,
+      #cobboK2AutoCleanSvgWrap3 svg,
+      #cobboK2AutoCleanSvgWrap4 svg,
+      #cobboK2AutoCleanSvgWrap5 svg {
+        width: 21px;
+        height: 21px;
+      }
+
+      #cobboK2AutoCleanBtnTop1,
+      #cobboK2AutoCleanBtnTop2,
+      #cobboK2AutoCleanBtnTop3,
+      #cobboK2AutoCleanBtnTop4,
+      #cobboK2AutoCleanBtnTop5 {
+        font-size: 16px;
+      }
+
+      #cobboK2AutoCleanBtnSub1,
+      #cobboK2AutoCleanBtnSub2,
+      #cobboK2AutoCleanBtnSub3,
+      #cobboK2AutoCleanBtnSub4,
+      #cobboK2AutoCleanBtnSub5 {
+        font-size: 12px;
+        line-height: 1.35;
+      }
+
+      #cobboK2AutoCleanIcon1,
+      #cobboK2AutoCleanIcon2,
+      #cobboK2AutoCleanIcon3,
+      #cobboK2AutoCleanIcon4,
+      #cobboK2AutoCleanIcon5 {
+        width: 30px;
+        height: 30px;
+        font-size: 20px;
+      }
+
+      #cobboK2AutoCleanPanelInner1,
+      #cobboK2AutoCleanPanelInner2,
+      #cobboK2AutoCleanPanelInner3,
+      #cobboK2AutoCleanPanelInner4,
+      #cobboK2AutoCleanPanelInner5 {
+        padding: 0 13px 15px 13px;
+        font-size: 13px;
+        line-height: 1.55;
+      }
+    }
+
+    @media (max-width: 420px) {
+      #cobboK2AutoCleanImageArea {
+        min-height: 300px;
+      }
+
+      #cobboK2AutoCleanImage {
+        max-height: 300px;
+      }
+
+      #cobboK2AutoCleanTitleMobile {
+        font-size: 24px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div id="cobboK2AutoClean">
+    <div id="cobboK2AutoCleanInner">
+      <div id="cobboK2AutoCleanGrid">
+
+        <div id="cobboK2AutoCleanVisual">
+          <div id="cobboK2AutoCleanVisualHeader">
+            <div id="cobboK2AutoCleanEyebrowMobile">Automatyczne czyszczenie</div>
+            <h2 id="cobboK2AutoCleanTitleMobile">
+              Codzienna czystość <span>bez Twojej ingerencji</span>
+            </h2>
+          </div>
+
+          <div id="cobboK2AutoCleanImageArea">
+            <div id="cobboK2AutoCleanGlow"></div>
+
+            <img id="cobboK2AutoCleanImage" src="https://cobbo.pl/upload/cobbo/COBBO-K2/k2-autoclean-v2.png" alt="COBBO K2 automatyczne czyszczenie kuwety">
+          </div>
+
+          <div id="cobboK2AutoCleanBadges">
+            <div id="cobboK2AutoCleanBadge1">
+              <strong>AutoClean™</strong>
+              Separuje zużyty żwirek po wizycie kota.
+            </div>
+
+            <div id="cobboK2AutoCleanBadge2">
+              <strong>PetPresence™</strong>
+              Uruchamia cykl po opuszczeniu kuwety.
+            </div>
+
+            <div id="cobboK2AutoCleanBadge3">
+              <strong>UV i harmonogram</strong>
+              Wspiera codzienną higienę.
+            </div>
+          </div>
+        </div>
+
+        <div id="cobboK2AutoCleanContent">
+          <div id="cobboK2AutoCleanEyebrow">Automatyczne czyszczenie</div>
+
+          <h2 id="cobboK2AutoCleanHeading">
+             Codzienna czystość <span>bez Twojej ingerencji</span>
+          </h2>
+
+          <p id="cobboK2AutoCleanLead">
+            COBBO K2 automatycznie separuje zużyty żwirek, pomaga utrzymać czystość i ogranicza codzienny kontakt z zabrudzeniami.
+          </p>
+
+          <div id="cobboK2AutoCleanAccordion">
+
+            <div id="cobboK2AutoCleanItem1" data-open="true">
+              <button id="cobboK2AutoCleanBtn1" type="button" aria-expanded="true" aria-controls="cobboK2AutoCleanPanel1">
+                <span id="cobboK2AutoCleanBtnMain1">
+                  <span id="cobboK2AutoCleanSvgWrap1">
+                    <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <path d="M4 13.5C4 8.8 7.8 5 12.5 5H17"></path>
+                      <path d="M14 2.8L17.2 5L14 7.2"></path>
+                      <path d="M20 10.5c0 4.7-3.8 8.5-8.5 8.5H7"></path>
+                      <path d="M10 21.2L6.8 19L10 16.8"></path>
+                      <path d="M9 12h6"></path>
+                    </svg>
+                  </span>
+                  <span id="cobboK2AutoCleanBtnText1">
+                    <span id="cobboK2AutoCleanBtnTop1">Automatyczne sprzątanie</span>
+                    <span id="cobboK2AutoCleanBtnSub1">Mniej codziennych obowiązków</span>
+                  </span>
+                </span>
+                <span id="cobboK2AutoCleanIcon1">−</span>
+              </button>
+              <div id="cobboK2AutoCleanPanel1">
+                <div id="cobboK2AutoCleanPanelInner1">
+                  <p>AutoClean™ System oddziela zużyty żwirek i przenosi odpady do zamkniętego pojemnika. Bez ręcznego wybierania zabrudzeń.</p>
+                </div>
+              </div>
+            </div>
+
+            <div id="cobboK2AutoCleanItem2" data-open="false">
+              <button id="cobboK2AutoCleanBtn2" type="button" aria-expanded="false" aria-controls="cobboK2AutoCleanPanel2">
+                <span id="cobboK2AutoCleanBtnMain2">
+                  <span id="cobboK2AutoCleanSvgWrap2">
+                    <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <path d="M12 4.5c4.8 0 8 4.5 8 7.5s-3.2 7.5-8 7.5S4 15 4 12s3.2-7.5 8-7.5Z"></path>
+                      <path d="M12 15.2A3.2 3.2 0 1 0 12 8.8a3.2 3.2 0 0 0 0 6.4Z"></path>
+                    </svg>
+                  </span>
+                  <span id="cobboK2AutoCleanBtnText2">
+                    <span id="cobboK2AutoCleanBtnTop2">Wykrywanie obecności</span>
+                    <span id="cobboK2AutoCleanBtnSub2">Cykl dopiero po wyjściu kota</span>
+                  </span>
+                </span>
+                <span id="cobboK2AutoCleanIcon2">+</span>
+              </button>
+              <div id="cobboK2AutoCleanPanel2">
+                <div id="cobboK2AutoCleanPanelInner2">
+                  <p>PetPresence™ Sensor wykrywa obecność kota i uruchamia czyszczenie dopiero wtedy, gdy pupil opuści kuwetę.</p>
+                </div>
+              </div>
+            </div>
+
+            <div id="cobboK2AutoCleanItem3" data-open="false">
+              <button id="cobboK2AutoCleanBtn3" type="button" aria-expanded="false" aria-controls="cobboK2AutoCleanPanel3">
+                <span id="cobboK2AutoCleanBtnMain3">
+                  <span id="cobboK2AutoCleanSvgWrap3">
+                    <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <path d="M8 10V7.5A4 4 0 0 1 12 3.5a4 4 0 0 1 4 4V10"></path>
+                      <path d="M6.5 10h11l-.8 9.5H7.3L6.5 10Z"></path>
+                      <path d="M10 14h4"></path>
+                    </svg>
+                  </span>
+                  <span id="cobboK2AutoCleanBtnText3">
+                    <span id="cobboK2AutoCleanBtnTop3">Czystość bez brudzenia rąk</span>
+                    <span id="cobboK2AutoCleanBtnSub3">Mniej kontaktu z nieczystościami</span>
+                  </span>
+                </span>
+                <span id="cobboK2AutoCleanIcon3">+</span>
+              </button>
+              <div id="cobboK2AutoCleanPanel3">
+                <div id="cobboK2AutoCleanPanelInner3">
+                  <p>Odpady trafiają do zamkniętego pojemnika, co pomaga ograniczyć kontakt z zabrudzeniami i nieprzyjemne momenty sprzątania.</p>
+                </div>
+              </div>
+            </div>
+
+            <div id="cobboK2AutoCleanItem4" data-open="false">
+              <button id="cobboK2AutoCleanBtn4" type="button" aria-expanded="false" aria-controls="cobboK2AutoCleanPanel4">
+                <span id="cobboK2AutoCleanBtnMain4">
+                  <span id="cobboK2AutoCleanSvgWrap4">
+                    <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <path d="M8 4.5h8"></path>
+                      <path d="M9 4.5v5.2l-4.2 7.1A2.2 2.2 0 0 0 6.7 20h10.6a2.2 2.2 0 0 0 1.9-3.2L15 9.7V4.5"></path>
+                      <path d="M8.2 15h7.6"></path>
+                    </svg>
+                  </span>
+                  <span id="cobboK2AutoCleanBtnText4">
+                    <span id="cobboK2AutoCleanBtnTop4">Czyszczenie na żądanie</span>
+                    <span id="cobboK2AutoCleanBtnSub4">Uruchom cykl wtedy, kiedy chcesz</span>
+                  </span>
+                </span>
+                <span id="cobboK2AutoCleanIcon4">+</span>
+              </button>
+              <div id="cobboK2AutoCleanPanel4">
+                <div id="cobboK2AutoCleanPanelInner4">
+                  <p>Funkcja ręcznego czyszczenia pozwala uruchomić cykl w dowolnym momencie, niezależnie od ustawionego harmonogramu.</p>
+                </div>
+              </div>
+            </div>
+
+            <div id="cobboK2AutoCleanItem5" data-open="false">
+              <button id="cobboK2AutoCleanBtn5" type="button" aria-expanded="false" aria-controls="cobboK2AutoCleanPanel5">
+                <span id="cobboK2AutoCleanBtnMain5">
+                  <span id="cobboK2AutoCleanSvgWrap5">
+                    <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <path d="M7 3.8v3"></path>
+                      <path d="M17 3.8v3"></path>
+                      <path d="M5 7h14"></path>
+                      <path d="M6.5 5.5h11A1.5 1.5 0 0 1 19 7v10.5A2.5 2.5 0 0 1 16.5 20h-9A2.5 2.5 0 0 1 5 17.5V7a1.5 1.5 0 0 1 1.5-1.5Z"></path>
+                      <path d="M12 15.5l1.1-2.2 2.4-.4-1.7-1.7.4-2.4-2.2 1.1-2.2-1.1.4 2.4-1.7 1.7 2.4.4 1.1 2.2Z"></path>
+                    </svg>
+                  </span>
+                  <span id="cobboK2AutoCleanBtnText5">
+                    <span id="cobboK2AutoCleanBtnTop5">Harmonogram i UV</span>
+                    <span id="cobboK2AutoCleanBtnSub5">Czystość dopasowana do rytmu dnia</span>
+                  </span>
+                </span>
+                <span id="cobboK2AutoCleanIcon5">+</span>
+              </button>
+              <div id="cobboK2AutoCleanPanel5">
+                <div id="cobboK2AutoCleanPanelInner5">
+                  <p>Harmonogram pozwala zaplanować cykle porządkowe, a funkcja UV może działać jako dodatkowy etap pracy urządzenia zgodnie z ustawieniami użytkownika.</p>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      var items = [
+        {
+          item: document.getElementById("cobboK2AutoCleanItem1"),
+          button: document.getElementById("cobboK2AutoCleanBtn1"),
+          panel: document.getElementById("cobboK2AutoCleanPanel1"),
+          icon: document.getElementById("cobboK2AutoCleanIcon1")
+        },
+        {
+          item: document.getElementById("cobboK2AutoCleanItem2"),
+          button: document.getElementById("cobboK2AutoCleanBtn2"),
+          panel: document.getElementById("cobboK2AutoCleanPanel2"),
+          icon: document.getElementById("cobboK2AutoCleanIcon2")
+        },
+        {
+          item: document.getElementById("cobboK2AutoCleanItem3"),
+          button: document.getElementById("cobboK2AutoCleanBtn3"),
+          panel: document.getElementById("cobboK2AutoCleanPanel3"),
+          icon: document.getElementById("cobboK2AutoCleanIcon3")
+        },
+        {
+          item: document.getElementById("cobboK2AutoCleanItem4"),
+          button: document.getElementById("cobboK2AutoCleanBtn4"),
+          panel: document.getElementById("cobboK2AutoCleanPanel4"),
+          icon: document.getElementById("cobboK2AutoCleanIcon4")
+        },
+        {
+          item: document.getElementById("cobboK2AutoCleanItem5"),
+          button: document.getElementById("cobboK2AutoCleanBtn5"),
+          panel: document.getElementById("cobboK2AutoCleanPanel5"),
+          icon: document.getElementById("cobboK2AutoCleanIcon5")
+        }
+      ];
+
+      function closeAll() {
+        for (var i = 0; i < items.length; i++) {
+          items[i].item.setAttribute("data-open", "false");
+          items[i].button.setAttribute("aria-expanded", "false");
+          items[i].panel.style.maxHeight = "0px";
+          items[i].icon.textContent = "+";
+        }
+      }
+
+      function openItem(index) {
+        closeAll();
+        items[index].item.setAttribute("data-open", "true");
+        items[index].button.setAttribute("aria-expanded", "true");
+        items[index].panel.style.maxHeight = items[index].panel.scrollHeight + "px";
+        items[index].icon.textContent = "−";
+      }
+
+      for (let i = 0; i < items.length; i++) {
+        items[i].button.addEventListener("click", function () {
+          var isOpen = items[i].item.getAttribute("data-open") === "true";
+          if (isOpen) {
+            closeAll();
+          } else {
+            openItem(i);
+          }
+        });
+      }
+
+      openItem(0);
+
+      window.addEventListener("resize", function () {
+        for (var i = 0; i < items.length; i++) {
+          if (items[i].item.getAttribute("data-open") === "true") {
+            items[i].panel.style.maxHeight = items[i].panel.scrollHeight + "px";
+          }
+        }
+      });
+    })();
+  </script>
+</body>
+</html>
